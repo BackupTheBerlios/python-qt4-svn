@@ -1,0 +1,6 @@
+qprint:
+Eric Jardim
+日本語のpython-qt4
+to_str:
+|Eric Jardim|
+|日本語のpython-qt4|
