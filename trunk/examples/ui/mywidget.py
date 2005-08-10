@@ -16,22 +16,23 @@ class MyWidget(QWidget):
     
     def mousePressEvent(self, e):
         print e, e.type()
-        print e.buttons()
-        if e.buttons() == MouseButton.LeftButton | MouseButton.MidButton:
-            print 'LeftButton & MidButton'
+        QWidget.mousePressEvent(self, e)
+#        print e.buttons()
+#        if e.buttons() == MouseButton.LeftButton | MouseButton.MidButton:
+#            print 'LeftButton & MidButton'
     
 #     def after_mousePressEvent(self, e):
 #         print 'after'
 #         print e, e.type()
 
-    def mouseReleaseEvent(self, e):
-        print e, e.type()
-
-    def mouseDoubleClickEvent(self, e):
-        print e, e.type()
-    
-    def mouseMoveEvent(self, e):
-        print e, e.type(), e.x(), e.y()
+#     def mouseReleaseEvent(self, e):
+#         print e, e.type()
+# 
+#     def mouseDoubleClickEvent(self, e):
+#         print e, e.type()
+#     
+#     def mouseMoveEvent(self, e):
+#         print e, e.type(), e.x(), e.y()
         
 app = QApplication('Inheritance')
 widget = MyWidget(None)

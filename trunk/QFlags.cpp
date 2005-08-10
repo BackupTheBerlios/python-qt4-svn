@@ -41,7 +41,24 @@ void
 export_QFlags()
 {
     to_python_converter<QFlags<Qt::MouseButton>, QFlags_MouseButton_to_python_str>();
-    
+
+    enum_<Qt::AlignmentFlag>("AlignmentFlag")
+        .value("AlignLeft", Qt::AlignLeft)
+        .value("AlignRight", Qt::AlignRight)
+        .value("AlignHCenter", Qt::AlignHCenter)
+        .value("AlignJustify", Qt::AlignJustify)
+        .value("AlignTop", Qt::AlignTop)
+        .value("AlignBottom", Qt::AlignBottom)
+        .value("AlignVCenter", Qt::AlignVCenter)
+        .value("AlignCenter", Qt::AlignCenter)
+        .value("AlignAbsolute", Qt::AlignAbsolute)
+        .value("AlignLeading", Qt::AlignLeading)
+        .value("AlignTrailing", Qt::AlignTrailing)
+        .value("AlignHorizontal_Mask", Qt::AlignHorizontal_Mask)
+        .value("AlignVertical_Mask", Qt::AlignVertical_Mask)
+        .export_values()
+        ;
+
     enum_<Qt::KeyboardModifier>("KeyboardModifier")
         .value("NoModifier", Qt::NoModifier)
         .value("ShiftModifier", Qt::ShiftModifier)

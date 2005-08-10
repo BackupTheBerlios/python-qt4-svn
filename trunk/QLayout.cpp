@@ -31,7 +31,10 @@
 //#include <boost/python/copy_non_const_reference.hpp>
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
+//#include <boost/python/return_value_policy.hpp>
 
+#include <QLayout>
+#include <QWidget>
 #include <QAbstractItemView>
 #include <QListView>
 #include <QListWidget>
@@ -43,8 +46,60 @@
 using namespace boost::python;
 
 void
+QGridLayout_addWidget(QGridLayout* self, QWidget* w, int r, int c)
+{
+    self->addWidget(w, r, c);
+}
+
+void
 export_QLayout()
 {
+    class_< QLayout,
+            bases<QObject>,
+            boost::shared_ptr<QLayout>,
+            boost::noncopyable>
+    ("QLayout", no_init )
+        .def("isEnabled", &QLayout::isEnabled)
+        .def("setEnabled", &QLayout::isEnabled)
+    ;
+
+    class_< QBoxLayout,
+            bases<QLayout>,
+            boost::shared_ptr<QBoxLayout>,
+            boost::noncopyable>
+    ("QBoxLayout", no_init)
+        .def("addWidget",
+             &QLayout::addWidget,
+             default_call_policies() )
+    ;
+    
+    class_< QHBoxLayout,
+            bases<QBoxLayout>,
+            boost::shared_ptr<QHBoxLayout>,
+            boost::noncopyable>
+    ("QHBoxLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
+    ;
+
+    class_< QVBoxLayout,
+            bases<QBoxLayout>,
+            boost::shared_ptr<QVBoxLayout>,
+            boost::noncopyable>
+    ("QVBoxLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
+    ;
+
+    class_< QGridLayout,
+            bases<QLayout>,
+            boost::shared_ptr<QGridLayout>,
+            boost::noncopyable>
+    ("QGridLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
+/*        .def("addWidget",
+            (void (QGridLayout::*)(QWidget*,int,int column,Qt::Alignment)) &QGridLayout::addWidget,
+            default_call_policies() )*/
+        .def("addWidget",
+             QGridLayout_addWidget,
+             default_call_policies() )
+            
+    ;
 //     class_< QAbstractItemView,
 //             bases<QWidget>,
 //             std::auto_ptr<QAbstractItemView>,

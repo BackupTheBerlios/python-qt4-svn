@@ -20,31 +20,36 @@
 
 # Dynamic dialog loading
 
-from Qt import QApplication, QWidget, QPushButton, loadUi
-
-
-class Proxy(object):
-    #__ui__ = 'dialog.ui'
-    
-    def __init__(self, obj):
-        pass
+from Qt import QApplication, QWidget, QPushButton, loadUi, QGridLayout, QVBoxLayout
+import Qt
 
 
 class Dialog(QWidget):
-    #def __new__(self, other):
-    #    #print other
-    #    self = loadUi('dialog.ui', None)
-        
     def __init__(self, parent=None):
+        #self.ui = loadUi('dialog.ui', parent)
         QWidget.__init__(self, parent)
+        #self.visible = False
         self.ui = loadUi('dialog.ui', self)
-        for signal in self.ui.__signals__():
-            print signal
         
+        #self.ui = QPushButton('Eric', self)
+        #layout = QVBoxLayout(None)
+        #layout.addWidget(self.ui)
+        
+        #self.setFocusProxy(self.ui)
+        #layout.addWidget(self.ui, 0, 0)
+        #print self.focusProxy()
+        
+        #self.setLayout(layout)
+        #print self.layout()
+        #layout.setEnabled(False)
+        #layout.setEnabled(True)
+        
+        #for signal in self.ui.__signals__():
+        #    print signal
+
+
 if __name__ == '__main__':
     app = QApplication('Dynamic dialog loading example')
     dialog = Dialog(None)
-    #form = loadUi('dialog.ui', None)
     dialog.show()
-    #dialog.ui.show()
     app.run()

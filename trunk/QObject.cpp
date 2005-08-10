@@ -89,16 +89,18 @@ struct
 QObjectList_to_python_object
 {
     static PyObject*
-    convert(const QList<QObject*> __list)
+    convert(QList<QObject*> const& objectList)
     {
-        //boost::python::object(s.toStdString()
-        list _list;
-        for(int i = 0; i < __list.size(); ++i)
+        list pythonList;
+        for(int i = 0; i < objectList.size(); ++i)
         {
-            _list.append( ptr(__list.at(i)) );
+            //QObject* _item = objectList.at(i);
+            //object item = object(ptr( _item ));
+            pythonList.append( ptr( objectList.at(i)  )  );
+            //incref( item.ptr() );
         }
         
-        return incref(_list.ptr());
+        return incref( pythonList.ptr() );
     }
 };
 
@@ -178,7 +180,10 @@ struct QObject_Wrapper: QObject, wrapper<QObject>
         {
             return event( ptr( p0 ) );
         }
-        return QObject::event(p0);
+        else
+        {
+            return QObject::event(p0);
+        }
     }
 
     bool
@@ -226,21 +231,26 @@ export_QObject()
         //.def("installEventFilter", &QObject::installEventFilter)
         //.def("removeEventFilter", &QObject::removeEventFilter)
         
+        //.def("children", &QObject::children, with_custodian_and_ward_postcall<0,1>())
+        //.def("children", &QObject::children, return_internal_reference<>() )
         .def("children", &QObject::children, return_value_policy<return_by_value>())
+        //.def("children", &QObject::children, return_value_policy<reference_existing_object>() )
 
-        .def("findChild", &QObject::findChild<QObject*>, return_internal_reference<>() )
+        //.def("findChild", &QObject::findChild<QObject*>, ,<>() )
         //.def("findChild", &QObject::findChild<QObject*>, return_value_policy<manage_new_object>() )
         //.def("findChild", &QObject::findChild<QObject*>, return_value_policy<reference_existing_object>())
+        .def("findChild", &QObject::findChild<QObject*>, return_value_policy<reference_existing_object, with_custodian_and_ward_postcall<0,1> >())
         //.def(init<QObject*>()[with_custodian_and_ward<2,1>()])
         //.def("parent", &QObject::parent)
-        .def("__eq__", compare)
+        //.def("__eq__", compare)
         .def("parent", &QObject::parent, return_internal_reference<>() )
+        .def("setParent", &QObject::setParent, with_custodian_and_ward<1,2>() )
         //.def("parent", &QObject::parent, return_value_policy<manage_new_object>())
         //.def("parent", &QObject::parent, return_value_policy<reference_existing_object>())
         //.def("parent", &QObject::parent, return_value_policy<copy_const_reference>())
         .add_property("objectName", &QObject::objectName, &QObject::setObjectName)
         
-        .def("__signals__", QObject___signals__);
+        .def("__signals__", QObject___signals__)
         
         //.def("__del__", QObject_del)
     ;

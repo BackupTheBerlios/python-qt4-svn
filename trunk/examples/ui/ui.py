@@ -25,9 +25,23 @@ from Qt import QApplication, QWidget, QPushButton, loadUi
 class Form(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
-        self.ui = loadUi('form.ui', self)
-        for signal in self.__signals__():
-            print signal
+        ui = loadUi('form.ui', self)
+        print ui.objectName
+        print
+        children = ui.children()
+        for child in children:
+            print child, child.objectName
+
+            #child.setParent(self)
+            if isinstance(child, QWidget):
+                print '    ', child.parentWidget()
+                child.setParent(self)
+            else:
+                print '    ', type(child)
+                
+        #self.ui = loadUi('form.ui', self)
+        #for signal in self.__signals__():
+        #    print signal
         
 
 app = QApplication('Dynamic UI loading example')
@@ -35,6 +49,7 @@ form = Form(None)
 #form = loadUi('form.ui', None)
 form.show()
 app.run()
+
 
 #for widget in form.ui.children():
 #    print widget

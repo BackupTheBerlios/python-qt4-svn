@@ -38,6 +38,7 @@
 #include <QFlags>
 #include <QObject>
 #include <QWidget>
+#include <QLayout>
 #include <QEvent>
 #include <QMouseEvent>
 //#include <QFormBuilder>
@@ -56,19 +57,44 @@ using namespace boost::python;
 //     return new QWidget(0);
 // }
 
-QWidget* 
-loadUi(QString filename, QWidget* parent)
-//loadUi(QString filename, std::auto_ptr<QWidget> parent)
+// QWidget* 
+// loadUi(QString filename, QWidget* parent)
+// {
+//     //std::auto_ptr<QWidget> parent
+//     QFormBuilder builder;
+//     QFile file(filename);
+//     file.open(QFile::ReadOnly);
+//     QWidget* widget = builder.load(&file, parent);
+//     file.close();
+//     return widget;
+// }
+
+object
+loadUi(str _filename, object _parent)
 {
-    //std::auto_ptr<QWidget> parent
+    QString filename = extract<QString>(_filename);
+    QWidget* parent = extract<QWidget*>(_parent);
+
     QFormBuilder builder;
     QFile file(filename);
     file.open(QFile::ReadOnly);
-    //std::auto_ptr<QWidget> widget;
-    //widget.set( builder.load(&file, parent) );
-    QWidget* widget = builder.load(&file, parent);
+    object widget = object( ptr( builder.load(&file, parent) ) );
     file.close();
     return widget;
+}
+
+
+void
+setupUi(QString filename, QWidget* parent)
+{
+//     QFormBuilder builder;
+//     QFile file(filename);
+//     file.open(QFile::ReadOnly);
+//     //std::auto_ptr<QWidget> widget;
+//     //widget.set( builder.load(&file, parent) );
+//     QWidget* widget = builder.load(&file, parent);
+//     file.close();
+//     return widget;
 }
 
 QWidget*
@@ -197,17 +223,23 @@ struct QWidget_Wrapper: QWidget, wrapper<QWidget>
 
     void
     mousePressEvent(QMouseEvent* p0)
-    { 
+    {
         if (override mousePressEvent = this->get_override("mousePressEvent"))
         {
+            qDebug("QWidget_Wrapper::mousePressEvent1");
             mousePressEvent( ptr( p0 ) );
         }
-        QWidget::mousePressEvent(p0);
+        else
+        {
+            qDebug("QWidget_Wrapper::mousePressEvent2");
+            QWidget::mousePressEvent(p0);
+        }
     }
 
     void
-    default_mousePressEvent(QMouseEvent* p0)
+    _mousePressEvent(QMouseEvent* p0)
     {
+        qDebug("QWidget_Wrapper::_mousePressEvent");
         this->QWidget::mousePressEvent(p0);
     }
     
@@ -570,8 +602,10 @@ export_QWidget()
 {
     //class_<QFlags>("QFlags", init<>());
 
-    def("loadUi", loadUi, return_value_policy<manage_new_object,
-                                              with_custodian_and_ward_postcall<0,2> >() );
+    def("loadUi", loadUi);
+    //def("loadUi", loadUi, return_value_policy<manage_new_object>() );
+    //def("loadUi", loadUi, return_value_policy<manage_new_object,
+    //                                          with_custodian_and_ward_postcall<2,0> >() );
 
     //def("qFindChild", _qFindChild, return_value_policy<manage_new_object>());
     enum_<Qt::WindowType>("WindowType")
@@ -607,7 +641,8 @@ export_QWidget()
         .add_property("y", &QWidget::y)
 
         // events -------------------------------------------------------------
-        .def("mousePressEvent", &QWidget_Wrapper::mousePressEvent) //, &QWidget_Wrapper::default_mousePressEvent)
+        //.def("mousePressEvent", &QWidget_Wrapper::mousePressEvent) //, &QWidget_Wrapper::default_mousePressEvent)
+        .def("mousePressEvent", &QWidget_Wrapper::_mousePressEvent)
         .def("mouseReleaseEvent", &QWidget_Wrapper::mouseReleaseEvent)
         .def("mouseDoubleClickEvent", &QWidget_Wrapper::mouseDoubleClickEvent)
         .def("mouseMoveEvent", &QWidget_Wrapper::mouseMoveEvent)
@@ -738,10 +773,12 @@ export_QWidget()
         .def("focusPolicy", &QWidget::focusPolicy)
         .def("setFocusPolicy", &QWidget::setFocusPolicy)
         .def("hasFocus", &QWidget::hasFocus)
-        .def("setTabOrder", &QWidget::setTabOrder)
-        .def("setFocusProxy", &QWidget::setFocusProxy)
-        .def("focusProxy", &QWidget::focusProxy)
-        .def("contextMenuPolicy", &QWidget::contextMenuPolicy)
+        .def("setTabOrder", &QWidget::setTabOrder) */
+        .def("setFocusProxy", &QWidget::setFocusProxy, with_custodian_and_ward<1,2>() )
+        .def("focusProxy",
+             &QWidget::focusProxy,
+             return_value_policy<reference_existing_object>() )
+        /*.def("contextMenuPolicy", &QWidget::contextMenuPolicy)
         .def("setContextMenuPolicy", &QWidget::setContextMenuPolicy)
         .def("grabMouse", (void (QWidget::*)() )&QWidget::grabMouse)
         .def("grabMouse", (void (QWidget::*)(const QCursor&) )&QWidget::grabMouse)
@@ -798,11 +835,21 @@ export_QWidget()
         .def("setContentsMargins", &QWidget::setContentsMargins)
         .def("getContentsMargins", &QWidget::getContentsMargins)
         .def("contentsRect", &QWidget::contentsRect)
-        .def("layout", &QWidget::layout)
-        .def("setLayout", &QWidget::setLayout)
-        .def("updateGeometry", &QWidget::updateGeometry)
-        .def("setParent", (void (QWidget::*)(QWidget*) )&QWidget::setParent)
-        .def("setParent", (void (QWidget::*)(QWidget*, Qt::WFlags) )&QWidget::setParent)
+        */
+        
+        .def("layout", &QWidget::layout, return_internal_reference<>() )
+        .def("setLayout", &QWidget::setLayout, with_custodian_and_ward<2,1>() )
+        
+        //.def("updateGeometry", &QWidget::updateGeometry)
+        
+        .def("setParent",
+             (void (QWidget::*)(QWidget*) )&QWidget::setParent,
+             with_custodian_and_ward<1,2>() )
+        .def("setParent",
+             (void (QWidget::*)(QWidget*, Qt::WFlags) )&QWidget::setParent,
+             with_custodian_and_ward<1,2>())
+
+        /*
         .def("scroll", (void (QWidget::*)(int, int) )&QWidget::scroll)
         .def("scroll", (void (QWidget::*)(int, int, const QRect&) )&QWidget::scroll)
         .def("focusWidget", &QWidget::focusWidget)
@@ -815,7 +862,10 @@ export_QWidget()
         .def("insertActions", &QWidget::insertActions)
         .def("removeAction", &QWidget::removeAction)
         .def("actions", &QWidget::actions)
-        .def("parentWidget", &QWidget::parentWidget)
+        */
+        .def("parentWidget", &QWidget::parentWidget, return_internal_reference<>() );
+
+        /*
         .def("setWindowFlags", &QWidget::setWindowFlags)
         .def("windowFlags", &QWidget::windowFlags)
         .def("overrideWindowFlags", &QWidget::overrideWindowFlags)

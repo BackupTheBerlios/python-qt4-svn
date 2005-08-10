@@ -1,7 +1,29 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="0" />
+ <DocsAndViews NumberOfDocuments="7" >
+  <Doc0 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/Qt.cpp" >
+   <View0 Type="Source" />
+  </Doc0>
+  <Doc1 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/QObject.cpp" >
+   <View0 line="244" Type="Source" />
+  </Doc1>
+  <Doc2 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/QWidget.cpp" >
+   <View0 line="64" Type="Source" />
+  </Doc2>
+  <Doc3 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/pyste/Qt.cpp" >
+   <View0 line="1216" Type="Source" />
+  </Doc3>
+  <Doc4 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/QFlags.cpp" >
+   <View0 line="29" Type="Source" />
+  </Doc4>
+  <Doc5 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/PythonConnection.h" >
+   <View0 line="0" Type="Source" />
+  </Doc5>
+  <Doc6 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/PythonConnection.cpp" >
+   <View0 line="7" Type="Source" />
+  </Doc6>
+ </DocsAndViews>
  <pluginList>
   <kdevdebugger>
    <breakpointList/>
@@ -9,7 +31,7 @@
   <kdevbookmarks>
    <bookmarks>
     <bookmark url="/home/eric/work/python-qt4/QLayout.cpp" >
-     <mark line="39" />
+     <mark line="42" />
     </bookmark>
    </bookmarks>
   </kdevbookmarks>

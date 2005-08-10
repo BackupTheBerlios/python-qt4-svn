@@ -50,7 +50,6 @@ export_QListView()
     class_< QAbstractItemView,
             bases<QWidget>,
             boost::shared_ptr<QAbstractItemView>,
-            //std::auto_ptr<QAbstractItemView>,
             boost::noncopyable>
     ("QAbstractItemView", no_init)
         //.def(init<QWidget*>() [with_custodian_and_ward<1,2>()] )
@@ -59,7 +58,6 @@ export_QListView()
     class_< QListView,
             bases<QAbstractItemView>,
             boost::shared_ptr<QListView>,
-            //std::auto_ptr<QListView>,
             boost::noncopyable>
     ("QListView")
         .def(init<QWidget*>() [with_custodian_and_ward<1,2>()] )
@@ -76,7 +74,6 @@ export_QListView()
     class_< QListWidget,
             bases<QListView>,
             boost::shared_ptr<QListWidget>,
-            //std::auto_ptr<QListWidget>,
             boost::noncopyable>
     ("QListWidget")
         .def(init<QWidget*>() [with_custodian_and_ward<1,2>()] )

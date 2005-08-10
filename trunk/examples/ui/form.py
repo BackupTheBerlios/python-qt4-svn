@@ -25,7 +25,8 @@ from Qt import QWidget, loadUi
 class Form(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
-        #print self, dir(self), self.parent()
-        #self = loadUi('form.ui', parent)
-        self.ui = loadUi('form.ui', self)
+        ui = loadUi('form.ui', self)
+        children = ui.children()
+        for child in children:
+            child.setParent(self)
     

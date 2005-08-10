@@ -33,6 +33,7 @@ void export_QWidget();
 void export_QPushButton();
 void export_QLineEdit();
 void export_QListView();
+void export_QLayout();
 
 using namespace boost::python;
 
@@ -43,6 +44,7 @@ BOOST_PYTHON_MODULE(Qt)
     export_QEvent();
     export_QPaintDevice();
     export_QObject();
+        export_QLayout();
         export_QApplication();
         export_QWidget();
             export_QPushButton();
