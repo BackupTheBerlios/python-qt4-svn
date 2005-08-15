@@ -59,14 +59,14 @@ void
 export_QApplication()
 {
     class_< QApplication_Wrapper,
-            bases<QObject>,
+            bases<QCoreApplication>,
             boost::shared_ptr<QApplication_Wrapper>,
             boost::noncopyable>
             ("QApplication", init<std::string>())
             
         .def("sessionId", &QApplication::sessionId)
         .def("notify", &QApplication::notify)  
-        .def("run", &QApplication_Wrapper::run);
+
     ;
 
 }

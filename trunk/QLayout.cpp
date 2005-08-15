@@ -97,7 +97,7 @@ export_QLayout()
             default_call_policies() )*/
         .def("addWidget",
              QGridLayout_addWidget,
-             default_call_policies() )
+             with_custodian_and_ward<1,2>() )
             
     ;
 //     class_< QAbstractItemView,

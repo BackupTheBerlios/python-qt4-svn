@@ -28,6 +28,7 @@ void export_QString();
 void export_QEvent();
 void export_QPaintDevice();
 void export_QObject();
+void export_QCoreApplication();
 void export_QApplication();
 void export_QWidget();
 void export_QPushButton();
@@ -45,7 +46,8 @@ BOOST_PYTHON_MODULE(Qt)
     export_QPaintDevice();
     export_QObject();
         export_QLayout();
-        export_QApplication();
+        export_QCoreApplication();
+            export_QApplication();
         export_QWidget();
             export_QPushButton();
             export_QLineEdit();

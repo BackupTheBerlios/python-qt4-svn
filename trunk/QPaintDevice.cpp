@@ -31,7 +31,7 @@
 
 using namespace boost::python;
 
-struct QPaintDevice_Wrapper: QPaintDevice, wrapper<QPaintDevice_Wrapper>
+struct QPaintDevice_Wrapper: QPaintDevice, wrapper<QPaintDevice>
 {
     QPaintDevice_Wrapper():
         QPaintDevice()
@@ -100,6 +100,7 @@ export_QPaintDevice()
         .def("physicalDpiY", &QPaintDevice::physicalDpiY)
         .def("numColors", &QPaintDevice::numColors)
         .def("depth", &QPaintDevice::depth)
+    //;
     );
 
     enum_<QPaintDevice::PaintDeviceMetric>("PaintDeviceMetric")

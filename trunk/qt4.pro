@@ -3,8 +3,6 @@
 # O subdir relativo ao diretório principal do projeto: .
 # O alvo é uma biblioteca: Qt
 
-include ( path.pri )
-
 HEADERS += PythonConnection.h 
 SOURCES += Qt.cpp \
            QObject.cpp \
@@ -18,9 +16,17 @@ SOURCES += Qt.cpp \
            PythonConnection.cpp \
            QEvent.cpp \
            QPaintDevice.cpp \
-           QFlags.cpp 
-TEMPLATE = lib
+           QFlags.cpp \
+           QCoreApplication.cpp 
+include ( path.pri )
+LIBS += -L$$BOOSTDIR/lib \
+-lboost_python
+INCLUDEPATH += $$BOOSTDIR/include \
+$$PYTHONDIR/include/python$$PYTHONVER
 TARGET = Qt
-CONFIG += qt designer debug warn_off plugin
-INCLUDEPATH += $$BOOSTDIR/include $$PYTHONDIR/include/python$$PYTHONVER
-LIBS += -L$$BOOSTDIR/lib -lboost_python
+CONFIG += debug \
+warn_off \
+qt \
+plugin \
+designer
+TEMPLATE = lib

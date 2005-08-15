@@ -20,7 +20,7 @@
 
 # Dynamic dialog loading
 
-from Qt import QApplication, QWidget, QPushButton, loadUi, QGridLayout, QVBoxLayout
+from Qt import QApplication, QWidget, QPushButton, loadUi, QGridLayout, QVBoxLayout, QPaintDevice
 import Qt
 
 

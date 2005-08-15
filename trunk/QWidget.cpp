@@ -37,6 +37,7 @@
 #include <Qt>
 #include <QFlags>
 #include <QObject>
+#include <QPaintDevice>
 #include <QWidget>
 #include <QLayout>
 #include <QEvent>
@@ -612,7 +613,7 @@ export_QWidget()
     ;
     
     class_< QWidget_Wrapper,
-            bases<QObject>,
+            bases<QObject, QPaintDevice>,
             boost::shared_ptr<QWidget_Wrapper>,
             //std::auto_ptr<QWidget>,
             boost::noncopyable>

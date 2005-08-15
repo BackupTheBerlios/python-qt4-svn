@@ -43,6 +43,14 @@
 // }
 
 
+template<typename T1>
+class PythonSlot1
+{
+    PythonSlot1(QObject* sender, boost::python::object* slot)
+    {
+    }
+};
+
 class PythonConnection: public QObject
 {
     Q_OBJECT
