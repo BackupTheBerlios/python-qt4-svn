@@ -3,10 +3,10 @@
 <KDevPrjSession>
  <DocsAndViews NumberOfDocuments="9" >
   <Doc0 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/Qt.cpp" >
-   <View0 line="47" Type="Source" />
+   <View0 Type="Source" />
   </Doc0>
   <Doc1 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/QObject.cpp" >
-   <View0 line="267" Type="Source" />
+   <View0 line="323" Type="Source" />
   </Doc1>
   <Doc2 NumberOfViews="1" URL="file:/home/eric/work/python-qt4/QWidget.cpp" >
    <View0 line="615" Type="Source" />
