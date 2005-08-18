@@ -618,7 +618,7 @@ export_QWidget()
             //std::auto_ptr<QWidget>,
             boost::noncopyable>
         ("QWidget", init<>() )
-        .def(init<QWidget*>()[with_custodian_and_ward<1,2>()] )
+        .def(init<QWidget*>(args("parent"))[with_custodian_and_ward<1,2>()] )
         //.def(init<QWidget*,Qt::WFlags>() )
         .def("close", &QWidget::close)
         .def("hide", &QWidget::hide)
@@ -813,12 +813,14 @@ export_QWidget()
         .def("raise", &QWidget::raise)
         .def("lower", &QWidget::lower)
         .def("stackUnder", &QWidget::stackUnder)
+        */
         .def("move", (void (QWidget::*)(int, int) )&QWidget::move)
-        .def("move", (void (QWidget::*)(const QPoint&) )&QWidget::move)
+        //.def("move", (void (QWidget::*)(const QPoint&) )&QWidget::move)
         .def("resize", (void (QWidget::*)(int, int) )&QWidget::resize)
-        .def("resize", (void (QWidget::*)(const QSize&) )&QWidget::resize)
+        //.def("resize", (void (QWidget::*)(const QSize&) )&QWidget::resize)
         .def("setGeometry", (void (QWidget::*)(int, int, int, int) )&QWidget::setGeometry)
-        .def("setGeometry", (void (QWidget::*)(const QRect&) )&QWidget::setGeometry)
+        //.def("setGeometry", (void (QWidget::*)(const QRect&) )&QWidget::setGeometry)
+        /*
         .def("adjustSize", &QWidget::adjustSize)
         .def("isVisible", &QWidget::isVisible)
         .def("isVisibleTo", &QWidget::isVisibleTo)
@@ -838,7 +840,8 @@ export_QWidget()
         .def("contentsRect", &QWidget::contentsRect)
         */
         
-        .def("layout", &QWidget::layout, return_internal_reference<>() )
+        //.def("layout", &QWidget::layout, return_internal_reference<>() )
+        .def("layout", &QWidget::layout, return_value_policy<reference_existing_object>() )
         .def("setLayout", &QWidget::setLayout, with_custodian_and_ward<2,1>() )
         
         //.def("updateGeometry", &QWidget::updateGeometry)

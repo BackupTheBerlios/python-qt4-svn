@@ -1,21 +1,29 @@
 # reference
 
-from Qt import QCoreApplication, QApplication, QObject, QWidget
+import Qt
+from Qt.Core import QCoreApplication, QObject
+from Qt.Gui import QApplication, QWidget
 
 #app = QCoreApplication('refer')
 app = QApplication('refer')
 
+#Klass = QObject
+Klass = QWidget
+
 def create():
-    a = QObject()
-    print a
+    a = Klass()
+    a.name = 'a'
+    print 'a:', a
 
     print
-    b = QObject(a)
-    print b
+    b = Klass(a)
+    b.name = 'b'
+    print 'b:', b
     
     print
-    c = QObject(b)
-    print c
+    c = Klass(b)
+    c.name = 'c'
+    print 'c:', c
 
     print
     print a, b, c

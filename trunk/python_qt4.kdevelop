@@ -76,12 +76,11 @@
   </kdevfilecreate>
   <kdevtrollproject>
     <general>
-      <activedir></activedir>
+      <activedir>Gui</activedir>
     </general>
     <run>
       <directoryradio>executable</directoryradio>
     </run>
-    <subclassing/>
   </kdevtrollproject>
   <kdevcppsupport>
     <references/>

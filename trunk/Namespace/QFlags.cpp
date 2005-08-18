@@ -56,7 +56,7 @@ export_QFlags()
         .value("AlignTrailing", Qt::AlignTrailing)
         .value("AlignHorizontal_Mask", Qt::AlignHorizontal_Mask)
         .value("AlignVertical_Mask", Qt::AlignVertical_Mask)
-        .export_values()
+        //.export_values()
         ;
 
     enum_<Qt::KeyboardModifier>("KeyboardModifier")

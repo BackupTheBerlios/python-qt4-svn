@@ -243,17 +243,17 @@ struct QObject_Wrapper: QObject, wrapper<QObject>
         return this->QObject::event(p0);
     }
 
-    void
-    childEvent(QChildEvent* event)
-    {
-        qDebug("QObject_Wrapper::childEvent");
-        QObject* obj = event->child();
-        object child( ptr(obj) );
-        qDebug("child %p:%p", obj, child.ptr());
-        
-        list& children = __children__[this];
-        children.append( child );
-    }
+//     void
+//     childEvent(QChildEvent* event)
+//     {
+//         //qDebug("QObject_Wrapper::childEvent");
+//         QObject* obj = event->child();
+//         object child( ptr(obj) );
+//         //qDebug("child %p:%p", obj, child.ptr());
+//         
+//         list& children = __children__[this];
+//         children.append( child );
+//     }
 };
 
 QObject* 
@@ -343,8 +343,8 @@ export_QObject()
         //.def(init<QObject*>()[with_custodian_and_ward<2,1>()])
         //.def("parent", &QObject::parent)
         //.def("__eq__", compare)
-        //.def("parent", &QObject::parent, return_internal_reference<>() )
-        .def("parent", &QObject::parent, return_value_policy<reference_existing_object>() )
+        .def("parent", &QObject::parent, return_internal_reference<>() )
+        //.def("parent", &QObject::parent, return_value_policy<reference_existing_object>() )
         .def("setParent", &QObject::setParent, with_custodian_and_ward<2,1>() )
         //.def("parent", &QObject::parent, return_value_policy<manage_new_object>())
         //.def("parent", &QObject::parent, return_value_policy<reference_existing_object>())

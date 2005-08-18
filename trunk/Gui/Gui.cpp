@@ -23,12 +23,8 @@
 
 #include <QtCore/Qt>
 
-void export_QFlags();
-void export_QString();
 void export_QEvent();
 void export_QPaintDevice();
-void export_QObject();
-void export_QCoreApplication();
 void export_QApplication();
 void export_QWidget();
 void export_QPushButton();
@@ -38,18 +34,14 @@ void export_QLayout();
 
 using namespace boost::python;
 
-BOOST_PYTHON_MODULE(Qt)
+BOOST_PYTHON_MODULE(Gui)
 {
-    export_QFlags();
-    export_QString();
     export_QEvent();
     export_QPaintDevice();
-    export_QObject();
-        export_QLayout();
-        export_QCoreApplication();
-            export_QApplication();
-        export_QWidget();
-            export_QPushButton();
-            export_QLineEdit();
-            export_QListView();
+    export_QLayout();
+    export_QApplication();
+    export_QWidget();
+    export_QPushButton();
+    export_QLineEdit();
+    export_QListView();
 }
