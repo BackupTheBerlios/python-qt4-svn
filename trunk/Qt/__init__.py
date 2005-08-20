@@ -2,6 +2,12 @@
 
 print 'starting python-qt4...'
 
+# workaround for cross-module inheritance
+import sys, dl
+__dlopenflags__ = sys.getdlopenflags()
+#sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)
+
+# import modules
 from Namespace import *
 import Core
 import Gui
@@ -19,7 +25,7 @@ def __link_parent__(obj):
 
 def __newinit__(self, *args, **kw):
     self.__oldinit__(*args, **kw)
-    print '__newinit__:', self, self.parent()
+    #print '__newinit__:', self, self.parent()
     __link_parent__(self)
 
 def __newdel__(self):
@@ -42,7 +48,6 @@ def search_qobjects(module):
     return klasses
                 
 __klasses__ = []
-#__klasses__ = [Core.QObject]
 __klasses__ += search_qobjects(Core)
 __klasses__ += search_qobjects(Gui)
 
@@ -60,5 +65,6 @@ for klass in __klasses__:
 #     def __getattr__(self, attr):
 #         return(self.widget, attr)
 
-    
+# workaround for cross-module inheritance
+sys.setdlopenflags(__dlopenflags__)
 print 'done\n'

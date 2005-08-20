@@ -867,7 +867,8 @@ export_QWidget()
         .def("removeAction", &QWidget::removeAction)
         .def("actions", &QWidget::actions)
         */
-        .def("parentWidget", &QWidget::parentWidget, return_internal_reference<>() );
+        .def("parentWidget", &QWidget::parentWidget, return_value_policy<reference_existing_object>() );
+        //.def("parentWidget", &QWidget::parentWidget, return_internal_reference<>() );
 
         /*
         .def("setWindowFlags", &QWidget::setWindowFlags)

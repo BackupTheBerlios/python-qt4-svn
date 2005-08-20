@@ -1,4 +1,4 @@
-LIBS += -L$$BOOSTDIR/lib -lboost_python
+LIBS += -L$$BOOSTDIR/lib -lboost_python 
 INCLUDEPATH += $$BOOSTDIR/include $$PYTHONDIR/include/python$$PYTHONVER
 DESTDIR = ../Qt
 unix {

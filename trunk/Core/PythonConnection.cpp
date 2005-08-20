@@ -21,6 +21,31 @@
 #include "PythonConnection.h"
 #include <boost/python/object.hpp>
 
+using namespace boost::python;
+
+PythonSlot::PythonSlot(object* _slot)
+{
+    __slot = new object(*_slot);
+}
+
+
+QObject*
+PythonSlot0Factory::create(QObject* parent, boost::python::object* _slot)
+{
+    return new PythonSlot0(parent, _slot);
+}
+
+PythonSlot0::PythonSlot0(QObject* parent, boost::python::object* _slot):
+    QObject(parent), PythonSlot(_slot)
+{
+}
+
+void
+PythonSlot0::callback()
+{
+    (*__slot)();
+}
+
 
 PythonConnection::PythonConnection(QObject* sender, boost::python::object* slot):
     //PythonSlot* slot): //, boost::python::object slot):

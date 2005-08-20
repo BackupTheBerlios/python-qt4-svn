@@ -30,6 +30,7 @@
 #include <boost/python/override.hpp>
 #include <boost/python/wrapper.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/python.hpp>
 
 // #include <boost/python/object.hpp>
 // #include <boost/python/list.hpp>
@@ -124,7 +125,7 @@ QObject_del(object self)
 
 
 void
-QObject_connect(object self, const QString& name, object method)
+QObject_connect(object self, const QString& signal, object method)
 //QObject_connect(QObject* self, const QString& name, object method)
 {
     QObject* sender = extract<QObject*>( self );
@@ -135,14 +136,36 @@ QObject_connect(object self, const QString& name, object method)
     //boost::python::incref(method.ptr());
     qDebug("method: %p", method.ptr());
     PythonConnection* conn = new PythonConnection(sender, &method);
-    QObject::connect(sender, name.toStdString().c_str(), conn, SLOT(callback()) );
+    QObject::connect(sender, signal.toStdString().c_str(), conn, SLOT(callback()) );
     method();
     
     //call_method<void>(im_self.ptr(), "on_button_clicked");
     
     //std::string name_ = extract<std::string>(str);
-    std::cout << "connect: " << sender << " " << name.toStdString() << std::endl;
+    std::cout << "connect: " << sender << " " << signal.toStdString() << std::endl;
 }
+
+// void
+// QObject_connect(object self, const QString& name, object method)
+// //QObject_connect(QObject* self, const QString& name, object method)
+// {
+//     QObject* sender = extract<QObject*>( self );
+//     std::string self_ = extract<std::string>( self.attr("objectName") );
+//     //object im_self = method.attr("im_self");
+//     //std::string im_self_ = extract<std::string>( str(im_self) );
+//     
+//     //boost::python::incref(method.ptr());
+//     qDebug("method: %p", method.ptr());
+//     PythonConnection* conn = new PythonConnection(sender, &method);
+//     QObject::connect(sender, name.toStdString().c_str(), conn, SLOT(callback()) );
+//     method();
+//     
+//     //call_method<void>(im_self.ptr(), "on_button_clicked");
+//     
+//     //std::string name_ = extract<std::string>(str);
+//     std::cout << "connect: " << sender << " " << name.toStdString() << std::endl;
+// }
+
 
 list
 QObject___signals__(QObject* self)
@@ -175,6 +198,9 @@ childrens(QObject* obj)
     //list ret;
     return __children__[obj];
 }
+
+
+//namespace {
 
 struct QObject_Wrapper: QObject, wrapper<QObject>
 {
@@ -256,6 +282,11 @@ struct QObject_Wrapper: QObject, wrapper<QObject>
 //     }
 };
 
+BOOST_PYTHON_FUNCTION_OVERLOADS(QObject_connect_overloads_4_5, QObject::connect, 4, 5)
+
+//} // namespace
+
+
 QObject* 
 factory(QObject* parent)
 {
@@ -286,6 +317,8 @@ factory(QObject* parent)
 //     oldnew(self);
 // }
 
+
+
 void
 export_QObject()
 {
@@ -299,7 +332,8 @@ export_QObject()
     def("to_str", to_str);
     def("display", display, return_internal_reference<>() );
     def("compare", compare);
-    
+
+
     // static methods
     def("tr", &QObject::tr);
     def("trUtf8", &QObject::trUtf8);
@@ -325,7 +359,7 @@ export_QObject()
         //.def(init<QObject*>(args("parent")) [with_custodian_and_ward<1,2/*,
         //                                    with_custodian_and_ward<2,1>*/ >()])
 
-        .def("connect", QObject_connect)
+        //.def("connect", QObject_connect)
         .def("event", &QObject::event, &QObject_Wrapper::default_event)
         //.def("eventFilter", &QObject::eventFilter, &QObject_Wrapper::default_eventFilter)
         //.def("installEventFilter", &QObject::installEventFilter)
@@ -356,6 +390,12 @@ export_QObject()
         .def("__signals__", QObject___signals__)
         
         //.def("__del__", QObject_del)
+
+        .def("__connect__",
+            (bool (*)(const QObject*, const char*, const QObject*, const char*, Qt::ConnectionType))
+            &QObject::connect,
+            QObject_connect_overloads_4_5() )    
+        .staticmethod("__connect__")
     ;
 
 /*   QObject_class.attr("__oldinit__") = QObject_class.attr("__init__");

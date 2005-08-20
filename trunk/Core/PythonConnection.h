@@ -25,28 +25,47 @@
 
 #include <QObject>
 
-
 /**
 @author Eric Jardim
 */
 
-// template<typename T>
-// struct classe
-// {
-//     void method(T t);
-// };
-// 
-// template<typename T>
-// void classe<T>::method(T t)
-// {
-//     QDebug("1");
-// }
+using boost::python::object;
+
+struct PythonSlotFactory
+{
+    virtual QObject* create(QObject* parent, object* slot) = 0;
+    virtual ~PythonSlotFactory() {}
+};
+
+class PythonSlot
+{
+protected:
+    object* __slot;
+public:
+    PythonSlot(object*);
+};
+
+struct PythonSlot0Factory: PythonSlotFactory
+{
+    virtual QObject* create(QObject* parent, object* slot);
+};
+
+
+class PythonSlot0: public QObject, public PythonSlot
+{
+    Q_OBJECT
+public:
+    PythonSlot0(QObject* parent, object* slot);
+
+public slots:
+    void callback();
+};
 
 
 template<typename T1>
 class PythonSlot1
 {
-    PythonSlot1(QObject* sender, boost::python::object* slot)
+    PythonSlot1(QObject* sender, object* slot)
     {
     }
 };
@@ -60,7 +79,7 @@ public:
     boost::python::object* _slot;
     
 public:
-    PythonConnection(QObject* sender, boost::python::object* slot); //PythonSlot* slot); //, boost::python::object slot);
+    PythonConnection(QObject* sender, object* slot); //PythonSlot* slot); //, boost::python::object slot);
     //virtual ~PythonConnection();
 
 public slots:

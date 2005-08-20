@@ -18,3 +18,4 @@ CONFIG += designer
 TEMPLATE = lib
 include ( ../setup.pri )
 include ( ../libs.pri )
+
