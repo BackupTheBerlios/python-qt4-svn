@@ -5,7 +5,7 @@ print 'starting python-qt4...'
 # workaround for cross-module inheritance
 import sys, dl
 __dlopenflags__ = sys.getdlopenflags()
-#sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)
+sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)
 
 # import modules
 from Namespace import *
