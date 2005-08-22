@@ -25,6 +25,7 @@ def __link_parent__(obj):
 
 def __newinit__(self, *args, **kw):
     self.__oldinit__(*args, **kw)
+    self.__qt_slots__ = []
     #print '__newinit__:', self, self.parent()
     __link_parent__(self)
 
@@ -38,6 +39,42 @@ def __replace_constructor__(klass):
     klass.__oldinit__ = klass.__init__
     klass.__init__ = __newinit__
 
+    
+##############################################################################
+
+import types
+
+def parse_signal(signal):
+    name, sig = signal.split('(')
+    sig = '('+sig
+    return name, sig
+    
+def __connect__(self, signal, callback):
+    """
+    The connect function is one of the central aspects of the Qt toolkit.
+    Every QObject must connect its events (signals) to other objects
+    callback (slots), in order to capture the behaviour of the sender.
+    
+    Sintax:
+    sender.connect("signal", reciever.method) or
+    sender.connect("signal(int, str)", reciever.method)
+    """
+    if isinstance(callback, types.MethodType):
+        reciever = callback.im_self
+        if not isinstance(reciever, Core.QObject): raise AttributeError
+        name, sig = parse_signal(signal)
+        slot = Core.__connect_method__(self, reciever, name, sig, callback)
+        if slot is not None:
+            self.__qt_slots__.append(slot)
+        print '_________'
+    else:
+        raise AttributeError
+    
+Core.QObject.connect = __connect__
+
+###############################################################################
+
+
 def search_qobjects(module):
     klasses = []
     for name in dir(module):
@@ -50,6 +87,8 @@ def search_qobjects(module):
 __klasses__ = []
 __klasses__ += search_qobjects(Core)
 __klasses__ += search_qobjects(Gui)
+
+
 
 #print __klasses__
 for klass in __klasses__:

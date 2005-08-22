@@ -23,31 +23,35 @@
 
 using namespace boost::python;
 
-PythonSlot::PythonSlot(object* _slot)
+PythonSlot::PythonSlot(object* method)
 {
-    __slot = new object(*_slot);
+    _method = new object(*method);
 }
 
 
 QObject*
-PythonSlot0Factory::create(QObject* parent, boost::python::object* _slot)
+PythonSlot0Factory::create(QObject* reciever, object* method)
 {
-    return new PythonSlot0(parent, _slot);
+    return new PythonSlot0(reciever, method);
 }
 
-PythonSlot0::PythonSlot0(QObject* parent, boost::python::object* _slot):
-    QObject(parent), PythonSlot(_slot)
+PythonSlot0::PythonSlot0(QObject* reciever, object* method):
+    QObject(reciever), PythonSlot(method)
 {
 }
 
 void
 PythonSlot0::callback()
 {
-    (*__slot)();
+    (*_method)();
 }
 
 
-PythonConnection::PythonConnection(QObject* sender, boost::python::object* slot):
+
+
+
+// ---------------------------------------------------------------------------
+PythonConnection::PythonConnection(QObject* sender, object* slot):
     //PythonSlot* slot): //, boost::python::object slot):
     QObject(sender) //, _slot(slot)
 {

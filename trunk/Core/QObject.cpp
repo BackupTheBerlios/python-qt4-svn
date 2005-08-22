@@ -192,6 +192,7 @@ static QMap<QObject*, list> __children__;
 //     }
 // };
 
+
 list
 childrens(QObject* obj)
 {
@@ -317,13 +318,49 @@ factory(QObject* parent)
 //     oldnew(self);
 // }
 
+static QMap<QString, PythonSlotFactory*> slot_registry;
+
+PythonSlotFactory*
+get_slot_factory(QString signature)
+{
+    PythonSlotFactory* factory = slot_registry[signature];
+    return factory;
+}
+
+QObject*
+create_slot(QString signature, QObject* reciever, object method)
+{
+    PythonSlotFactory* factory = get_slot_factory(signature);
+    return factory->create(reciever, &method);
+}
+
+QObject*
+__connect_method__(QObject* sender, QObject* reciever, QString signal, QString signature, object method)
+{
+    qDebug("__connect_method__");
+    QString signalname = QString("2")+signal+signature;
+    QString slotname = QString("1callback")+signature;
+    qDebug("signal:%s, slot:%s", signalname.toStdString().c_str(), slotname.toStdString().c_str());
+    QObject* pySlot = create_slot(signature, reciever, method);
+    bool result = QObject::connect( sender,
+                                    signalname.toStdString().c_str(),
+                                    pySlot,
+                                    slotname.toStdString().c_str() );
+    if (result) return pySlot;
+    else return 0;
+}
+
 
 
 void
 export_QObject()
 {
+    qDebug("slot_registry");
+    slot_registry["()"] = new PythonSlot0Factory;
+    //def("create_slot", );
+    
     to_python_converter<QList<QObject*>, QObjectList_to_python_object>();
-
+    
     //def("connect", &Qt_connect, with_custodian_and_ward<1,3>() );
     //def("__bypass__", __bypass__, return_value_policy<reference_existing_object>() );
     def("childrens", childrens, default_call_policies() );
@@ -332,7 +369,7 @@ export_QObject()
     def("to_str", to_str);
     def("display", display, return_internal_reference<>() );
     def("compare", compare);
-
+    def("__connect_method__", __connect_method__, return_value_policy<manage_new_object>());
 
     // static methods
     def("tr", &QObject::tr);
@@ -391,11 +428,11 @@ export_QObject()
         
         //.def("__del__", QObject_del)
 
-        .def("__connect__",
+/*        .def("__connect__",
             (bool (*)(const QObject*, const char*, const QObject*, const char*, Qt::ConnectionType))
             &QObject::connect,
             QObject_connect_overloads_4_5() )    
-        .staticmethod("__connect__")
+        .staticmethod("__connect__")*/
     ;
 
 /*   QObject_class.attr("__oldinit__") = QObject_class.attr("__init__");

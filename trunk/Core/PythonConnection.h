@@ -31,23 +31,26 @@
 
 using boost::python::object;
 
-struct PythonSlotFactory
-{
-    virtual QObject* create(QObject* parent, object* slot) = 0;
-    virtual ~PythonSlotFactory() {}
-};
-
 class PythonSlot
 {
 protected:
-    object* __slot;
+    object* _method;
 public:
-    PythonSlot(object*);
+    PythonSlot(object* method);
+    virtual ~PythonSlot() { delete _method; }
 };
+
+
+struct PythonSlotFactory
+{
+    virtual QObject* create(QObject* reciever, object* method) = 0;
+    virtual ~PythonSlotFactory() {}
+};
+
 
 struct PythonSlot0Factory: PythonSlotFactory
 {
-    virtual QObject* create(QObject* parent, object* slot);
+    virtual QObject* create(QObject* reciever, object* method);
 };
 
 
@@ -55,7 +58,7 @@ class PythonSlot0: public QObject, public PythonSlot
 {
     Q_OBJECT
 public:
-    PythonSlot0(QObject* parent, object* slot);
+    PythonSlot0(QObject* reciever, object* slot);
 
 public slots:
     void callback();
