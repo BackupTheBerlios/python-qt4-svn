@@ -20,7 +20,7 @@
 
 # Dynamic UI loading
 
-from Qt import QApplication, QWidget, QPushButton, loadUi
+from Qt.Gui import QApplication, QWidget, QPushButton, loadUi
 
 class Form(QWidget):
     def __init__(self, parent=None):

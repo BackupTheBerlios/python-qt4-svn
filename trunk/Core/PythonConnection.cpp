@@ -23,20 +23,29 @@
 
 using namespace boost::python;
 
+// ----------------------------------------------------------------------------
+
 PythonSlot::PythonSlot(object* method)
 {
     _method = new object(*method);
 }
 
 
-QObject*
-PythonSlot0Factory::create(QObject* reciever, object* method)
+PythonSlot::~PythonSlot()
 {
-    return new PythonSlot0(reciever, method);
+    delete _method; 
 }
 
-PythonSlot0::PythonSlot0(QObject* reciever, object* method):
-    QObject(reciever), PythonSlot(method)
+// ----------------------------------------------------------------------------
+
+QObject*
+PythonSlot0Factory::create(object* method)
+{
+    return new PythonSlot0(method);
+}
+
+PythonSlot0::PythonSlot0(object* method):
+    QObject(0), PythonSlot(method)
 {
 }
 
@@ -46,34 +55,22 @@ PythonSlot0::callback()
     (*_method)();
 }
 
+// ----------------------------------------------------------------------------
 
-
-
-
-// ---------------------------------------------------------------------------
-PythonConnection::PythonConnection(QObject* sender, object* slot):
-    //PythonSlot* slot): //, boost::python::object slot):
-    QObject(sender) //, _slot(slot)
+QObject*
+PythonSlot1_bool_Factory::create(object* method)
 {
-    _slot = new boost::python::object(*slot);
-    qDebug("_slot: %p", _slot->ptr());
-    //boost::python::incref(_slot.ptr());
+    return new PythonSlot1_bool(method);
 }
 
-
-// PythonConnection::~PythonConnection()
-// {
-//     qDebug("Connection deleted");
-// }
-
+PythonSlot1_bool::PythonSlot1_bool(object* method):
+    QObject(0), PythonSlot(method)
+{
+}
 
 void
-PythonConnection::callback()
+PythonSlot1_bool::callback(bool p0)
 {
-    qDebug("Callback %d", sizeof(PythonConnection));
-    qDebug("_slot: %p", _slot->ptr());
-    //boost::python::object slot = *_slot;
-    (*_slot)();
+    (*_method)(p0);
 }
-
 

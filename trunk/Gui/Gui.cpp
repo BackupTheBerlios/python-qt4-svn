@@ -24,6 +24,7 @@
 #include <QtCore/Qt>
 
 void export_QEvent();
+void export_QFont();
 void export_QPaintDevice();
 void export_QApplication();
 void export_QWidget();
@@ -37,6 +38,7 @@ using namespace boost::python;
 BOOST_PYTHON_MODULE(Gui)
 {
     export_QEvent();
+    export_QFont();
     export_QPaintDevice();
     export_QLayout();
     export_QApplication();

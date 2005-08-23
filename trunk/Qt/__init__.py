@@ -14,6 +14,8 @@ import Gui
 #from Core import *
 #from Gui import *
 
+__qt_connections__ = {}
+
 def __link_parent__(obj):
     parent = obj.parent()
     #print '__link_parent__:',obj, parent
@@ -26,13 +28,18 @@ def __link_parent__(obj):
 def __newinit__(self, *args, **kw):
     self.__oldinit__(*args, **kw)
     self.__qt_slots__ = []
+    if isinstance(self, Core.QCoreApplication):
+        print 'is app'
+        Core.__app__ = self
     #print '__newinit__:', self, self.parent()
     __link_parent__(self)
 
 def __newdel__(self):
-    #print '__del__:', self
-    if hasattr(self, '__children__'):
-        del self.__children__
+    print '__del__:', self
+    #if hasattr(self, '__children__'):
+    #    del self.__children__
+    #if hasattr(self, '__qt_slots__'):
+    #    del self.__qt_slots__
     
     
 def __replace_constructor__(klass):
@@ -44,7 +51,7 @@ def __replace_constructor__(klass):
 
 import types
 
-def parse_signal(signal):
+def _parse_signal(signal):
     name, sig = signal.split('(')
     sig = '('+sig
     return name, sig
@@ -55,20 +62,40 @@ def __connect__(self, signal, callback):
     Every QObject must connect its events (signals) to other objects
     callback (slots), in order to capture the behaviour of the sender.
     
-    Sintax:
-    sender.connect("signal", reciever.method) or
-    sender.connect("signal(int, str)", reciever.method)
+    Syntax:
+    Automatic signature (generally the biggest)
+    >>> sender.connect("signal", reciever.method) 
+    
+    Specific signature
+    >>> sender.connect("signal(int, str)", reciever.method)
+    
+    Connect to normal functions or static methods
+    >>> sender.connect("signal", function) 
     """
-    if isinstance(callback, types.MethodType):
-        reciever = callback.im_self
-        if not isinstance(reciever, Core.QObject): raise AttributeError
-        name, sig = parse_signal(signal)
-        slot = Core.__connect_method__(self, reciever, name, sig, callback)
-        if slot is not None:
-            self.__qt_slots__.append(slot)
-        print '_________'
+    if __qt_connections__.has_key((self, signal, callback)):
+        print 'Warning! %s: %s -> %s is already connected!' % (signal, self, callback)        
+        return # do nothing
+
+    if callable(callback):
+    #if isinstance(callback, types.MethodType) or \
+    #   isinstance(callback, types.FunctionType):        
+        reciever = None
+        if isinstance(callback, types.MethodType):
+            reciever = callback.im_self       
+            print 'reciever:', reciever
+        #if not isinstance(reciever, Core.QObject): 
+        #    raise AttributeError, 'reciever must be a QObject'
+        name, sig = _parse_signal(signal)
+        pyslot = Core.__connect_method__(self, name, sig, callback)
+        if pyslot is not None:
+            # hold reference of the python slot
+            __qt_connections__[(self, signal, callback)] = pyslot
+            self.__qt_slots__.append(pyslot)
+            #if reciever is not None:
+            #    if isinstance(reciever, Core.QObject): 
+            #        reciever.__qt_slots__.append(pyslot)
     else:
-        raise AttributeError
+        raise AttributeError, 'callback must be a function or method'
     
 Core.QObject.connect = __connect__
 
@@ -93,7 +120,7 @@ __klasses__ += search_qobjects(Gui)
 #print __klasses__
 for klass in __klasses__:
     __replace_constructor__(klass)
-    #klass.__del__ = __newdel__
+    klass.__del__ = __newdel__
 
 
 # Proxy class

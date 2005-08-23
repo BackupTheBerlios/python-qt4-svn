@@ -124,7 +124,7 @@ QObject_del(object self)
 }
 
 
-void
+/*void
 QObject_connect(object self, const QString& signal, object method)
 //QObject_connect(QObject* self, const QString& name, object method)
 {
@@ -143,7 +143,7 @@ QObject_connect(object self, const QString& signal, object method)
     
     //std::string name_ = extract<std::string>(str);
     std::cout << "connect: " << sender << " " << signal.toStdString() << std::endl;
-}
+}*/
 
 // void
 // QObject_connect(object self, const QString& name, object method)
@@ -328,20 +328,20 @@ get_slot_factory(QString signature)
 }
 
 QObject*
-create_slot(QString signature, QObject* reciever, object method)
+create_slot(QString signature, object method)
 {
     PythonSlotFactory* factory = get_slot_factory(signature);
-    return factory->create(reciever, &method);
+    return factory->create(&method);
 }
 
 QObject*
-__connect_method__(QObject* sender, QObject* reciever, QString signal, QString signature, object method)
+__connect_method__(QObject* sender, QString signal, QString signature, object method)
 {
     qDebug("__connect_method__");
     QString signalname = QString("2")+signal+signature;
     QString slotname = QString("1callback")+signature;
     qDebug("signal:%s, slot:%s", signalname.toStdString().c_str(), slotname.toStdString().c_str());
-    QObject* pySlot = create_slot(signature, reciever, method);
+    QObject* pySlot = create_slot(signature, method);
     bool result = QObject::connect( sender,
                                     signalname.toStdString().c_str(),
                                     pySlot,
@@ -357,6 +357,7 @@ export_QObject()
 {
     qDebug("slot_registry");
     slot_registry["()"] = new PythonSlot0Factory;
+    slot_registry["(bool)"] = new PythonSlot1_bool_Factory;
     //def("create_slot", );
     
     to_python_converter<QList<QObject*>, QObjectList_to_python_object>();
@@ -425,6 +426,9 @@ export_QObject()
         //.def_readwrite("__children__", &QObject_Wrapper::children)
         
         .def("__signals__", QObject___signals__)
+        
+        // slots
+        .def("deleteLater", &QObject::deleteLater)
         
         //.def("__del__", QObject_del)
 

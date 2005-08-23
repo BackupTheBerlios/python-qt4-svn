@@ -58,6 +58,14 @@ struct QPushButton_Wrapper: QPushButton, wrapper<QPushButton>
     {
     }
 
+    // signals
+    void
+    clicked(bool checked = false)
+    {
+        this->QPushButton::clicked(checked);
+    }
+   
+
 //protected:
 //     bool
 //     event(QEvent* p0)
@@ -93,6 +101,10 @@ export_QPushButton()
         .add_property("autoDefault", &QPushButton::autoDefault, &QPushButton::setAutoDefault)
         .add_property("default", &QPushButton::isDefault, &QPushButton::setDefault)
         .add_property("flat", &QPushButton::isFlat, &QPushButton::setFlat)
+        
+        // signals
+        .def("clicked", (void (QPushButton_Wrapper::*)() ) &QPushButton_Wrapper::clicked)
+        .def("clicked", (void (QPushButton_Wrapper::*)(bool) ) &QPushButton_Wrapper::clicked)
         
         //.def("parent", &QObject::parent, return_internal_reference<>() )
         //.def("parent", &QObject::parent, return_value_policy<manage_new_object>())

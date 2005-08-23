@@ -25,10 +25,6 @@
 
 #include <QObject>
 
-/**
-@author Eric Jardim
-*/
-
 using boost::python::object;
 
 class PythonSlot
@@ -37,57 +33,48 @@ protected:
     object* _method;
 public:
     PythonSlot(object* method);
-    virtual ~PythonSlot() { delete _method; }
+    virtual ~PythonSlot();
 };
-
 
 struct PythonSlotFactory
 {
-    virtual QObject* create(QObject* reciever, object* method) = 0;
+    virtual QObject* create(object* method) = 0;
     virtual ~PythonSlotFactory() {}
 };
 
+// ----------------------------------------------------------------------------
 
 struct PythonSlot0Factory: PythonSlotFactory
 {
-    virtual QObject* create(QObject* reciever, object* method);
+    virtual QObject* create(object* method);
 };
-
 
 class PythonSlot0: public QObject, public PythonSlot
 {
     Q_OBJECT
 public:
-    PythonSlot0(QObject* reciever, object* slot);
+    PythonSlot0(object* slot);
 
 public slots:
     void callback();
 };
 
+// ----------------------------------------------------------------------------
 
-template<typename T1>
-class PythonSlot1
+
+struct PythonSlot1_bool_Factory: PythonSlotFactory
 {
-    PythonSlot1(QObject* sender, object* slot)
-    {
-    }
+    virtual QObject* create(object* method);
 };
 
-class PythonConnection: public QObject
+class PythonSlot1_bool: public QObject, public PythonSlot
 {
     Q_OBJECT
-
 public:
-    //boost::python::object _slot;
-    boost::python::object* _slot;
-    
-public:
-    PythonConnection(QObject* sender, object* slot); //PythonSlot* slot); //, boost::python::object slot);
-    //virtual ~PythonConnection();
+    PythonSlot1_bool(object* slot);
 
 public slots:
-    void callback();
-    
+    void callback(bool p0);
 };
 
 #endif

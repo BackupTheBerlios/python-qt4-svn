@@ -1,6 +1,6 @@
 # QFormBuilder example
 
-from Qt import *
+from Qt.Gui import QApplication, loadUi
 
 app = QApplication('QFormBuilderExample')
 form = loadUi('form.ui', None)

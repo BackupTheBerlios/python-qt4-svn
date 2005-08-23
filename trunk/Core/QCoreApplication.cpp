@@ -64,6 +64,14 @@ export_QCoreApplication()
 
         .def("run", &QCoreApplication::exec)
         .staticmethod("run")
+     
+	.def("instance", &QCoreApplication::instance, 
+			return_value_policy<reference_existing_object>())
+        .staticmethod("instance")
+   
+        .def("exit", (void(*)()) &QCoreApplication::exit)
+        .def("exit", (void(*)(int)) &QCoreApplication::exit)
+        .staticmethod("exit")
         
         .def("quit", &QCoreApplication::quit)
         .staticmethod("quit")        

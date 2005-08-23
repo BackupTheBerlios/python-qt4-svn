@@ -4,8 +4,7 @@ from sys import argv
 app = QApplication('t2')
 quit = QPushButton("Quit", None)
 quit.resize(100, 30)
-quit.setFont(QFont("Times", 18, QFont.Bold));
-quit.connect("clicked", app.quit);
+quit.setFont(QFont('Times', 18, QFont.Bold));
+quit.connect('clicked()', app.quit);
 quit.show()
 app.run()
-

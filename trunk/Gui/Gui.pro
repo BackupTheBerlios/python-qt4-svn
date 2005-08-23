@@ -1,7 +1,7 @@
 # Arquivo gerado pelo gerenciador qmake do kdevelop. 
 # ------------------------------------------- 
-# O subdir relativo ao diretório principal do projeto: .
-# O alvo é uma biblioteca: Qt
+# O subdir relativo ao diretï¿½io principal do projeto: .
+# O alvo ï¿½uma biblioteca: Qt
 
 
 SOURCES += Gui.cpp \
@@ -12,7 +12,8 @@ SOURCES += Gui.cpp \
            QListView.cpp \
            QLayout.cpp \
            QEvent.cpp \
-           QPaintDevice.cpp 
+           QPaintDevice.cpp \
+           QFont.cpp
 TARGET = Gui
 CONFIG += designer
 TEMPLATE = lib

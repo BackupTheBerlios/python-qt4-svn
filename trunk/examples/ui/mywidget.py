@@ -1,5 +1,6 @@
-from Qt import QEvent, QObject, QWidget, QApplication, QPushButton, MouseButton
-
+from Qt import MouseButton
+from Qt.Core import QObject
+from Qt.Gui import QEvent, QWidget, QApplication, QPushButton
 
 class MyObject(QObject):
     def __init__(self, parent=None):

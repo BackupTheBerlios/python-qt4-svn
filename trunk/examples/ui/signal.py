@@ -18,8 +18,6 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ############################################################################
 
-# Hello World
-
 from Qt.Gui import QApplication, QPushButton
 
 class MyButton(QPushButton):
@@ -27,13 +25,8 @@ class MyButton(QPushButton):
        QPushButton.__init__(self, text, parent)
        self.objectName = 'button'
        self.connect("clicked()", self.on_button_clicked)
+       print self.__qt_slots__
 
-    def event(self, event):
-        print event
-        
-    def eventFilter(self, obj, event):
-        print obj, event
-       
     def on_button_clicked(self):
         print 'Hello, World!'
        
@@ -41,4 +34,3 @@ app = QApplication('Hello World example')
 button = MyButton('Click me')
 button.show()
 app.run()
-

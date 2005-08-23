@@ -18,7 +18,8 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ############################################################################
 
-from Qt import QApplication, QObject, QPushButton
+from Qt.Core import QObject
+from Qt.Gui import QApplication, QPushButton
 
 class MyObject(QObject):
     def __init__(self, parent=None):

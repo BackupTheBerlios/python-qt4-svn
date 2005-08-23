@@ -20,7 +20,7 @@
 
 # Dynamic dialog loading
 
-from Qt import QApplication, QWidget, QPushButton, loadUi, QGridLayout, QVBoxLayout, QPaintDevice
+from Qt.Gui import QApplication, QWidget, QPushButton, loadUi, QGridLayout, QVBoxLayout, QPaintDevice
 import Qt
 
 
@@ -53,3 +53,4 @@ if __name__ == '__main__':
     dialog = Dialog(None)
     dialog.show()
     app.run()
+
