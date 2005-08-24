@@ -1,5 +1,5 @@
 # -*- encoding:utf-8 -*-
-from Qt import qprint, to_str
+from Qt.Core import qprint, to_str
 
 s1 = 'Eric Jardim'
 s2 = '日本語のpython-qt4'

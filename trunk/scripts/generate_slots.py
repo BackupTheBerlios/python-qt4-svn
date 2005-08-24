@@ -10,7 +10,17 @@
 #     'QObject*':'QObject'
 # }
 
-__signtures__ = [ 
+# def alias(s):
+#     if __alias__.has_key(s):
+#         return __alias__[s]
+#     else:
+#         return s
+
+__headers__ = [ 
+    'QString', 'QSize', 'QRect', 'QPoint', 'QTextCursor', 'QObject'
+]
+
+__signatures__ = [ 
     ['bool'],
     ['int'],
     ['double'],
@@ -24,14 +34,8 @@ __signtures__ = [
     ['int', 'int', 'int']
 ]
 
-def alias(s):
-    if __alias__.has_key(s):
-        return __alias__[s]
-    else:
-        return s
 
-
-for sig in __signtures__:
+for sig in __signatures__:
     print sig
     
 
@@ -56,6 +60,18 @@ license = """
 *    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ****************************************************************************/
 """
+license = license.strip()
+
+
+inc_tmpl = """
+#include <%s>
+"""
+inc_tmpl = inc_tmpl.lstrip()
+
+includes = ''
+for klass in __headers__:
+        includes += inc_tmpl%(klass)
+
     
 h_pre = """
 #ifndef PYTHONCONNECTION_H
@@ -63,37 +79,41 @@ h_pre = """
 
 #include <boost/python/object_fwd.hpp>
 
-#include <QObject>
+#include <QMap>
+%s
 
 using boost::python::object;
 
-class PythonSlot
+class AbstractPythonSlot
 {
 protected:
     object* _method;
 public:
-    PythonSlot(object* method);
-    virtual ~PythonSlot();
+    AbstractPythonSlot(object* method);
+    virtual ~AbstractPythonSlot();
 };
 
-struct PythonSlotFactory
+struct AbstractPythonSlotFactory
 {
     virtual QObject* create(object* method) = 0;
-    virtual ~PythonSlotFactory() {}
+    virtual ~AbstractPythonSlotFactory() {}
 };
+
+typedef QMap<QString, AbstractPythonSlotFactory*> FactoryMap;
+void register_slot_factories(FactoryMap& slot_registry);
 
 // ----------------------------------------------------------------------------
 
-struct PythonSlot0Factory: PythonSlotFactory
+struct PythonSlotFactory: AbstractPythonSlotFactory
 {
     virtual QObject* create(object* method);
 };
 
-class PythonSlot0: public QObject, public PythonSlot
+class PythonSlot: public QObject, public AbstractPythonSlot
 {
     Q_OBJECT
 public:
-    PythonSlot0(object* slot);
+    PythonSlot(object* slot);
 
 public slots:
     void callback();
@@ -102,14 +122,16 @@ public slots:
 // ----------------------------------------------------------------------------
 
 """
+h_pre = h_pre%(includes)
+
 
 h_tmpl = """
-struct PythonSlot%sFactory: PythonSlotFactory
+struct PythonSlot%sFactory: AbstractPythonSlotFactory
 {
     virtual QObject* create(object* method);
 };
 
-class PythonSlot%s: public QObject, public PythonSlot
+class PythonSlot%s: public QObject, public AbstractPythonSlot
 {
     Q_OBJECT
 public:
@@ -123,6 +145,10 @@ public slots:
 
 """
 
+h_pos = """
+#endif
+"""
+
 
 cpp_pre = """
 #include "PythonConnection.h"
@@ -132,13 +158,13 @@ using namespace boost::python;
 
 // ----------------------------------------------------------------------------
 
-PythonSlot::PythonSlot(object* method)
+AbstractPythonSlot::AbstractPythonSlot(object* method)
 {
     _method = new object(*method);
 }
 
 
-PythonSlot::~PythonSlot()
+AbstractPythonSlot::~AbstractPythonSlot()
 {
     delete _method; 
 }
@@ -146,18 +172,18 @@ PythonSlot::~PythonSlot()
 // ----------------------------------------------------------------------------
 
 QObject*
-PythonSlot0Factory::create(object* method)
+PythonSlotFactory::create(object* method)
 {
-    return new PythonSlot0(method);
+    return new PythonSlot(method);
 }
 
-PythonSlot0::PythonSlot0(object* method):
-    QObject(0), PythonSlot(method)
+PythonSlot::PythonSlot(object* method):
+    QObject(0), AbstractPythonSlot(method)
 {
 }
 
 void
-PythonSlot0::callback()
+PythonSlot::callback()
 {
     (*_method)();
 }
@@ -165,9 +191,49 @@ PythonSlot0::callback()
 // ----------------------------------------------------------------------------
 """
 
-reg_pre = """
-slot_registry["()"] = new PythonSlot0Factory;
+cpp_tmpl = """
+QObject*
+PythonSlot%sFactory::create(object* method)
+{
+    return new PythonSlot%s(method);
+}
+
+PythonSlot%s::PythonSlot%s(object* method):
+    QObject(0), AbstractPythonSlot(method)
+{
+}
+
+void
+PythonSlot%s::callback(%s)
+{
+    (*_method)(%s);
+}
+
+// ----------------------------------------------------------------------------
 """
+
+
+reg_pre = """
+#include "PythonConnection.h"
+
+void 
+register_slot_factories(FactoryMap& slot_registry)
+{
+    slot_registry["()"] = new PythonSlotFactory;
+"""
+reg_pre = reg_pre.rstrip()
+
+reg_tmpl = """
+    slot_registry["(%s)"] = new PythonSlot%sFactory;
+"""    
+reg_tmpl = reg_tmpl.rstrip()    
+
+reg_pos = """
+}
+"""
+
+
+
 ########################################################33#####################
 
 def pod_ptr(arg, ptr=False):
@@ -176,41 +242,56 @@ def pod_ptr(arg, ptr=False):
     else:
         return arg
 
-def signature(args, sep=',', pre='', pos='', ptr=False):
-    if len(args) == 1:
-        ret = pod_ptr(args[0], ptr)
-    else:
-        ret = ''
-        for i in range(len(args)):
-            arg = pod_ptr(args[i], ptr)
-            ret += arg+sep
-        ret = ret[:-1]
+def arguments(args):
+    ret = ''
+    for i in range(len(args)):
+        ret += 'p%d'%(i)
+        if (args[i]).endswith('*'): ret = 'ptr('+ret+')'
+        ret += ','
+    return ret[:-1]
+                
+def signature(args, sep=',', pre='', pos='', ptr=False, param=False):
+    ret = ''
+    for i in range(len(args)):
+        arg = pod_ptr(args[i], ptr)
+        ret += arg
+        if param: ret += (' p%d'%(i))
+        ret += sep
+    ret = ret[:-1]    
     return pre+ret+pos
-    
+  
+### open all files (overwrite if necessary)     
 h_file = open('PythonConnection.h','w')
 cpp_file = open('PythonConnection.cpp','w')
-reg_file = open('register.cpp','w')
+reg_file = open('Register.cpp','w')
 
-# GPL license
+### GPL license
 print >>h_file, license
 print >>cpp_file, license
+print >>reg_file, license
 
-# headers
+### headers
 print >>h_file, h_pre
 print >>cpp_file, cpp_pre
 print >>reg_file, reg_pre
 
-for s in __signtures__:
+#### middle
+for s in __signatures__:
     cb = signature(s, ptr=True)
     ps = signature(s, '_', '_')
     psf = signature(s, '_', '_', '_')
+    cal = arguments(s)
+    par = signature(s, ptr=True, param=True)    
     print >>h_file, h_tmpl % (psf,ps,ps,cb)
-    
+    print >>cpp_file, cpp_tmpl % (psf,ps,ps,ps,ps,par,cal)    
+    print >>reg_file, reg_tmpl % (cb,psf)
 
+#### footers
+print >>h_file, h_pos
+print >>reg_file, reg_pos
+
+### close all files
 h_file.close()
 cpp_file.close()
 reg_file.close()
-
-
-
 

@@ -1,7 +1,7 @@
 import Qt
 print 'Qt:', Qt
 
-from Qt import QApplication
+from Qt.Gui import QApplication
 
 app = QApplication('')
 print 'app:', app, app.sessionId()

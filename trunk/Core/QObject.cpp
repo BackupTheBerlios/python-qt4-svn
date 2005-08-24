@@ -318,19 +318,12 @@ factory(QObject* parent)
 //     oldnew(self);
 // }
 
-static QMap<QString, PythonSlotFactory*> slot_registry;
-
-PythonSlotFactory*
-get_slot_factory(QString signature)
-{
-    PythonSlotFactory* factory = slot_registry[signature];
-    return factory;
-}
+static QMap<QString, AbstractPythonSlotFactory*> slot_registry;
 
 QObject*
 create_slot(QString signature, object method)
 {
-    PythonSlotFactory* factory = get_slot_factory(signature);
+    AbstractPythonSlotFactory* factory = slot_registry[signature];
     return factory->create(&method);
 }
 
@@ -355,10 +348,8 @@ __connect_method__(QObject* sender, QString signal, QString signature, object me
 void
 export_QObject()
 {
-    qDebug("slot_registry");
-    slot_registry["()"] = new PythonSlot0Factory;
-    slot_registry["(bool)"] = new PythonSlot1_bool_Factory;
-    //def("create_slot", );
+    qDebug(">>> register_slot_factories");
+    register_slot_factories(slot_registry);    
     
     to_python_converter<QList<QObject*>, QObjectList_to_python_object>();
     
@@ -373,7 +364,8 @@ export_QObject()
     def("__connect_method__", __connect_method__, return_value_policy<manage_new_object>());
 
     // static methods
-    def("tr", &QObject::tr);
+    def("tr", ( QString (*)(const char*) ) &QObject::tr);
+    def("tr", ( QString (*)(const char*, const char*) ) &QObject::tr);
     def("trUtf8", &QObject::trUtf8);
 
     QObject_class = class_<QObject_Wrapper,

@@ -24,6 +24,7 @@
 #include <QString>
 #include <string>
 //#include <memory>
+#include <stdlib.h>
 
 
 static int one = 1;
@@ -31,8 +32,9 @@ static int one = 1;
 static char**
 AppName(std::string name)
 {
-    char** v = new char* [1];
+    char** v = (char**) malloc(sizeof(char*));
     v[0] = new char[strlen(name.c_str())];
+    v[0] = (char*) malloc(strlen(name.c_str())+1);
     strcpy(v[0], name.c_str());
     return v;
 }

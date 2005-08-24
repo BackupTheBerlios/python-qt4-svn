@@ -48,12 +48,12 @@ using namespace boost::python;
 
 struct QPushButton_Wrapper: QPushButton, wrapper<QPushButton>
 {
-    QPushButton_Wrapper(QWidget* p0):
+    QPushButton_Wrapper(QWidget* p0=0):
         QPushButton(p0)
     {
     }
 
-    QPushButton_Wrapper(const QString& p0, QWidget* p1):
+    QPushButton_Wrapper(const QString& p0, QWidget* p1=0):
         QPushButton(p0, p1)
     {
     }
@@ -64,7 +64,6 @@ struct QPushButton_Wrapper: QPushButton, wrapper<QPushButton>
     {
         this->QPushButton::clicked(checked);
     }
-   
 
 //protected:
 //     bool
@@ -93,9 +92,11 @@ export_QPushButton()
             bases<QWidget>,
             boost::shared_ptr<QPushButton_Wrapper>,
             boost::noncopyable>
-            ("QPushButton", init<QWidget*>() [with_custodian_and_ward<1,2>()])
-            
+            ("QPushButton", init<>() )
+        .def(init<QWidget*>() [with_custodian_and_ward<1,2>()])    
+        .def(init<const QString&>() )
         .def(init<const QString&, QWidget*>() [with_custodian_and_ward<1,3>()] )
+        
         //.def("event", &QObject::event, &QObject_Wrapper::default_event)
         //.def("event", &QPushButton::event, &QPushButton_Wrapper::default_event)
         .add_property("autoDefault", &QPushButton::autoDefault, &QPushButton::setAutoDefault)

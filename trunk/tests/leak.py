@@ -1,5 +1,5 @@
 # try to leak memory
-from Qt import QObject, childrens, factory
+from Qt.Core import QObject, childrens, factory
 
 
 

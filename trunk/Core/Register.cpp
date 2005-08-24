@@ -18,50 +18,34 @@
 *    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ****************************************************************************/
 
-#include <boost/python.hpp>
-#include <boost/python/wrapper.hpp>
-#include <QApplication>
-#include <QMainWindow>
-#include <QString>
-#include <string>
-#include <memory>
-#include <stdlib.h>
+#include "PythonConnection.h"
 
-static int one = 1;
-
-static char**
-AppName(std::string name)
+void 
+register_slot_factories(FactoryMap& slot_registry)
 {
-    char** v = (char**) malloc(sizeof(char*));
-    v[0] = (char*) malloc(strlen(name.c_str())+1);
-    strcpy(v[0], name.c_str());
-    return v;
-}
+    slot_registry["()"] = new PythonSlotFactory;
 
-using namespace boost::python;
+    slot_registry["(bool)"] = new PythonSlot_bool_Factory;
 
-struct QApplication_Wrapper: QApplication, wrapper<QApplication>
-{
-    QApplication_Wrapper(std::string name):
-        QApplication(one, AppName(name))
-    {
-    }
-};
+    slot_registry["(int)"] = new PythonSlot_int_Factory;
 
-void
-export_QApplication()
-{
-    class_< QApplication_Wrapper,
-            bases<QCoreApplication>,
-            boost::shared_ptr<QApplication_Wrapper>,
-            boost::noncopyable>
-            ("QApplication", init<std::string>())
-            
-        .def("sessionId", &QApplication::sessionId)
-        .def("notify", &QApplication::notify)  
+    slot_registry["(double)"] = new PythonSlot_double_Factory;
 
-    ;
+    slot_registry["(QString)"] = new PythonSlot_QString_Factory;
+
+    slot_registry["(QSize)"] = new PythonSlot_QSize_Factory;
+
+    slot_registry["(QRect)"] = new PythonSlot_QRect_Factory;
+
+    slot_registry["(QPoint)"] = new PythonSlot_QPoint_Factory;
+
+    slot_registry["(QTextCursor)"] = new PythonSlot_QTextCursor_Factory;
+
+    slot_registry["(QObject*)"] = new PythonSlot_QObject_Factory;
+
+    slot_registry["(int,int)"] = new PythonSlot_int_int_Factory;
+
+    slot_registry["(int,int,int)"] = new PythonSlot_int_int_int_Factory;
 
 }
-
 

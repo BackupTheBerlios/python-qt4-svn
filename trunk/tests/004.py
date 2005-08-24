@@ -1,6 +1,6 @@
 # simple push button
 
-from Qt import QApplication, QPushButton
+from Qt.Gui import QApplication, QPushButton
 
 app = QApplication('sample app')
 button = QPushButton('Push me', None)

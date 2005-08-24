@@ -1,6 +1,6 @@
 # parental test
 
-from Qt import QObject
+from Qt.Core import QObject
 
 a = QObject(None)
 b = QObject(a)

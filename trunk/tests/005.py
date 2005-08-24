@@ -1,6 +1,8 @@
 # parent test
 
-from Qt import QApplication, QPushButton, QObject
+from Qt.Core import QObject
+from Qt.Gui import QApplication, QPushButton
+
 app = QApplication('app')
 button = QPushButton('Push me', None)
 a = QObject(button)

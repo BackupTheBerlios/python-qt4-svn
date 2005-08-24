@@ -4,8 +4,9 @@ print 'starting python-qt4...'
 
 # workaround for cross-module inheritance
 import sys, dl
-__dlopenflags__ = sys.getdlopenflags()
-sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)
+if  sys.platform.startswith('linux') or sys.platform.startswith('sunos'):    
+    __dlopenflags__ = sys.getdlopenflags()
+    sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)
 
 # import modules
 from Namespace import *
@@ -29,15 +30,14 @@ def __newinit__(self, *args, **kw):
     self.__oldinit__(*args, **kw)
     self.__qt_slots__ = []
     if isinstance(self, Core.QCoreApplication):
-        print 'is app'
         Core.__app__ = self
     #print '__newinit__:', self, self.parent()
     __link_parent__(self)
 
 def __newdel__(self):
     print '__del__:', self
-    #if hasattr(self, '__children__'):
-    #    del self.__children__
+    if hasattr(self, '__children__'):
+        del self.__children__
     #if hasattr(self, '__qt_slots__'):
     #    del self.__qt_slots__
     
@@ -51,10 +51,90 @@ def __replace_constructor__(klass):
 
 import types
 
-def _parse_signal(signal):
-    name, sig = signal.split('(')
-    sig = '('+sig
-    return name, sig
+__alias__ = {
+    'QObject': 'object',
+    'QString': 'str',
+    'QStringList': 'list',
+    'double': 'float'
+}
+
+
+def __rmptr(arg):
+    if arg.endswith('*'):
+        return arg[:-1]
+    else:
+        return arg
+
+    
+def __candidates(sender, name):
+    lst = []
+    for item in sender.__signals__():
+        if item.startswith(name):
+            lst.append(item)
+    return lst
+
+
+def __is(a, b):
+    while True:
+        print '%s == %s' % (a, b)
+        if a == b:
+            print 'FOUND'
+            return True
+        else:
+            if __alias__.has_key(a):
+                a = __alias__[a]
+                continue
+            else:
+                return False
+        
+def __match(lsig, rsig):
+    lsig = lsig[1:-1]
+    rsig = rsig[1:-1]
+    largs = lsig.split(',')
+    rargs = rsig.split(',')
+
+    if not len(largs) == len(largs):
+        return False
+    n =len(largs)
+    for i in range(n):
+        #largs[i] = __rmptr(largs[i])
+        #rargs[i] = __rmptr(rargs[i])
+        if __is(__rmptr(largs[i]), __rmptr(rargs[i])):
+            return True
+    return False
+    
+    
+        
+def __parse_signal(sender, signal):
+    parts = signal.split('(')
+    name = parts[0]
+    
+    candidates = __candidates(sender, name)
+    print candidates
+
+    if len(candidates) == 0:
+        raise TypeError, 'no signal named "%s"' % name
+        
+    if len(parts) == 1:
+        # case 1 - auto find signature (get first)
+        cand = candidates[0]
+        right = cand.split('(')[1]
+        sig = '('+right
+        return name, sig
+    
+    elif len(parts) == 2 and (parts[1]).endswith(')'):
+        # case 2 - match signature
+        sig = '('+parts[1]
+        for candidate in candidates:
+            left, right = candidate.split('(')
+            right = '('+right
+            if __match(right, sig):
+                return left, right
+        raise TypeError, ('signal named "%s" did not match any signature' % name)
+        
+    else:
+        raise TypeError, 'signal "%s" parse error' % signal
+
     
 def __connect__(self, signal, callback):
     """
@@ -77,25 +157,25 @@ def __connect__(self, signal, callback):
         return # do nothing
 
     if callable(callback):
-    #if isinstance(callback, types.MethodType) or \
-    #   isinstance(callback, types.FunctionType):        
         reciever = None
         if isinstance(callback, types.MethodType):
             reciever = callback.im_self       
             print 'reciever:', reciever
-        #if not isinstance(reciever, Core.QObject): 
-        #    raise AttributeError, 'reciever must be a QObject'
-        name, sig = _parse_signal(signal)
-        pyslot = Core.__connect_method__(self, name, sig, callback)
-        if pyslot is not None:
-            # hold reference of the python slot
-            __qt_connections__[(self, signal, callback)] = pyslot
-            self.__qt_slots__.append(pyslot)
-            #if reciever is not None:
-            #    if isinstance(reciever, Core.QObject): 
-            #        reciever.__qt_slots__.append(pyslot)
+        try:
+            signal = signal.replace(' ','')
+            name, sig = __parse_signal(self, signal)
+            pyslot = Core.__connect_method__(self, name, sig, callback)
+            if pyslot is not None:
+                # hold reference of the python slot
+                __qt_connections__[(self, signal, callback)] = pyslot
+                self.__qt_slots__.append(pyslot)
+                #if reciever is not None:
+                #    if isinstance(reciever, Core.QObject): 
+                #        reciever.__qt_slots__.append(pyslot)
+        except TypeError, e:
+            print 'Warning:', e, '- connection failed'
     else:
-        raise AttributeError, 'callback must be a function or method'
+        raise AttributeError, 'callback must be a function, method or lambda expression'
     
 Core.QObject.connect = __connect__
 
@@ -131,6 +211,9 @@ for klass in __klasses__:
 #     def __getattr__(self, attr):
 #         return(self.widget, attr)
 
+
 # workaround for cross-module inheritance
-sys.setdlopenflags(__dlopenflags__)
+if  sys.platform.startswith('linux') or sys.platform.startswith('sunos'):    
+    sys.setdlopenflags(__dlopenflags__)
+    
 print 'done\n'

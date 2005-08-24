@@ -227,12 +227,12 @@ struct QWidget_Wrapper: QWidget, wrapper<QWidget>
     {
         if (override mousePressEvent = this->get_override("mousePressEvent"))
         {
-            qDebug("QWidget_Wrapper::mousePressEvent1");
+            qDebug("QWidget_Wrapper::mousePressEvent (overriden)");
             mousePressEvent( ptr( p0 ) );
         }
         else
         {
-            qDebug("QWidget_Wrapper::mousePressEvent2");
+            qDebug("QWidget_Wrapper::mousePressEvent (not overriden)");
             QWidget::mousePressEvent(p0);
         }
     }
@@ -240,7 +240,7 @@ struct QWidget_Wrapper: QWidget, wrapper<QWidget>
     void
     _mousePressEvent(QMouseEvent* p0)
     {
-        qDebug("QWidget_Wrapper::_mousePressEvent");
+        qDebug("QWidget_Wrapper::_mousePressEvent (default)");
         this->QWidget::mousePressEvent(p0);
     }
     
@@ -743,9 +743,11 @@ export_QWidget()
         .def("setMask", (void (QWidget::*)(const QBitmap&) )&QWidget::setMask)
         .def("setMask", (void (QWidget::*)(const QRegion&) )&QWidget::setMask)
         .def("mask", &QWidget::mask)
-        .def("clearMask", &QWidget::clearMask)
-        .def("setWindowTitle", &QWidget::setWindowTitle)
-        .def("windowTitle", &QWidget::windowTitle)
+        .def("clearMask", &QWidget::clearMask)*/
+
+        .add_property("windowTitle", &QWidget::windowTitle, &QWidget::setWindowTitle)
+        
+        /*
         .def("setWindowIcon", &QWidget::setWindowIcon)
         .def("windowIcon", &QWidget::windowIcon)
         .def("setWindowIconText", &QWidget::setWindowIconText)
