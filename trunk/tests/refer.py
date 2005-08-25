@@ -36,5 +36,5 @@ a, b = create()
 print
 print 'pos create:', a.children(), b.children()
 
-app.run()
+#app.run()
 #del app

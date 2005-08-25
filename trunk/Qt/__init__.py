@@ -3,8 +3,9 @@
 print 'starting python-qt4...'
 
 # workaround for cross-module inheritance
-import sys, dl
-if  sys.platform.startswith('linux') or sys.platform.startswith('sunos'):    
+import sys
+if  sys.platform.startswith('linux'):
+    import dl
     __dlopenflags__ = sys.getdlopenflags()
     sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)
 
