@@ -14,7 +14,8 @@ SOURCES += Gui.cpp \
            QPaintDevice.cpp \
            QFont.cpp \
            QFrame.cpp \
-           QLCDNumber.cpp 
+           QLCDNumber.cpp \
+           QLayoutItem.cpp 
 TARGET = Gui
 CONFIG += designer
 TEMPLATE = lib

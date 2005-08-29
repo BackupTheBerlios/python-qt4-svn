@@ -55,7 +55,7 @@ void
 export_QLayout()
 {
     class_< QLayout,
-            bases<QObject>,
+            bases<QObject, QLayoutItem>,
             boost::shared_ptr<QLayout>,
             boost::noncopyable>
     ("QLayout", no_init )

@@ -4,1404 +4,823 @@
 #include <boost/cstdint.hpp>
 
 // Includes ====================================================================
-#include <QtCore/QCoreApplication>
-#include <QtCore/QEvent>
-#include <QtCore/QObject>
-#include <QtGui/QApplication>
-#include <QtGui/QPaintDevice>
-#include <QtGui/QWidget>
+#include <QtCore/Qt>
 
 // Using =======================================================================
 using namespace boost::python;
 
-// Declarations ================================================================
-namespace  {
-
-struct QObject_Wrapper: QObject
-{
-    QObject_Wrapper(PyObject* py_self_):
-        QObject(), py_self(py_self_) {}
-
-    QObject_Wrapper(PyObject* py_self_, QObject* p0):
-        QObject(p0), py_self(py_self_) {}
-
-    const QMetaObject* metaObject() const {
-        return call_method< const QMetaObject* >(py_self, "metaObject");
-    }
-
-    const QMetaObject* default_metaObject() const {
-        return QObject::metaObject();
-    }
-
-    void* qt_metacast(const char* p0) {
-        return call_method< void* >(py_self, "qt_metacast", p0);
-    }
-
-    void* default_qt_metacast(const char* p0) {
-        return QObject::qt_metacast(p0);
-    }
-
-    int qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return call_method< int >(py_self, "qt_metacall", p0, p1, p2);
-    }
-
-    int default_qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return QObject::qt_metacall(p0, p1, p2);
-    }
-
-    bool event(QEvent* p0) {
-        return call_method< bool >(py_self, "event", p0);
-    }
-
-    bool default_event(QEvent* p0) {
-        return QObject::event(p0);
-    }
-
-    bool eventFilter(QObject* p0, QEvent* p1) {
-        return call_method< bool >(py_self, "eventFilter", p0, p1);
-    }
-
-    bool default_eventFilter(QObject* p0, QEvent* p1) {
-        return QObject::eventFilter(p0, p1);
-    }
-
-    void timerEvent(QTimerEvent* p0) {
-        call_method< void >(py_self, "timerEvent", p0);
-    }
-
-    void default_timerEvent(QTimerEvent* p0) {
-        QObject::timerEvent(p0);
-    }
-
-    void childEvent(QChildEvent* p0) {
-        call_method< void >(py_self, "childEvent", p0);
-    }
-
-    void default_childEvent(QChildEvent* p0) {
-        QObject::childEvent(p0);
-    }
-
-    void customEvent(QEvent* p0) {
-        call_method< void >(py_self, "customEvent", p0);
-    }
-
-    void default_customEvent(QEvent* p0) {
-        QObject::customEvent(p0);
-    }
-
-    void connectNotify(const char* p0) {
-        call_method< void >(py_self, "connectNotify", p0);
-    }
-
-    void default_connectNotify(const char* p0) {
-        QObject::connectNotify(p0);
-    }
-
-    void disconnectNotify(const char* p0) {
-        call_method< void >(py_self, "disconnectNotify", p0);
-    }
-
-    void default_disconnectNotify(const char* p0) {
-        QObject::disconnectNotify(p0);
-    }
-
-    PyObject* py_self;
-};
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QObject_tr_overloads_1_2, QObject::tr, 1, 2)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QObject_trUtf8_overloads_1_2, QObject::trUtf8, 1, 2)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QObject_connect_overloads_4_5, QObject::connect, 4, 5)
-
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(QObject_connect_overloads_3_4, connect, 3, 4)
-
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(QObject_disconnect_overloads_0_3, disconnect, 0, 3)
-
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(QObject_disconnect_overloads_1_2, disconnect, 1, 2)
-
-struct QCoreApplication_Wrapper: QCoreApplication
-{
-    QCoreApplication_Wrapper(PyObject* py_self_, int& p0, char** p1):
-        QCoreApplication(p0, p1), py_self(py_self_) {}
-
-    const QMetaObject* metaObject() const {
-        return call_method< const QMetaObject* >(py_self, "metaObject");
-    }
-
-    const QMetaObject* default_metaObject() const {
-        return QCoreApplication::metaObject();
-    }
-
-    void* qt_metacast(const char* p0) {
-        return call_method< void* >(py_self, "qt_metacast", p0);
-    }
-
-    void* default_qt_metacast(const char* p0) {
-        return QCoreApplication::qt_metacast(p0);
-    }
-
-    int qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return call_method< int >(py_self, "qt_metacall", p0, p1, p2);
-    }
-
-    int default_qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return QCoreApplication::qt_metacall(p0, p1, p2);
-    }
-
-    bool notify(QObject* p0, QEvent* p1) {
-        return call_method< bool >(py_self, "notify", p0, p1);
-    }
-
-    bool default_notify(QObject* p0, QEvent* p1) {
-        return QCoreApplication::notify(p0, p1);
-    }
-
-    bool event(QEvent* p0) {
-        return call_method< bool >(py_self, "event", p0);
-    }
-
-    bool default_event(QEvent* p0) {
-        return QCoreApplication::event(p0);
-    }
-
-    bool compressEvent(QEvent* p0, QObject* p1, QPostEventList* p2) {
-        return call_method< bool >(py_self, "compressEvent", p0, p1, p2);
-    }
-
-    bool default_compressEvent(QEvent* p0, QObject* p1, QPostEventList* p2) {
-        return QCoreApplication::compressEvent(p0, p1, p2);
-    }
-
-    bool eventFilter(QObject* p0, QEvent* p1) {
-        return call_method< bool >(py_self, "eventFilter", p0, p1);
-    }
-
-    bool default_eventFilter(QObject* p0, QEvent* p1) {
-        return QObject::eventFilter(p0, p1);
-    }
-
-    void timerEvent(QTimerEvent* p0) {
-        call_method< void >(py_self, "timerEvent", p0);
-    }
-
-    void default_timerEvent(QTimerEvent* p0) {
-        QObject::timerEvent(p0);
-    }
-
-    void childEvent(QChildEvent* p0) {
-        call_method< void >(py_self, "childEvent", p0);
-    }
-
-    void default_childEvent(QChildEvent* p0) {
-        QObject::childEvent(p0);
-    }
-
-    void customEvent(QEvent* p0) {
-        call_method< void >(py_self, "customEvent", p0);
-    }
-
-    void default_customEvent(QEvent* p0) {
-        QObject::customEvent(p0);
-    }
-
-    void connectNotify(const char* p0) {
-        call_method< void >(py_self, "connectNotify", p0);
-    }
-
-    void default_connectNotify(const char* p0) {
-        QObject::connectNotify(p0);
-    }
-
-    void disconnectNotify(const char* p0) {
-        call_method< void >(py_self, "disconnectNotify", p0);
-    }
-
-    void default_disconnectNotify(const char* p0) {
-        QObject::disconnectNotify(p0);
-    }
-
-    PyObject* py_self;
-};
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QCoreApplication_tr_overloads_1_2, QCoreApplication::tr, 1, 2)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QCoreApplication_trUtf8_overloads_1_2, QCoreApplication::trUtf8, 1, 2)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QCoreApplication_processEvents_overloads_0_1, QCoreApplication::processEvents, 0, 1)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QCoreApplication_exit_overloads_0_1, QCoreApplication::exit, 0, 1)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QCoreApplication_translate_overloads_2_4, QCoreApplication::translate, 2, 4)
-
-struct QPaintDevice_Wrapper: QPaintDevice
-{
-    int devType() const {
-        return call_method< int >(py_self, "devType");
-    }
-
-    int default_devType() const {
-        return QPaintDevice::devType();
-    }
-
-    QPaintEngine* paintEngine() const {
-        return call_method< QPaintEngine* >(py_self, "paintEngine");
-    }
-
-    int metric(QPaintDevice::PaintDeviceMetric p0) const {
-        return call_method< int >(py_self, "metric", p0);
-    }
-
-    int default_metric(QPaintDevice::PaintDeviceMetric p0) const {
-        return QPaintDevice::metric(p0);
-    }
-
-    PyObject* py_self;
-};
-
-struct QWidget_Wrapper: QWidget
-{
-    QWidget_Wrapper(PyObject* py_self_):
-        QWidget(), py_self(py_self_) {}
-
-    QWidget_Wrapper(PyObject* py_self_, QWidget* p0):
-        QWidget(p0), py_self(py_self_) {}
-
-    QWidget_Wrapper(PyObject* py_self_, QWidget* p0, Qt::WFlags p1):
-        QWidget(p0, p1), py_self(py_self_) {}
-
-    const QMetaObject* metaObject() const {
-        return call_method< const QMetaObject* >(py_self, "metaObject");
-    }
-
-    const QMetaObject* default_metaObject() const {
-        return QWidget::metaObject();
-    }
-
-    void* qt_metacast(const char* p0) {
-        return call_method< void* >(py_self, "qt_metacast", p0);
-    }
-
-    void* default_qt_metacast(const char* p0) {
-        return QWidget::qt_metacast(p0);
-    }
-
-    int qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return call_method< int >(py_self, "qt_metacall", p0, p1, p2);
-    }
-
-    int default_qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return QWidget::qt_metacall(p0, p1, p2);
-    }
-
-    int devType() const {
-        return call_method< int >(py_self, "devType");
-    }
-
-    int default_devType() const {
-        return QWidget::devType();
-    }
-
-    void setVisible(bool p0) {
-        call_method< void >(py_self, "setVisible", p0);
-    }
-
-    void default_setVisible(bool p0) {
-        QWidget::setVisible(p0);
-    }
-
-    QSize sizeHint() const {
-        return call_method< QSize >(py_self, "sizeHint");
-    }
-
-    QSize default_sizeHint() const {
-        return QWidget::sizeHint();
-    }
-
-    QSize minimumSizeHint() const {
-        return call_method< QSize >(py_self, "minimumSizeHint");
-    }
-
-    QSize default_minimumSizeHint() const {
-        return QWidget::minimumSizeHint();
-    }
-
-    int heightForWidth(int p0) const {
-        return call_method< int >(py_self, "heightForWidth", p0);
-    }
-
-    int default_heightForWidth(int p0) const {
-        return QWidget::heightForWidth(p0);
-    }
-
-    QPaintEngine* paintEngine() const {
-        return call_method< QPaintEngine* >(py_self, "paintEngine");
-    }
-
-    QPaintEngine* default_paintEngine() const {
-        return QWidget::paintEngine();
-    }
-
-    bool event(QEvent* p0) {
-        return call_method< bool >(py_self, "event", p0);
-    }
-
-    bool default_event(QEvent* p0) {
-        return QWidget::event(p0);
-    }
-
-    void mousePressEvent(QMouseEvent* p0) {
-        call_method< void >(py_self, "mousePressEvent", p0);
-    }
-
-    void default_mousePressEvent(QMouseEvent* p0) {
-        QWidget::mousePressEvent(p0);
-    }
-
-    void mouseReleaseEvent(QMouseEvent* p0) {
-        call_method< void >(py_self, "mouseReleaseEvent", p0);
-    }
-
-    void default_mouseReleaseEvent(QMouseEvent* p0) {
-        QWidget::mouseReleaseEvent(p0);
-    }
-
-    void mouseDoubleClickEvent(QMouseEvent* p0) {
-        call_method< void >(py_self, "mouseDoubleClickEvent", p0);
-    }
-
-    void default_mouseDoubleClickEvent(QMouseEvent* p0) {
-        QWidget::mouseDoubleClickEvent(p0);
-    }
-
-    void mouseMoveEvent(QMouseEvent* p0) {
-        call_method< void >(py_self, "mouseMoveEvent", p0);
-    }
-
-    void default_mouseMoveEvent(QMouseEvent* p0) {
-        QWidget::mouseMoveEvent(p0);
-    }
-
-    void wheelEvent(QWheelEvent* p0) {
-        call_method< void >(py_self, "wheelEvent", p0);
-    }
-
-    void default_wheelEvent(QWheelEvent* p0) {
-        QWidget::wheelEvent(p0);
-    }
-
-    void keyPressEvent(QKeyEvent* p0) {
-        call_method< void >(py_self, "keyPressEvent", p0);
-    }
-
-    void default_keyPressEvent(QKeyEvent* p0) {
-        QWidget::keyPressEvent(p0);
-    }
-
-    void keyReleaseEvent(QKeyEvent* p0) {
-        call_method< void >(py_self, "keyReleaseEvent", p0);
-    }
-
-    void default_keyReleaseEvent(QKeyEvent* p0) {
-        QWidget::keyReleaseEvent(p0);
-    }
-
-    void focusInEvent(QFocusEvent* p0) {
-        call_method< void >(py_self, "focusInEvent", p0);
-    }
-
-    void default_focusInEvent(QFocusEvent* p0) {
-        QWidget::focusInEvent(p0);
-    }
-
-    void focusOutEvent(QFocusEvent* p0) {
-        call_method< void >(py_self, "focusOutEvent", p0);
-    }
-
-    void default_focusOutEvent(QFocusEvent* p0) {
-        QWidget::focusOutEvent(p0);
-    }
-
-    void enterEvent(QEvent* p0) {
-        call_method< void >(py_self, "enterEvent", p0);
-    }
-
-    void default_enterEvent(QEvent* p0) {
-        QWidget::enterEvent(p0);
-    }
-
-    void leaveEvent(QEvent* p0) {
-        call_method< void >(py_self, "leaveEvent", p0);
-    }
-
-    void default_leaveEvent(QEvent* p0) {
-        QWidget::leaveEvent(p0);
-    }
-
-    void paintEvent(QPaintEvent* p0) {
-        call_method< void >(py_self, "paintEvent", p0);
-    }
-
-    void default_paintEvent(QPaintEvent* p0) {
-        QWidget::paintEvent(p0);
-    }
-
-    void moveEvent(QMoveEvent* p0) {
-        call_method< void >(py_self, "moveEvent", p0);
-    }
-
-    void default_moveEvent(QMoveEvent* p0) {
-        QWidget::moveEvent(p0);
-    }
-
-    void resizeEvent(QResizeEvent* p0) {
-        call_method< void >(py_self, "resizeEvent", p0);
-    }
-
-    void default_resizeEvent(QResizeEvent* p0) {
-        QWidget::resizeEvent(p0);
-    }
-
-    void closeEvent(QCloseEvent* p0) {
-        call_method< void >(py_self, "closeEvent", p0);
-    }
-
-    void default_closeEvent(QCloseEvent* p0) {
-        QWidget::closeEvent(p0);
-    }
-
-    void contextMenuEvent(QContextMenuEvent* p0) {
-        call_method< void >(py_self, "contextMenuEvent", p0);
-    }
-
-    void default_contextMenuEvent(QContextMenuEvent* p0) {
-        QWidget::contextMenuEvent(p0);
-    }
-
-    void tabletEvent(QTabletEvent* p0) {
-        call_method< void >(py_self, "tabletEvent", p0);
-    }
-
-    void default_tabletEvent(QTabletEvent* p0) {
-        QWidget::tabletEvent(p0);
-    }
-
-    void actionEvent(QActionEvent* p0) {
-        call_method< void >(py_self, "actionEvent", p0);
-    }
-
-    void default_actionEvent(QActionEvent* p0) {
-        QWidget::actionEvent(p0);
-    }
-
-    void dragEnterEvent(QDragEnterEvent* p0) {
-        call_method< void >(py_self, "dragEnterEvent", p0);
-    }
-
-    void default_dragEnterEvent(QDragEnterEvent* p0) {
-        QWidget::dragEnterEvent(p0);
-    }
-
-    void dragMoveEvent(QDragMoveEvent* p0) {
-        call_method< void >(py_self, "dragMoveEvent", p0);
-    }
-
-    void default_dragMoveEvent(QDragMoveEvent* p0) {
-        QWidget::dragMoveEvent(p0);
-    }
-
-    void dragLeaveEvent(QDragLeaveEvent* p0) {
-        call_method< void >(py_self, "dragLeaveEvent", p0);
-    }
-
-    void default_dragLeaveEvent(QDragLeaveEvent* p0) {
-        QWidget::dragLeaveEvent(p0);
-    }
-
-    void dropEvent(QDropEvent* p0) {
-        call_method< void >(py_self, "dropEvent", p0);
-    }
-
-    void default_dropEvent(QDropEvent* p0) {
-        QWidget::dropEvent(p0);
-    }
-
-    void showEvent(QShowEvent* p0) {
-        call_method< void >(py_self, "showEvent", p0);
-    }
-
-    void default_showEvent(QShowEvent* p0) {
-        QWidget::showEvent(p0);
-    }
-
-    void hideEvent(QHideEvent* p0) {
-        call_method< void >(py_self, "hideEvent", p0);
-    }
-
-    void default_hideEvent(QHideEvent* p0) {
-        QWidget::hideEvent(p0);
-    }
-
-    bool x11Event(XEvent* p0) {
-        return call_method< bool >(py_self, "x11Event", p0);
-    }
-
-    bool default_x11Event(XEvent* p0) {
-        return QWidget::x11Event(p0);
-    }
-
-    void changeEvent(QEvent* p0) {
-        call_method< void >(py_self, "changeEvent", p0);
-    }
-
-    void default_changeEvent(QEvent* p0) {
-        QWidget::changeEvent(p0);
-    }
-
-    int metric(QPaintDevice::PaintDeviceMetric p0) const {
-        return call_method< int >(py_self, "metric", p0);
-    }
-
-    int default_metric(QPaintDevice::PaintDeviceMetric p0) const {
-        return QWidget::metric(p0);
-    }
-
-    void inputMethodEvent(QInputMethodEvent* p0) {
-        call_method< void >(py_self, "inputMethodEvent", p0);
-    }
-
-    void default_inputMethodEvent(QInputMethodEvent* p0) {
-        QWidget::inputMethodEvent(p0);
-    }
-
-    QVariant inputMethodQuery(Qt::InputMethodQuery p0) const {
-        return call_method< QVariant >(py_self, "inputMethodQuery", p0);
-    }
-
-    QVariant default_inputMethodQuery(Qt::InputMethodQuery p0) const {
-        return QWidget::inputMethodQuery(p0);
-    }
-
-    bool focusNextPrevChild(bool p0) {
-        return call_method< bool >(py_self, "focusNextPrevChild", p0);
-    }
-
-    bool default_focusNextPrevChild(bool p0) {
-        return QWidget::focusNextPrevChild(p0);
-    }
-
-    void styleChange(QStyle& p0) {
-        call_method< void >(py_self, "styleChange", p0);
-    }
-
-    void default_styleChange(QStyle& p0) {
-        QWidget::styleChange(p0);
-    }
-
-    void enabledChange(bool p0) {
-        call_method< void >(py_self, "enabledChange", p0);
-    }
-
-    void default_enabledChange(bool p0) {
-        QWidget::enabledChange(p0);
-    }
-
-    void paletteChange(const QPalette& p0) {
-        call_method< void >(py_self, "paletteChange", p0);
-    }
-
-    void default_paletteChange(const QPalette& p0) {
-        QWidget::paletteChange(p0);
-    }
-
-    void fontChange(const QFont& p0) {
-        call_method< void >(py_self, "fontChange", p0);
-    }
-
-    void default_fontChange(const QFont& p0) {
-        QWidget::fontChange(p0);
-    }
-
-    void windowActivationChange(bool p0) {
-        call_method< void >(py_self, "windowActivationChange", p0);
-    }
-
-    void default_windowActivationChange(bool p0) {
-        QWidget::windowActivationChange(p0);
-    }
-
-    void languageChange() {
-        call_method< void >(py_self, "languageChange");
-    }
-
-    void default_languageChange() {
-        QWidget::languageChange();
-    }
-
-    bool eventFilter(QObject* p0, QEvent* p1) {
-        return call_method< bool >(py_self, "eventFilter", p0, p1);
-    }
-
-    bool default_eventFilter(QObject* p0, QEvent* p1) {
-        return QObject::eventFilter(p0, p1);
-    }
-
-    void timerEvent(QTimerEvent* p0) {
-        call_method< void >(py_self, "timerEvent", p0);
-    }
-
-    void default_timerEvent(QTimerEvent* p0) {
-        QObject::timerEvent(p0);
-    }
-
-    void childEvent(QChildEvent* p0) {
-        call_method< void >(py_self, "childEvent", p0);
-    }
-
-    void default_childEvent(QChildEvent* p0) {
-        QObject::childEvent(p0);
-    }
-
-    void customEvent(QEvent* p0) {
-        call_method< void >(py_self, "customEvent", p0);
-    }
-
-    void default_customEvent(QEvent* p0) {
-        QObject::customEvent(p0);
-    }
-
-    void connectNotify(const char* p0) {
-        call_method< void >(py_self, "connectNotify", p0);
-    }
-
-    void default_connectNotify(const char* p0) {
-        QObject::connectNotify(p0);
-    }
-
-    void disconnectNotify(const char* p0) {
-        call_method< void >(py_self, "disconnectNotify", p0);
-    }
-
-    void default_disconnectNotify(const char* p0) {
-        QObject::disconnectNotify(p0);
-    }
-
-    PyObject* py_self;
-};
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QWidget_tr_overloads_1_2, QWidget::tr, 1, 2)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QWidget_trUtf8_overloads_1_2, QWidget::trUtf8, 1, 2)
-
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(QWidget_grabShortcut_overloads_1_2, grabShortcut, 1, 2)
-
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(QWidget_setShortcutEnabled_overloads_1_2, setShortcutEnabled, 1, 2)
-
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(QWidget_setAttribute_overloads_1_2, setAttribute, 1, 2)
-
-struct QApplication_Wrapper: QApplication
-{
-    QApplication_Wrapper(PyObject* py_self_, int& p0, char** p1):
-        QApplication(p0, p1), py_self(py_self_) {}
-
-    QApplication_Wrapper(PyObject* py_self_, int& p0, char** p1, bool p2):
-        QApplication(p0, p1, p2), py_self(py_self_) {}
-
-    QApplication_Wrapper(PyObject* py_self_, int& p0, char** p1, QApplication::Type p2):
-        QApplication(p0, p1, p2), py_self(py_self_) {}
-
-    QApplication_Wrapper(PyObject* py_self_, Display* p0):
-        QApplication(p0), py_self(py_self_) {}
-
-    QApplication_Wrapper(PyObject* py_self_, Display* p0, Qt::HANDLE p1):
-        QApplication(p0, p1), py_self(py_self_) {}
-
-    QApplication_Wrapper(PyObject* py_self_, Display* p0, Qt::HANDLE p1, Qt::HANDLE p2):
-        QApplication(p0, p1, p2), py_self(py_self_) {}
-
-    QApplication_Wrapper(PyObject* py_self_, Display* p0, int& p1, char** p2):
-        QApplication(p0, p1, p2), py_self(py_self_) {}
-
-    QApplication_Wrapper(PyObject* py_self_, Display* p0, int& p1, char** p2, Qt::HANDLE p3):
-        QApplication(p0, p1, p2, p3), py_self(py_self_) {}
-
-    QApplication_Wrapper(PyObject* py_self_, Display* p0, int& p1, char** p2, Qt::HANDLE p3, Qt::HANDLE p4):
-        QApplication(p0, p1, p2, p3, p4), py_self(py_self_) {}
-
-    const QMetaObject* metaObject() const {
-        return call_method< const QMetaObject* >(py_self, "metaObject");
-    }
-
-    const QMetaObject* default_metaObject() const {
-        return QApplication::metaObject();
-    }
-
-    void* qt_metacast(const char* p0) {
-        return call_method< void* >(py_self, "qt_metacast", p0);
-    }
-
-    void* default_qt_metacast(const char* p0) {
-        return QApplication::qt_metacast(p0);
-    }
-
-    int qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return call_method< int >(py_self, "qt_metacall", p0, p1, p2);
-    }
-
-    int default_qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return QApplication::qt_metacall(p0, p1, p2);
-    }
-
-    bool x11EventFilter(XEvent* p0) {
-        return call_method< bool >(py_self, "x11EventFilter", p0);
-    }
-
-    bool default_x11EventFilter(XEvent* p0) {
-        return QApplication::x11EventFilter(p0);
-    }
-
-    int x11ClientMessage(QWidget* p0, XEvent* p1, bool p2) {
-        return call_method< int >(py_self, "x11ClientMessage", p0, p1, p2);
-    }
-
-    int default_x11ClientMessage(QWidget* p0, XEvent* p1, bool p2) {
-        return QApplication::x11ClientMessage(p0, p1, p2);
-    }
-
-    void commitData(QSessionManager& p0) {
-        call_method< void >(py_self, "commitData", p0);
-    }
-
-    void default_commitData(QSessionManager& p0) {
-        QApplication::commitData(p0);
-    }
-
-    void saveState(QSessionManager& p0) {
-        call_method< void >(py_self, "saveState", p0);
-    }
-
-    void default_saveState(QSessionManager& p0) {
-        QApplication::saveState(p0);
-    }
-
-    bool notify(QObject* p0, QEvent* p1) {
-        return call_method< bool >(py_self, "notify", p0, p1);
-    }
-
-    bool default_notify(QObject* p0, QEvent* p1) {
-        return QApplication::notify(p0, p1);
-    }
-
-    bool event(QEvent* p0) {
-        return call_method< bool >(py_self, "event", p0);
-    }
-
-    bool default_event(QEvent* p0) {
-        return QApplication::event(p0);
-    }
-
-    bool compressEvent(QEvent* p0, QObject* p1, QPostEventList* p2) {
-        return call_method< bool >(py_self, "compressEvent", p0, p1, p2);
-    }
-
-    bool default_compressEvent(QEvent* p0, QObject* p1, QPostEventList* p2) {
-        return QApplication::compressEvent(p0, p1, p2);
-    }
-
-    bool eventFilter(QObject* p0, QEvent* p1) {
-        return call_method< bool >(py_self, "eventFilter", p0, p1);
-    }
-
-    bool default_eventFilter(QObject* p0, QEvent* p1) {
-        return QObject::eventFilter(p0, p1);
-    }
-
-    void timerEvent(QTimerEvent* p0) {
-        call_method< void >(py_self, "timerEvent", p0);
-    }
-
-    void default_timerEvent(QTimerEvent* p0) {
-        QObject::timerEvent(p0);
-    }
-
-    void childEvent(QChildEvent* p0) {
-        call_method< void >(py_self, "childEvent", p0);
-    }
-
-    void default_childEvent(QChildEvent* p0) {
-        QObject::childEvent(p0);
-    }
-
-    void customEvent(QEvent* p0) {
-        call_method< void >(py_self, "customEvent", p0);
-    }
-
-    void default_customEvent(QEvent* p0) {
-        QObject::customEvent(p0);
-    }
-
-    void connectNotify(const char* p0) {
-        call_method< void >(py_self, "connectNotify", p0);
-    }
-
-    void default_connectNotify(const char* p0) {
-        QObject::connectNotify(p0);
-    }
-
-    void disconnectNotify(const char* p0) {
-        call_method< void >(py_self, "disconnectNotify", p0);
-    }
-
-    void default_disconnectNotify(const char* p0) {
-        QObject::disconnectNotify(p0);
-    }
-
-    PyObject* py_self;
-};
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QApplication_tr_overloads_1_2, QApplication::tr, 1, 2)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QApplication_trUtf8_overloads_1_2, QApplication::trUtf8, 1, 2)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QApplication_setPalette_overloads_1_2, QApplication::setPalette, 1, 2)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QApplication_font_overloads_0_1, QApplication::font, 0, 1)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QApplication_setFont_overloads_1_2, QApplication::setFont, 1, 2)
-
-BOOST_PYTHON_FUNCTION_OVERLOADS(QApplication_setEffectEnabled_overloads_1_2, QApplication::setEffectEnabled, 1, 2)
-
-
-}// namespace 
-
-
 // Module ======================================================================
 BOOST_PYTHON_MODULE(Qt)
 {
-    class_< QObject, boost::noncopyable, QObject_Wrapper >("QObject", init< optional< QObject* > >())
-        .def_readonly("staticMetaObject", &QObject::staticMetaObject)
-        .def("metaObject", &QObject::metaObject, &QObject_Wrapper::default_metaObject)
-        .def("qt_metacast", &QObject::qt_metacast, &QObject_Wrapper::default_qt_metacast)
-        .def("qt_metacall", &QObject::qt_metacall, &QObject_Wrapper::default_qt_metacall)
-        .def("event", &QObject::event, &QObject_Wrapper::default_event)
-        .def("eventFilter", &QObject::eventFilter, &QObject_Wrapper::default_eventFilter)
-        .def("tr", &QObject::tr, QObject_tr_overloads_1_2())
-        .def("trUtf8", &QObject::trUtf8, QObject_trUtf8_overloads_1_2())
-        .def("objectName", &QObject::objectName)
-        .def("setObjectName", &QObject::setObjectName)
-        .def("isWidgetType", &QObject::isWidgetType)
-        .def("signalsBlocked", &QObject::signalsBlocked)
-        .def("blockSignals", &QObject::blockSignals)
-        .def("thread", &QObject::thread)
-        .def("moveToThread", &QObject::moveToThread)
-        .def("startTimer", &QObject::startTimer)
-        .def("killTimer", &QObject::killTimer)
-        .def("children", &QObject::children, return_value_policy< copy_const_reference >())
-        .def("setParent", &QObject::setParent)
-        .def("installEventFilter", &QObject::installEventFilter)
-        .def("removeEventFilter", &QObject::removeEventFilter)
-        .def("connect", (bool (*)(const QObject*, const char*, const QObject*, const char*, Qt::ConnectionType))&QObject::connect, QObject_connect_overloads_4_5())
-        .def("connect", (bool (QObject::*)(const QObject*, const char*, const char*, Qt::ConnectionType) const)&QObject::connect, QObject_connect_overloads_3_4())
-        .def("disconnect", (bool (*)(const QObject*, const char*, const QObject*, const char*))&QObject::disconnect)
-        .def("disconnect", (bool (QObject::*)(const char*, const QObject*, const char*) )&QObject::disconnect, QObject_disconnect_overloads_0_3())
-        .def("disconnect", (bool (QObject::*)(const QObject*, const char*) )&QObject::disconnect, QObject_disconnect_overloads_1_2())
-        .def("dumpObjectTree", &QObject::dumpObjectTree)
-        .def("dumpObjectInfo", &QObject::dumpObjectInfo)
-        .def("setProperty", &QObject::setProperty)
-        .def("property", &QObject::property)
-        .def("registerUserData", &QObject::registerUserData)
-        .def("setUserData", &QObject::setUserData)
-        .def("userData", &QObject::userData)
-        .def("parent", &QObject::parent)
-        .def("inherits", &QObject::inherits)
-        .def("deleteLater", &QObject::deleteLater)
-        .staticmethod("trUtf8")
-        .staticmethod("registerUserData")
-        .staticmethod("tr")
-        .staticmethod("connect")
-        .staticmethod("disconnect")
-        .def( other< QDebug >() << self )
+    enum_< Qt::KeyboardModifier >("KeyboardModifier")
+        .value("KeyboardModifierMask", Qt::KeyboardModifierMask)
+        .value("NoModifier", Qt::NoModifier)
+        .value("MetaModifier", Qt::MetaModifier)
+        .value("AltModifier", Qt::AltModifier)
+        .value("ShiftModifier", Qt::ShiftModifier)
+        .value("KeypadModifier", Qt::KeypadModifier)
+        .value("ControlModifier", Qt::ControlModifier)
     ;
 
-    scope* QCoreApplication_scope = new scope(
-    class_< QCoreApplication, bases< QObject > , boost::noncopyable, QCoreApplication_Wrapper >("QCoreApplication", init< int&, char** >())
-        .def_readonly("staticMetaObject", &QCoreApplication::staticMetaObject)
-        .def("metaObject", (const QMetaObject* (QCoreApplication::*)() const)&QCoreApplication::metaObject, (const QMetaObject* (QCoreApplication_Wrapper::*)() const)&QCoreApplication_Wrapper::default_metaObject)
-        .def("qt_metacast", (void* (QCoreApplication::*)(const char*) )&QCoreApplication::qt_metacast, (void* (QCoreApplication_Wrapper::*)(const char*))&QCoreApplication_Wrapper::default_qt_metacast)
-        .def("qt_metacall", (int (QCoreApplication::*)(QMetaObject::Call, int, void**) )&QCoreApplication::qt_metacall, (int (QCoreApplication_Wrapper::*)(QMetaObject::Call, int, void**))&QCoreApplication_Wrapper::default_qt_metacall)
-        .def("notify", &QCoreApplication::notify, &QCoreApplication_Wrapper::default_notify)
-        .def("eventFilter", &QObject::eventFilter, &QCoreApplication_Wrapper::default_eventFilter)
-        .def("tr", &QCoreApplication::tr, QCoreApplication_tr_overloads_1_2())
-        .def("trUtf8", &QCoreApplication::trUtf8, QCoreApplication_trUtf8_overloads_1_2())
-        .def("argc", &QCoreApplication::argc)
-        .def("argv", &QCoreApplication::argv)
-        .def("setOrganizationDomain", &QCoreApplication::setOrganizationDomain)
-        .def("organizationDomain", &QCoreApplication::organizationDomain)
-        .def("setOrganizationName", &QCoreApplication::setOrganizationName)
-        .def("organizationName", &QCoreApplication::organizationName)
-        .def("setApplicationName", &QCoreApplication::setApplicationName)
-        .def("applicationName", &QCoreApplication::applicationName)
-        .def("instance", &QCoreApplication::instance)
-        .def("exec", &QCoreApplication::exec)
-        .def("processEvents", (void (*)(QFlags<QEventLoop::ProcessEventsFlag>))&QCoreApplication::processEvents, QCoreApplication_processEvents_overloads_0_1())
-        .def("processEvents", (void (*)(QFlags<QEventLoop::ProcessEventsFlag>, int))&QCoreApplication::processEvents)
-        .def("exit", &QCoreApplication::exit, QCoreApplication_exit_overloads_0_1())
-        .def("sendEvent", &QCoreApplication::sendEvent)
-        .def("postEvent", &QCoreApplication::postEvent)
-        .def("sendPostedEvents", (void (*)(QObject*, int))&QCoreApplication::sendPostedEvents)
-        .def("sendPostedEvents", (void (*)())&QCoreApplication::sendPostedEvents)
-        .def("removePostedEvents", &QCoreApplication::removePostedEvents)
-        .def("hasPendingEvents", &QCoreApplication::hasPendingEvents)
-        .def("startingUp", &QCoreApplication::startingUp)
-        .def("closingDown", &QCoreApplication::closingDown)
-        .def("applicationDirPath", &QCoreApplication::applicationDirPath)
-        .def("applicationFilePath", &QCoreApplication::applicationFilePath)
-        .def("setLibraryPaths", &QCoreApplication::setLibraryPaths)
-        .def("libraryPaths", &QCoreApplication::libraryPaths)
-        .def("addLibraryPath", &QCoreApplication::addLibraryPath)
-        .def("removeLibraryPath", &QCoreApplication::removeLibraryPath)
-        .def("installTranslator", &QCoreApplication::installTranslator)
-        .def("removeTranslator", &QCoreApplication::removeTranslator)
-        .def("translate", &QCoreApplication::translate, QCoreApplication_translate_overloads_2_4())
-        .def("flush", &QCoreApplication::flush)
-        .def("watchUnixSignal", &QCoreApplication::watchUnixSignal)
-        .def("setEventFilter", &QCoreApplication::setEventFilter)
-        .def("filterEvent", &QCoreApplication::filterEvent)
-        .def("quit", &QCoreApplication::quit)
-        .staticmethod("setLibraryPaths")
-        .staticmethod("setOrganizationName")
-        .staticmethod("applicationDirPath")
-        .staticmethod("flush")
-        .staticmethod("closingDown")
-        .staticmethod("applicationName")
-        .staticmethod("startingUp")
-        .staticmethod("sendEvent")
-        .staticmethod("tr")
-        .staticmethod("instance")
-        .staticmethod("organizationDomain")
-        .staticmethod("exit")
-        .staticmethod("applicationFilePath")
-        .staticmethod("translate")
-        .staticmethod("exec")
-        .staticmethod("processEvents")
-        .staticmethod("removeTranslator")
-        .staticmethod("argv")
-        .staticmethod("quit")
-        .staticmethod("setOrganizationDomain")
-        .staticmethod("argc")
-        .staticmethod("setApplicationName")
-        .staticmethod("addLibraryPath")
-        .staticmethod("installTranslator")
-        .staticmethod("libraryPaths")
-        .staticmethod("organizationName")
-        .staticmethod("sendPostedEvents")
-        .staticmethod("trUtf8")
-        .staticmethod("removePostedEvents")
-        .staticmethod("hasPendingEvents")
-        .staticmethod("postEvent")
-        .staticmethod("watchUnixSignal")
-        .staticmethod("removeLibraryPath")
-    );
-
-    enum_< QCoreApplication::Encoding >("Encoding")
-        .value("DefaultCodec", QCoreApplication::DefaultCodec)
-        .value("UnicodeUTF8", QCoreApplication::UnicodeUTF8)
+    enum_< Qt::GlobalColor >("GlobalColor")
+        .value("lightGray", Qt::lightGray)
+        .value("gray", Qt::gray)
+        .value("darkGreen", Qt::darkGreen)
+        .value("darkMagenta", Qt::darkMagenta)
+        .value("darkCyan", Qt::darkCyan)
+        .value("darkBlue", Qt::darkBlue)
+        .value("darkGray", Qt::darkGray)
+        .value("blue", Qt::blue)
+        .value("yellow", Qt::yellow)
+        .value("darkYellow", Qt::darkYellow)
+        .value("color1", Qt::color1)
+        .value("color0", Qt::color0)
+        .value("transparent", Qt::transparent)
+        .value("black", Qt::black)
+        .value("darkRed", Qt::darkRed)
+        .value("cyan", Qt::cyan)
+        .value("green", Qt::green)
+        .value("white", Qt::white)
+        .value("magenta", Qt::magenta)
+        .value("red", Qt::red)
     ;
 
-    delete QCoreApplication_scope;
-
-
-    class_< QWidget, bases< QObject, QPaintDevice > , boost::noncopyable, QWidget_Wrapper >("QWidget", init< optional< QWidget*, Qt::WFlags > >())
-        .def_readonly("staticMetaObject", &QWidget::staticMetaObject)
-        .def("metaObject", (const QMetaObject* (QWidget::*)() const)&QWidget::metaObject, (const QMetaObject* (QWidget_Wrapper::*)() const)&QWidget_Wrapper::default_metaObject)
-        .def("qt_metacast", (void* (QWidget::*)(const char*) )&QWidget::qt_metacast, (void* (QWidget_Wrapper::*)(const char*))&QWidget_Wrapper::default_qt_metacast)
-        .def("qt_metacall", (int (QWidget::*)(QMetaObject::Call, int, void**) )&QWidget::qt_metacall, (int (QWidget_Wrapper::*)(QMetaObject::Call, int, void**))&QWidget_Wrapper::default_qt_metacall)
-        .def("devType", (int (QWidget::*)() const)&QWidget::devType, (int (QWidget_Wrapper::*)() const)&QWidget_Wrapper::default_devType)
-        .def("setVisible", &QWidget::setVisible, &QWidget_Wrapper::default_setVisible)
-        .def("sizeHint", &QWidget::sizeHint, &QWidget_Wrapper::default_sizeHint)
-        .def("minimumSizeHint", &QWidget::minimumSizeHint, &QWidget_Wrapper::default_minimumSizeHint)
-        .def("heightForWidth", &QWidget::heightForWidth, &QWidget_Wrapper::default_heightForWidth)
-        .def("paintEngine", (QPaintEngine* (QWidget::*)() const)&QWidget::paintEngine, (QPaintEngine* (QWidget_Wrapper::*)() const)&QWidget_Wrapper::default_paintEngine)
-        .def("inputMethodQuery", &QWidget::inputMethodQuery, &QWidget_Wrapper::default_inputMethodQuery)
-        .def("eventFilter", &QObject::eventFilter, &QWidget_Wrapper::default_eventFilter)
-        .def("tr", &QWidget::tr, QWidget_tr_overloads_1_2())
-        .def("trUtf8", &QWidget::trUtf8, QWidget_trUtf8_overloads_1_2())
-        .def("winId", &QWidget::winId)
-        .def("style", &QWidget::style)
-        .def("setStyle", &QWidget::setStyle)
-        .def("isTopLevel", &QWidget::isTopLevel)
-        .def("isWindow", &QWidget::isWindow)
-        .def("isModal", &QWidget::isModal)
-        .def("isEnabled", &QWidget::isEnabled)
-        .def("isEnabledTo", &QWidget::isEnabledTo)
-        .def("isEnabledToTLW", &QWidget::isEnabledToTLW)
-        .def("setEnabled", &QWidget::setEnabled)
-        .def("setDisabled", &QWidget::setDisabled)
-        .def("setWindowModified", &QWidget::setWindowModified)
-        .def("frameGeometry", &QWidget::frameGeometry)
-        .def("geometry", &QWidget::geometry, return_value_policy< copy_const_reference >())
-        .def("normalGeometry", &QWidget::normalGeometry)
-        .def("x", &QWidget::x)
-        .def("y", &QWidget::y)
-        .def("pos", &QWidget::pos)
-        .def("frameSize", &QWidget::frameSize)
-        .def("size", &QWidget::size)
-        .def("width", &QWidget::width)
-        .def("height", &QWidget::height)
-        .def("rect", &QWidget::rect)
-        .def("childrenRect", &QWidget::childrenRect)
-        .def("childrenRegion", &QWidget::childrenRegion)
-        .def("minimumSize", &QWidget::minimumSize)
-        .def("maximumSize", &QWidget::maximumSize)
-        .def("minimumWidth", &QWidget::minimumWidth)
-        .def("minimumHeight", &QWidget::minimumHeight)
-        .def("maximumWidth", &QWidget::maximumWidth)
-        .def("maximumHeight", &QWidget::maximumHeight)
-        .def("setMinimumSize", (void (QWidget::*)(const QSize&) )&QWidget::setMinimumSize)
-        .def("setMinimumSize", (void (QWidget::*)(int, int) )&QWidget::setMinimumSize)
-        .def("setMaximumSize", (void (QWidget::*)(const QSize&) )&QWidget::setMaximumSize)
-        .def("setMaximumSize", (void (QWidget::*)(int, int) )&QWidget::setMaximumSize)
-        .def("setMinimumWidth", &QWidget::setMinimumWidth)
-        .def("setMinimumHeight", &QWidget::setMinimumHeight)
-        .def("setMaximumWidth", &QWidget::setMaximumWidth)
-        .def("setMaximumHeight", &QWidget::setMaximumHeight)
-        .def("sizeIncrement", &QWidget::sizeIncrement)
-        .def("setSizeIncrement", (void (QWidget::*)(const QSize&) )&QWidget::setSizeIncrement)
-        .def("setSizeIncrement", (void (QWidget::*)(int, int) )&QWidget::setSizeIncrement)
-        .def("baseSize", &QWidget::baseSize)
-        .def("setBaseSize", (void (QWidget::*)(const QSize&) )&QWidget::setBaseSize)
-        .def("setBaseSize", (void (QWidget::*)(int, int) )&QWidget::setBaseSize)
-        .def("setFixedSize", (void (QWidget::*)(const QSize&) )&QWidget::setFixedSize)
-        .def("setFixedSize", (void (QWidget::*)(int, int) )&QWidget::setFixedSize)
-        .def("setFixedWidth", &QWidget::setFixedWidth)
-        .def("setFixedHeight", &QWidget::setFixedHeight)
-        .def("mapToGlobal", &QWidget::mapToGlobal)
-        .def("mapFromGlobal", &QWidget::mapFromGlobal)
-        .def("mapToParent", &QWidget::mapToParent)
-        .def("mapFromParent", &QWidget::mapFromParent)
-        .def("mapTo", &QWidget::mapTo)
-        .def("mapFrom", &QWidget::mapFrom)
-        .def("window", &QWidget::window)
-        .def("topLevelWidget", &QWidget::topLevelWidget)
-        .def("palette", &QWidget::palette, return_value_policy< copy_const_reference >())
-        .def("setPalette", &QWidget::setPalette)
-        .def("setBackgroundRole", &QWidget::setBackgroundRole)
-        .def("backgroundRole", &QWidget::backgroundRole)
-        .def("setForegroundRole", &QWidget::setForegroundRole)
-        .def("foregroundRole", &QWidget::foregroundRole)
-        .def("font", &QWidget::font, return_value_policy< copy_const_reference >())
-        .def("setFont", &QWidget::setFont)
-        .def("fontMetrics", &QWidget::fontMetrics)
-        .def("fontInfo", &QWidget::fontInfo)
-        .def("cursor", &QWidget::cursor)
-        .def("setCursor", &QWidget::setCursor)
-        .def("unsetCursor", &QWidget::unsetCursor)
-        .def("setMouseTracking", &QWidget::setMouseTracking)
-        .def("hasMouseTracking", &QWidget::hasMouseTracking)
-        .def("underMouse", &QWidget::underMouse)
-        .def("setMask", (void (QWidget::*)(const QBitmap&) )&QWidget::setMask)
-        .def("setMask", (void (QWidget::*)(const QRegion&) )&QWidget::setMask)
-        .def("mask", &QWidget::mask)
-        .def("clearMask", &QWidget::clearMask)
-        .def("setWindowTitle", &QWidget::setWindowTitle)
-        .def("windowTitle", &QWidget::windowTitle)
-        .def("setWindowIcon", &QWidget::setWindowIcon)
-        .def("windowIcon", &QWidget::windowIcon)
-        .def("setWindowIconText", &QWidget::setWindowIconText)
-        .def("windowIconText", &QWidget::windowIconText)
-        .def("setWindowRole", &QWidget::setWindowRole)
-        .def("windowRole", &QWidget::windowRole)
-        .def("setWindowOpacity", &QWidget::setWindowOpacity)
-        .def("windowOpacity", &QWidget::windowOpacity)
-        .def("isWindowModified", &QWidget::isWindowModified)
-        .def("setToolTip", &QWidget::setToolTip)
-        .def("toolTip", &QWidget::toolTip)
-        .def("setStatusTip", &QWidget::setStatusTip)
-        .def("statusTip", &QWidget::statusTip)
-        .def("setWhatsThis", &QWidget::setWhatsThis)
-        .def("whatsThis", &QWidget::whatsThis)
-        .def("accessibleName", &QWidget::accessibleName)
-        .def("setAccessibleName", &QWidget::setAccessibleName)
-        .def("accessibleDescription", &QWidget::accessibleDescription)
-        .def("setAccessibleDescription", &QWidget::setAccessibleDescription)
-        .def("setLayoutDirection", &QWidget::setLayoutDirection)
-        .def("layoutDirection", &QWidget::layoutDirection)
-        .def("unsetLayoutDirection", &QWidget::unsetLayoutDirection)
-        .def("isRightToLeft", &QWidget::isRightToLeft)
-        .def("isLeftToRight", &QWidget::isLeftToRight)
-        .def("setFocus", (void (QWidget::*)() )&QWidget::setFocus)
-        .def("isActiveWindow", &QWidget::isActiveWindow)
-        .def("activateWindow", &QWidget::activateWindow)
-        .def("clearFocus", &QWidget::clearFocus)
-        .def("setFocus", (void (QWidget::*)(Qt::FocusReason) )&QWidget::setFocus)
-        .def("focusPolicy", &QWidget::focusPolicy)
-        .def("setFocusPolicy", &QWidget::setFocusPolicy)
-        .def("hasFocus", &QWidget::hasFocus)
-        .def("setTabOrder", &QWidget::setTabOrder)
-        .def("setFocusProxy", &QWidget::setFocusProxy)
-        .def("focusProxy", &QWidget::focusProxy)
-        .def("contextMenuPolicy", &QWidget::contextMenuPolicy)
-        .def("setContextMenuPolicy", &QWidget::setContextMenuPolicy)
-        .def("grabMouse", (void (QWidget::*)() )&QWidget::grabMouse)
-        .def("grabMouse", (void (QWidget::*)(const QCursor&) )&QWidget::grabMouse)
-        .def("releaseMouse", &QWidget::releaseMouse)
-        .def("grabKeyboard", &QWidget::grabKeyboard)
-        .def("releaseKeyboard", &QWidget::releaseKeyboard)
-        .def("grabShortcut", &QWidget::grabShortcut, QWidget_grabShortcut_overloads_1_2())
-        .def("releaseShortcut", &QWidget::releaseShortcut)
-        .def("setShortcutEnabled", &QWidget::setShortcutEnabled, QWidget_setShortcutEnabled_overloads_1_2())
-        .def("mouseGrabber", &QWidget::mouseGrabber)
-        .def("keyboardGrabber", &QWidget::keyboardGrabber)
-        .def("updatesEnabled", &QWidget::updatesEnabled)
-        .def("setUpdatesEnabled", &QWidget::setUpdatesEnabled)
-        .def("update", (void (QWidget::*)() )&QWidget::update)
-        .def("repaint", (void (QWidget::*)() )&QWidget::repaint)
-        .def("update", (void (QWidget::*)(int, int, int, int) )&QWidget::update)
-        .def("update", (void (QWidget::*)(const QRect&) )&QWidget::update)
-        .def("update", (void (QWidget::*)(const QRegion&) )&QWidget::update)
-        .def("repaint", (void (QWidget::*)(int, int, int, int) )&QWidget::repaint)
-        .def("repaint", (void (QWidget::*)(const QRect&) )&QWidget::repaint)
-        .def("repaint", (void (QWidget::*)(const QRegion&) )&QWidget::repaint)
-        .def("setHidden", &QWidget::setHidden)
-        .def("show", &QWidget::show)
-        .def("hide", &QWidget::hide)
-        .def("setShown", &QWidget::setShown)
-        .def("showMinimized", &QWidget::showMinimized)
-        .def("showMaximized", &QWidget::showMaximized)
-        .def("showFullScreen", &QWidget::showFullScreen)
-        .def("showNormal", &QWidget::showNormal)
-        .def("close", &QWidget::close)
-        .def("raise", &QWidget::raise)
-        .def("lower", &QWidget::lower)
-        .def("stackUnder", &QWidget::stackUnder)
-        .def("move", (void (QWidget::*)(int, int) )&QWidget::move)
-        .def("move", (void (QWidget::*)(const QPoint&) )&QWidget::move)
-        .def("resize", (void (QWidget::*)(int, int) )&QWidget::resize)
-        .def("resize", (void (QWidget::*)(const QSize&) )&QWidget::resize)
-        .def("setGeometry", (void (QWidget::*)(int, int, int, int) )&QWidget::setGeometry)
-        .def("setGeometry", (void (QWidget::*)(const QRect&) )&QWidget::setGeometry)
-        .def("adjustSize", &QWidget::adjustSize)
-        .def("isVisible", &QWidget::isVisible)
-        .def("isVisibleTo", &QWidget::isVisibleTo)
-        .def("isHidden", &QWidget::isHidden)
-        .def("isMinimized", &QWidget::isMinimized)
-        .def("isMaximized", &QWidget::isMaximized)
-        .def("isFullScreen", &QWidget::isFullScreen)
-        .def("windowState", &QWidget::windowState)
-        .def("setWindowState", &QWidget::setWindowState)
-        .def("overrideWindowState", &QWidget::overrideWindowState)
-        .def("sizePolicy", &QWidget::sizePolicy)
-        .def("setSizePolicy", (void (QWidget::*)(QSizePolicy) )&QWidget::setSizePolicy)
-        .def("setSizePolicy", (void (QWidget::*)(QSizePolicy::Policy, QSizePolicy::Policy) )&QWidget::setSizePolicy)
-        .def("visibleRegion", &QWidget::visibleRegion)
-        .def("setContentsMargins", &QWidget::setContentsMargins)
-        .def("getContentsMargins", &QWidget::getContentsMargins)
-        .def("contentsRect", &QWidget::contentsRect)
-        .def("layout", &QWidget::layout)
-        .def("setLayout", &QWidget::setLayout)
-        .def("updateGeometry", &QWidget::updateGeometry)
-        .def("setParent", (void (QWidget::*)(QWidget*) )&QWidget::setParent)
-        .def("setParent", (void (QWidget::*)(QWidget*, Qt::WFlags) )&QWidget::setParent)
-        .def("scroll", (void (QWidget::*)(int, int) )&QWidget::scroll)
-        .def("scroll", (void (QWidget::*)(int, int, const QRect&) )&QWidget::scroll)
-        .def("focusWidget", &QWidget::focusWidget)
-        .def("nextInFocusChain", &QWidget::nextInFocusChain)
-        .def("acceptDrops", &QWidget::acceptDrops)
-        .def("setAcceptDrops", &QWidget::setAcceptDrops)
-        .def("addAction", &QWidget::addAction)
-        .def("addActions", &QWidget::addActions)
-        .def("insertAction", &QWidget::insertAction)
-        .def("insertActions", &QWidget::insertActions)
-        .def("removeAction", &QWidget::removeAction)
-        .def("actions", &QWidget::actions)
-        .def("parentWidget", &QWidget::parentWidget)
-        .def("setWindowFlags", &QWidget::setWindowFlags)
-        .def("windowFlags", &QWidget::windowFlags)
-        .def("overrideWindowFlags", &QWidget::overrideWindowFlags)
-        .def("windowType", &QWidget::windowType)
-        .def("find", &QWidget::find)
-        .def("childAt", (QWidget* (QWidget::*)(int, int) const)&QWidget::childAt)
-        .def("childAt", (QWidget* (QWidget::*)(const QPoint&) const)&QWidget::childAt)
-        .def("x11Info", &QWidget::x11Info, return_value_policy< copy_const_reference >())
-        .def("x11PictureHandle", &QWidget::x11PictureHandle)
-        .def("handle", &QWidget::handle)
-        .def("setAttribute", &QWidget::setAttribute, QWidget_setAttribute_overloads_1_2())
-        .def("testAttribute", &QWidget::testAttribute)
-        .def("ensurePolished", &QWidget::ensurePolished)
-        .def("inputContext", &QWidget::inputContext)
-        .def("setInputContext", &QWidget::setInputContext)
-        .def("isAncestorOf", &QWidget::isAncestorOf)
-        .staticmethod("trUtf8")
-        .staticmethod("tr")
-        .staticmethod("setTabOrder")
-        .staticmethod("keyboardGrabber")
-        .staticmethod("mouseGrabber")
-        .staticmethod("find")
+    enum_< Qt::Modifier >("Modifier")
+        .value("CTRL", Qt::CTRL)
+        .value("SHIFT", Qt::SHIFT)
+        .value("UNICODE_ACCEL", Qt::UNICODE_ACCEL)
+        .value("MODIFIER_MASK", Qt::MODIFIER_MASK)
+        .value("META", Qt::META)
+        .value("ALT", Qt::ALT)
     ;
 
-    scope* QApplication_scope = new scope(
-    class_< QApplication, bases< QCoreApplication > , boost::noncopyable, QApplication_Wrapper >("QApplication", init< int&, char** >())
-        .def(init< int&, char**, bool >())
-        .def(init< int&, char**, QApplication::Type >())
-        .def(init< Display*, optional< Qt::HANDLE, Qt::HANDLE > >())
-        .def(init< Display*, int&, char**, optional< Qt::HANDLE, Qt::HANDLE > >())
-        .def_readonly("staticMetaObject", &QApplication::staticMetaObject)
-        .def("metaObject", (const QMetaObject* (QApplication::*)() const)&QApplication::metaObject, (const QMetaObject* (QApplication_Wrapper::*)() const)&QApplication_Wrapper::default_metaObject)
-        .def("qt_metacast", (void* (QApplication::*)(const char*) )&QApplication::qt_metacast, (void* (QApplication_Wrapper::*)(const char*))&QApplication_Wrapper::default_qt_metacast)
-        .def("qt_metacall", (int (QApplication::*)(QMetaObject::Call, int, void**) )&QApplication::qt_metacall, (int (QApplication_Wrapper::*)(QMetaObject::Call, int, void**))&QApplication_Wrapper::default_qt_metacall)
-        .def("x11EventFilter", &QApplication::x11EventFilter, &QApplication_Wrapper::default_x11EventFilter)
-        .def("x11ClientMessage", &QApplication::x11ClientMessage, &QApplication_Wrapper::default_x11ClientMessage)
-        .def("commitData", &QApplication::commitData, &QApplication_Wrapper::default_commitData)
-        .def("saveState", &QApplication::saveState, &QApplication_Wrapper::default_saveState)
-        .def("notify", (bool (QApplication::*)(QObject*, QEvent*) )&QApplication::notify, (bool (QApplication_Wrapper::*)(QObject*, QEvent*))&QApplication_Wrapper::default_notify)
-        .def("eventFilter", &QObject::eventFilter, &QApplication_Wrapper::default_eventFilter)
-        .def("tr", &QApplication::tr, QApplication_tr_overloads_1_2())
-        .def("trUtf8", &QApplication::trUtf8, QApplication_trUtf8_overloads_1_2())
-        .def("type", &QApplication::type)
-        .def("style", &QApplication::style)
-        .def("setStyle", (void (*)(QStyle*))&QApplication::setStyle)
-        .def("setStyle", (QStyle* (*)(const QString&))&QApplication::setStyle)
-        .def("colorSpec", &QApplication::colorSpec)
-        .def("setColorSpec", &QApplication::setColorSpec)
-        .def("overrideCursor", &QApplication::overrideCursor)
-        .def("setOverrideCursor", &QApplication::setOverrideCursor)
-        .def("changeOverrideCursor", &QApplication::changeOverrideCursor)
-        .def("restoreOverrideCursor", &QApplication::restoreOverrideCursor)
-        .def("palette", (QPalette (*)())&QApplication::palette)
-        .def("palette", (QPalette (*)(const QWidget*))&QApplication::palette)
-        .def("palette", (QPalette (*)(const char*))&QApplication::palette)
-        .def("setPalette", &QApplication::setPalette, QApplication_setPalette_overloads_1_2())
-        .def("font", &QApplication::font, QApplication_font_overloads_0_1())
-        .def("setFont", &QApplication::setFont, QApplication_setFont_overloads_1_2())
-        .def("fontMetrics", &QApplication::fontMetrics)
-        .def("setWindowIcon", &QApplication::setWindowIcon)
-        .def("windowIcon", &QApplication::windowIcon)
-        .def("allWidgets", &QApplication::allWidgets)
-        .def("topLevelWidgets", &QApplication::topLevelWidgets)
-        .def("desktop", &QApplication::desktop)
-        .def("activePopupWidget", &QApplication::activePopupWidget)
-        .def("activeModalWidget", &QApplication::activeModalWidget)
-        .def("clipboard", &QApplication::clipboard)
-        .def("focusWidget", &QApplication::focusWidget)
-        .def("activeWindow", &QApplication::activeWindow)
-        .def("setActiveWindow", &QApplication::setActiveWindow)
-        .def("widgetAt", (QWidget* (*)(const QPoint&))&QApplication::widgetAt)
-        .def("widgetAt", (QWidget* (*)(int, int))&QApplication::widgetAt)
-        .def("topLevelAt", (QWidget* (*)(const QPoint&))&QApplication::topLevelAt)
-        .def("topLevelAt", (QWidget* (*)(int, int))&QApplication::topLevelAt)
-        .def("syncX", &QApplication::syncX)
-        .def("beep", &QApplication::beep)
-        .def("keyboardModifiers", &QApplication::keyboardModifiers)
-        .def("mouseButtons", &QApplication::mouseButtons)
-        .def("setDesktopSettingsAware", &QApplication::setDesktopSettingsAware)
-        .def("desktopSettingsAware", &QApplication::desktopSettingsAware)
-        .def("setCursorFlashTime", &QApplication::setCursorFlashTime)
-        .def("cursorFlashTime", &QApplication::cursorFlashTime)
-        .def("setDoubleClickInterval", &QApplication::setDoubleClickInterval)
-        .def("doubleClickInterval", &QApplication::doubleClickInterval)
-        .def("setKeyboardInputInterval", &QApplication::setKeyboardInputInterval)
-        .def("keyboardInputInterval", &QApplication::keyboardInputInterval)
-        .def("setWheelScrollLines", &QApplication::setWheelScrollLines)
-        .def("wheelScrollLines", &QApplication::wheelScrollLines)
-        .def("setGlobalStrut", &QApplication::setGlobalStrut)
-        .def("globalStrut", &QApplication::globalStrut)
-        .def("setStartDragTime", &QApplication::setStartDragTime)
-        .def("startDragTime", &QApplication::startDragTime)
-        .def("setStartDragDistance", &QApplication::setStartDragDistance)
-        .def("startDragDistance", &QApplication::startDragDistance)
-        .def("setLayoutDirection", &QApplication::setLayoutDirection)
-        .def("layoutDirection", &QApplication::layoutDirection)
-        .def("isRightToLeft", &QApplication::isRightToLeft)
-        .def("isLeftToRight", &QApplication::isLeftToRight)
-        .def("isEffectEnabled", &QApplication::isEffectEnabled)
-        .def("setEffectEnabled", &QApplication::setEffectEnabled, QApplication_setEffectEnabled_overloads_1_2())
-        .def("x11ProcessEvent", &QApplication::x11ProcessEvent)
-        .def("isSessionRestored", &QApplication::isSessionRestored)
-        .def("sessionId", &QApplication::sessionId)
-        .def("sessionKey", &QApplication::sessionKey)
-        .def("setInputContext", &QApplication::setInputContext)
-        .def("inputContext", &QApplication::inputContext)
-        .def("exec", &QApplication::exec)
-        .def("setQuitOnLastWindowClosed", &QApplication::setQuitOnLastWindowClosed)
-        .def("quitOnLastWindowClosed", &QApplication::quitOnLastWindowClosed)
-        .def("closeAllWindows", &QApplication::closeAllWindows)
-        .def("aboutQt", &QApplication::aboutQt)
-        .staticmethod("activePopupWidget")
-        .staticmethod("closeAllWindows")
-        .staticmethod("syncX")
-        .staticmethod("topLevelWidgets")
-        .staticmethod("setEffectEnabled")
-        .staticmethod("setStyle")
-        .staticmethod("focusWidget")
-        .staticmethod("allWidgets")
-        .staticmethod("font")
-        .staticmethod("quitOnLastWindowClosed")
-        .staticmethod("changeOverrideCursor")
-        .staticmethod("setLayoutDirection")
-        .staticmethod("aboutQt")
-        .staticmethod("style")
-        .staticmethod("widgetAt")
-        .staticmethod("setDoubleClickInterval")
-        .staticmethod("startDragDistance")
-        .staticmethod("layoutDirection")
-        .staticmethod("wheelScrollLines")
-        .staticmethod("tr")
-        .staticmethod("setGlobalStrut")
-        .staticmethod("desktop")
-        .staticmethod("beep")
-        .staticmethod("clipboard")
-        .staticmethod("isEffectEnabled")
-        .staticmethod("keyboardModifiers")
-        .staticmethod("type")
-        .staticmethod("setWheelScrollLines")
-        .staticmethod("activeWindow")
-        .staticmethod("isRightToLeft")
-        .staticmethod("topLevelAt")
-        .staticmethod("fontMetrics")
-        .staticmethod("setKeyboardInputInterval")
-        .staticmethod("exec")
-        .staticmethod("overrideCursor")
-        .staticmethod("colorSpec")
-        .staticmethod("desktopSettingsAware")
-        .staticmethod("palette")
-        .staticmethod("setStartDragTime")
-        .staticmethod("activeModalWidget")
-        .staticmethod("setDesktopSettingsAware")
-        .staticmethod("windowIcon")
-        .staticmethod("setCursorFlashTime")
-        .staticmethod("setPalette")
-        .staticmethod("mouseButtons")
-        .staticmethod("setActiveWindow")
-        .staticmethod("setStartDragDistance")
-        .staticmethod("cursorFlashTime")
-        .staticmethod("trUtf8")
-        .staticmethod("keyboardInputInterval")
-        .staticmethod("setColorSpec")
-        .staticmethod("setQuitOnLastWindowClosed")
-        .staticmethod("startDragTime")
-        .staticmethod("setWindowIcon")
-        .staticmethod("isLeftToRight")
-        .staticmethod("globalStrut")
-        .staticmethod("setOverrideCursor")
-        .staticmethod("setFont")
-        .staticmethod("restoreOverrideCursor")
-        .staticmethod("doubleClickInterval")
-    );
-
-    enum_< QApplication::Type >("Type")
-        .value("GuiServer", QApplication::GuiServer)
-        .value("Tty", QApplication::Tty)
-        .value("GuiClient", QApplication::GuiClient)
+    enum_< Qt::MouseButton >("MouseButton")
+        .value("RightButton", Qt::RightButton)
+        .value("NoButton", Qt::NoButton)
+        .value("LeftButton", Qt::LeftButton)
+        .value("MouseButtonMask", Qt::MouseButtonMask)
+        .value("XButton1", Qt::XButton1)
+        .value("XButton2", Qt::XButton2)
+        .value("MidButton", Qt::MidButton)
     ;
 
-
-    enum_< QApplication::ColorSpec >("ColorSpec")
-        .value("ManyColor", QApplication::ManyColor)
-        .value("NormalColor", QApplication::NormalColor)
-        .value("CustomColor", QApplication::CustomColor)
+    enum_< Qt::Orientation >("Orientation")
+        .value("Horizontal", Qt::Horizontal)
+        .value("Vertical", Qt::Vertical)
     ;
 
-    delete QApplication_scope;
+    enum_< Qt::FocusPolicy >("FocusPolicy")
+        .value("StrongFocus", Qt::StrongFocus)
+        .value("WheelFocus", Qt::WheelFocus)
+        .value("ClickFocus", Qt::ClickFocus)
+        .value("TabFocus", Qt::TabFocus)
+        .value("NoFocus", Qt::NoFocus)
+    ;
+
+    enum_< Qt::SortOrder >("SortOrder")
+        .value("AscendingOrder", Qt::AscendingOrder)
+        .value("DescendingOrder", Qt::DescendingOrder)
+    ;
+
+    enum_< Qt::AlignmentFlag >("AlignmentFlag")
+        .value("AlignLeft", Qt::AlignLeft)
+        .value("AlignTrailing", Qt::AlignTrailing)
+        .value("AlignAbsolute", Qt::AlignAbsolute)
+        .value("AlignHCenter", Qt::AlignHCenter)
+        .value("AlignCenter", Qt::AlignCenter)
+        .value("AlignJustify", Qt::AlignJustify)
+        .value("AlignHorizontal_Mask", Qt::AlignHorizontal_Mask)
+        .value("AlignTop", Qt::AlignTop)
+        .value("AlignRight", Qt::AlignRight)
+        .value("AlignLeading", Qt::AlignLeading)
+        .value("AlignVCenter", Qt::AlignVCenter)
+        .value("AlignBottom", Qt::AlignBottom)
+        .value("AlignVertical_Mask", Qt::AlignVertical_Mask)
+    ;
+
+    enum_< Qt::TextFlag >("TextFlag")
+        .value("TextShowMnemonic", Qt::TextShowMnemonic)
+        .value("TextHideMnemonic", Qt::TextHideMnemonic)
+        .value("TextDontClip", Qt::TextDontClip)
+        .value("TextIncludeTrailingSpaces", Qt::TextIncludeTrailingSpaces)
+        .value("TextDontPrint", Qt::TextDontPrint)
+        .value("TextSingleLine", Qt::TextSingleLine)
+        .value("TextWrapAnywhere", Qt::TextWrapAnywhere)
+        .value("TextExpandTabs", Qt::TextExpandTabs)
+        .value("TextWordWrap", Qt::TextWordWrap)
+    ;
+
+    enum_< Qt::TextElideMode >("TextElideMode")
+        .value("ElideMiddle", Qt::ElideMiddle)
+        .value("ElideRight", Qt::ElideRight)
+        .value("ElideLeft", Qt::ElideLeft)
+    ;
+
+    enum_< Qt::WindowType >("WindowType")
+        .value("SubWindow", Qt::SubWindow)
+        .value("Sheet", Qt::Sheet)
+        .value("Desktop", Qt::Desktop)
+        .value("WindowType_Mask", Qt::WindowType_Mask)
+        .value("WindowShadeButtonHint", Qt::WindowShadeButtonHint)
+        .value("Window", Qt::Window)
+        .value("WindowMinimizeButtonHint", Qt::WindowMinimizeButtonHint)
+        .value("WindowMaximizeButtonHint", Qt::WindowMaximizeButtonHint)
+        .value("Widget", Qt::Widget)
+        .value("Popup", Qt::Popup)
+        .value("WindowStaysOnTopHint", Qt::WindowStaysOnTopHint)
+        .value("Tool", Qt::Tool)
+        .value("WindowTitleHint", Qt::WindowTitleHint)
+        .value("X11BypassWindowManagerHint", Qt::X11BypassWindowManagerHint)
+        .value("MSWindowsFixedSizeDialogHint", Qt::MSWindowsFixedSizeDialogHint)
+        .value("WindowMinMaxButtonsHint", Qt::WindowMinMaxButtonsHint)
+        .value("FramelessWindowHint", Qt::FramelessWindowHint)
+        .value("MSWindowsOwnDC", Qt::MSWindowsOwnDC)
+        .value("Dialog", Qt::Dialog)
+        .value("WindowSystemMenuHint", Qt::WindowSystemMenuHint)
+        .value("ToolTip", Qt::ToolTip)
+        .value("WindowContextHelpButtonHint", Qt::WindowContextHelpButtonHint)
+        .value("Drawer", Qt::Drawer)
+        .value("SplashScreen", Qt::SplashScreen)
+    ;
+
+    enum_< Qt::WindowState >("WindowState")
+        .value("WindowNoState", Qt::WindowNoState)
+        .value("WindowFullScreen", Qt::WindowFullScreen)
+        .value("WindowMaximized", Qt::WindowMaximized)
+        .value("WindowActive", Qt::WindowActive)
+        .value("WindowMinimized", Qt::WindowMinimized)
+    ;
+
+    enum_< Qt::WidgetAttribute >("WidgetAttribute")
+        .value("WA_InputMethodTransparent", Qt::WA_InputMethodTransparent)
+        .value("WA_InputMethodEnabled", Qt::WA_InputMethodEnabled)
+        .value("WA_CustomWhatsThis", Qt::WA_CustomWhatsThis)
+        .value("WA_NoMouseReplay", Qt::WA_NoMouseReplay)
+        .value("WA_ContentsPropagated", Qt::WA_ContentsPropagated)
+        .value("WA_SetFont", Qt::WA_SetFont)
+        .value("WA_NoChildEventsForParent", Qt::WA_NoChildEventsForParent)
+        .value("WA_LayoutOnEntireRect", Qt::WA_LayoutOnEntireRect)
+        .value("WA_NoBackground", Qt::WA_NoBackground)
+        .value("WA_SetPalette", Qt::WA_SetPalette)
+        .value("WA_Hover", Qt::WA_Hover)
+        .value("WA_Moved", Qt::WA_Moved)
+        .value("WA_WState_Polished", Qt::WA_WState_Polished)
+        .value("WA_TransparentForMouseEvents", Qt::WA_TransparentForMouseEvents)
+        .value("WA_UpdatesDisabled", Qt::WA_UpdatesDisabled)
+        .value("WA_StaticContents", Qt::WA_StaticContents)
+        .value("WA_MouseTracking", Qt::WA_MouseTracking)
+        .value("WA_RightToLeft", Qt::WA_RightToLeft)
+        .value("WA_PaintUnclipped", Qt::WA_PaintUnclipped)
+        .value("WA_WState_Created", Qt::WA_WState_Created)
+        .value("WA_PendingUpdate", Qt::WA_PendingUpdate)
+        .value("WA_WState_InPaintEvent", Qt::WA_WState_InPaintEvent)
+        .value("WA_AcceptDrops", Qt::WA_AcceptDrops)
+        .value("WA_Resized", Qt::WA_Resized)
+        .value("WA_ShowModal", Qt::WA_ShowModal)
+        .value("WA_PendingMoveEvent", Qt::WA_PendingMoveEvent)
+        .value("WA_ForceAcceptDrops", Qt::WA_ForceAcceptDrops)
+        .value("WA_Mapped", Qt::WA_Mapped)
+        .value("WA_NoSystemBackground", Qt::WA_NoSystemBackground)
+        .value("WA_MouseNoMask", Qt::WA_MouseNoMask)
+        .value("WA_Disabled", Qt::WA_Disabled)
+        .value("WA_InvalidSize", Qt::WA_InvalidSize)
+        .value("WA_SetLayoutDirection", Qt::WA_SetLayoutDirection)
+        .value("WA_WState_Hidden", Qt::WA_WState_Hidden)
+        .value("WA_GrabbedShortcut", Qt::WA_GrabbedShortcut)
+        .value("WA_WState_DND", Qt::WA_WState_DND)
+        .value("WA_MacMetalStyle", Qt::WA_MacMetalStyle)
+        .value("WA_KeyboardFocusChange", Qt::WA_KeyboardFocusChange)
+        .value("WA_LaidOut", Qt::WA_LaidOut)
+        .value("WA_QuitOnClose", Qt::WA_QuitOnClose)
+        .value("WA_WState_OwnSizePolicy", Qt::WA_WState_OwnSizePolicy)
+        .value("WA_ForceDisabled", Qt::WA_ForceDisabled)
+        .value("WA_MacNoClickThrough", Qt::WA_MacNoClickThrough)
+        .value("WA_WState_ExplicitShowHide", Qt::WA_WState_ExplicitShowHide)
+        .value("WA_AttributeCount", Qt::WA_AttributeCount)
+        .value("WA_DeleteOnClose", Qt::WA_DeleteOnClose)
+        .value("WA_OutsideWSRange", Qt::WA_OutsideWSRange)
+        .value("WA_ForceUpdatesDisabled", Qt::WA_ForceUpdatesDisabled)
+        .value("WA_PaintOnScreen", Qt::WA_PaintOnScreen)
+        .value("WA_SetCursor", Qt::WA_SetCursor)
+        .value("WA_WState_Reparented", Qt::WA_WState_Reparented)
+        .value("WA_PendingResizeEvent", Qt::WA_PendingResizeEvent)
+        .value("WA_NoChildEventsFromChildren", Qt::WA_NoChildEventsFromChildren)
+        .value("WA_UnderMouse", Qt::WA_UnderMouse)
+        .value("WA_WState_CompressKeys", Qt::WA_WState_CompressKeys)
+        .value("WA_PaintOutsidePaintEvent", Qt::WA_PaintOutsidePaintEvent)
+        .value("WA_WindowModified", Qt::WA_WindowModified)
+        .value("WA_NoMousePropagation", Qt::WA_NoMousePropagation)
+        .value("WA_WState_Visible", Qt::WA_WState_Visible)
+        .value("WA_WState_ConfigPending", Qt::WA_WState_ConfigPending)
+        .value("WA_SetWindowIcon", Qt::WA_SetWindowIcon)
+        .value("WA_GroupLeader", Qt::WA_GroupLeader)
+        .value("WA_KeyCompression", Qt::WA_KeyCompression)
+    ;
+
+    enum_< Qt::ImageConversionFlag >("ImageConversionFlag")
+        .value("AvoidDither", Qt::AvoidDither)
+        .value("AutoColor", Qt::AutoColor)
+        .value("ColorMode_Mask", Qt::ColorMode_Mask)
+        .value("OrderedDither", Qt::OrderedDither)
+        .value("Dither_Mask", Qt::Dither_Mask)
+        .value("NoAlpha", Qt::NoAlpha)
+        .value("PreferDither", Qt::PreferDither)
+        .value("AlphaDither_Mask", Qt::AlphaDither_Mask)
+        .value("OrderedAlphaDither", Qt::OrderedAlphaDither)
+        .value("ThresholdAlphaDither", Qt::ThresholdAlphaDither)
+        .value("DiffuseAlphaDither", Qt::DiffuseAlphaDither)
+        .value("DiffuseDither", Qt::DiffuseDither)
+        .value("AutoDither", Qt::AutoDither)
+        .value("ColorOnly", Qt::ColorOnly)
+        .value("MonoOnly", Qt::MonoOnly)
+        .value("ThresholdDither", Qt::ThresholdDither)
+        .value("DitherMode_Mask", Qt::DitherMode_Mask)
+    ;
+
+    enum_< Qt::BGMode >("BGMode")
+        .value("TransparentMode", Qt::TransparentMode)
+        .value("OpaqueMode", Qt::OpaqueMode)
+    ;
+
+    enum_< Qt::Key >("Key")
+        .value("Key_End", Qt::Key_End)
+        .value("Key_Otilde", Qt::Key_Otilde)
+        .value("Key_ScrollLock", Qt::Key_ScrollLock)
+        .value("Key_Menu", Qt::Key_Menu)
+        .value("Key_hyphen", Qt::Key_hyphen)
+        .value("Key_Kanji", Qt::Key_Kanji)
+        .value("Key_MediaRecord", Qt::Key_MediaRecord)
+        .value("Key_Dead_Hook", Qt::Key_Dead_Hook)
+        .value("Key_Space", Qt::Key_Space)
+        .value("Key_Pause", Qt::Key_Pause)
+        .value("Key_F27", Qt::Key_F27)
+        .value("Key_F26", Qt::Key_F26)
+        .value("Key_F25", Qt::Key_F25)
+        .value("Key_F24", Qt::Key_F24)
+        .value("Key_F23", Qt::Key_F23)
+        .value("Key_F22", Qt::Key_F22)
+        .value("Key_F21", Qt::Key_F21)
+        .value("Key_F20", Qt::Key_F20)
+        .value("Key_SingleCandidate", Qt::Key_SingleCandidate)
+        .value("Key_Slash", Qt::Key_Slash)
+        .value("Key_VolumeUp", Qt::Key_VolumeUp)
+        .value("Key_Romaji", Qt::Key_Romaji)
+        .value("Key_F29", Qt::Key_F29)
+        .value("Key_F28", Qt::Key_F28)
+        .value("Key_Uacute", Qt::Key_Uacute)
+        .value("Key_Muhenkan", Qt::Key_Muhenkan)
+        .value("Key_Dead_Breve", Qt::Key_Dead_Breve)
+        .value("Key_Iacute", Qt::Key_Iacute)
+        .value("Key_Zenkaku_Hankaku", Qt::Key_Zenkaku_Hankaku)
+        .value("Key_Favorites", Qt::Key_Favorites)
+        .value("Key_AsciiCircum", Qt::Key_AsciiCircum)
+        .value("Key_Launch8", Qt::Key_Launch8)
+        .value("Key_Launch3", Qt::Key_Launch3)
+        .value("Key_Icircumflex", Qt::Key_Icircumflex)
+        .value("Key_VolumeDown", Qt::Key_VolumeDown)
+        .value("Key_onequarter", Qt::Key_onequarter)
+        .value("Key_BassDown", Qt::Key_BassDown)
+        .value("Key_HomePage", Qt::Key_HomePage)
+        .value("Key_Launch1", Qt::Key_Launch1)
+        .value("Key_Launch2", Qt::Key_Launch2)
+        .value("Key_Dead_Tilde", Qt::Key_Dead_Tilde)
+        .value("Key_Acircumflex", Qt::Key_Acircumflex)
+        .value("Key_Launch5", Qt::Key_Launch5)
+        .value("Key_Dead_Grave", Qt::Key_Dead_Grave)
+        .value("Key_Launch7", Qt::Key_Launch7)
+        .value("Key_Bar", Qt::Key_Bar)
+        .value("Key_Ediaeresis", Qt::Key_Ediaeresis)
+        .value("Key_onehalf", Qt::Key_onehalf)
+        .value("Key_Super_R", Qt::Key_Super_R)
+        .value("Key_Clear", Qt::Key_Clear)
+        .value("Key_LaunchA", Qt::Key_LaunchA)
+        .value("Key_LaunchB", Qt::Key_LaunchB)
+        .value("Key_LaunchC", Qt::Key_LaunchC)
+        .value("Key_LaunchD", Qt::Key_LaunchD)
+        .value("Key_Backtab", Qt::Key_Backtab)
+        .value("Key_LaunchE", Qt::Key_LaunchE)
+        .value("Key_Launch4", Qt::Key_Launch4)
+        .value("Key_F34", Qt::Key_F34)
+        .value("Key_F35", Qt::Key_F35)
+        .value("Key_Udiaeresis", Qt::Key_Udiaeresis)
+        .value("Key_Left", Qt::Key_Left)
+        .value("Key_F30", Qt::Key_F30)
+        .value("Key_F31", Qt::Key_F31)
+        .value("Key_F32", Qt::Key_F32)
+        .value("Key_F33", Qt::Key_F33)
+        .value("Key_guillemotright", Qt::Key_guillemotright)
+        .value("Key_Hangul_Special", Qt::Key_Hangul_Special)
+        .value("Key_ParenLeft", Qt::Key_ParenLeft)
+        .value("Key_Super_L", Qt::Key_Super_L)
+        .value("Key_multiply", Qt::Key_multiply)
+        .value("Key_Dead_Belowdot", Qt::Key_Dead_Belowdot)
+        .value("Key_Dollar", Qt::Key_Dollar)
+        .value("Key_Period", Qt::Key_Period)
+        .value("Key_onesuperior", Qt::Key_onesuperior)
+        .value("Key_ydiaeresis", Qt::Key_ydiaeresis)
+        .value("Key_Dead_Acute", Qt::Key_Dead_Acute)
+        .value("Key_Dead_Voiced_Sound", Qt::Key_Dead_Voiced_Sound)
+        .value("Key_Ooblique", Qt::Key_Ooblique)
+        .value("Key_Backslash", Qt::Key_Backslash)
+        .value("Key_MediaPlay", Qt::Key_MediaPlay)
+        .value("Key_CapsLock", Qt::Key_CapsLock)
+        .value("Key_Aring", Qt::Key_Aring)
+        .value("Key_Right", Qt::Key_Right)
+        .value("Key_PageDown", Qt::Key_PageDown)
+        .value("Key_paragraph", Qt::Key_paragraph)
+        .value("Key_Comma", Qt::Key_Comma)
+        .value("Key_Forward", Qt::Key_Forward)
+        .value("Key_notsign", Qt::Key_notsign)
+        .value("Key_Down", Qt::Key_Down)
+        .value("Key_Katakana", Qt::Key_Katakana)
+        .value("Key_Hiragana", Qt::Key_Hiragana)
+        .value("Key_Dead_Cedilla", Qt::Key_Dead_Cedilla)
+        .value("Key_QuoteDbl", Qt::Key_QuoteDbl)
+        .value("Key_questiondown", Qt::Key_questiondown)
+        .value("Key_QuoteLeft", Qt::Key_QuoteLeft)
+        .value("Key_Hangul_Jamo", Qt::Key_Hangul_Jamo)
+        .value("Key_Backspace", Qt::Key_Backspace)
+        .value("Key_BassUp", Qt::Key_BassUp)
+        .value("Key_Ucircumflex", Qt::Key_Ucircumflex)
+        .value("Key_Hangul_Romaja", Qt::Key_Hangul_Romaja)
+        .value("Key_Ocircumflex", Qt::Key_Ocircumflex)
+        .value("Key_LaunchF", Qt::Key_LaunchF)
+        .value("Key_diaeresis", Qt::Key_diaeresis)
+        .value("Key_Yacute", Qt::Key_Yacute)
+        .value("Key_Atilde", Qt::Key_Atilde)
+        .value("Key_BassBoost", Qt::Key_BassBoost)
+        .value("Key_threequarters", Qt::Key_threequarters)
+        .value("Key_Ecircumflex", Qt::Key_Ecircumflex)
+        .value("Key_Eisu_Shift", Qt::Key_Eisu_Shift)
+        .value("Key_cent", Qt::Key_cent)
+        .value("Key_Hangul_Jeonja", Qt::Key_Hangul_Jeonja)
+        .value("Key_unknown", Qt::Key_unknown)
+        .value("Key_At", Qt::Key_At)
+        .value("Key_Asterisk", Qt::Key_Asterisk)
+        .value("Key_Greater", Qt::Key_Greater)
+        .value("Key_Ntilde", Qt::Key_Ntilde)
+        .value("Key_plusminus", Qt::Key_plusminus)
+        .value("Key_Eacute", Qt::Key_Eacute)
+        .value("Key_Hangul_PreHanja", Qt::Key_Hangul_PreHanja)
+        .value("Key_periodcentered", Qt::Key_periodcentered)
+        .value("Key_Zenkaku", Qt::Key_Zenkaku)
+        .value("Key_BraceRight", Qt::Key_BraceRight)
+        .value("Key_Kana_Lock", Qt::Key_Kana_Lock)
+        .value("Key_VolumeMute", Qt::Key_VolumeMute)
+        .value("Key_macron", Qt::Key_macron)
+        .value("Key_MediaNext", Qt::Key_MediaNext)
+        .value("Key_Hiragana_Katakana", Qt::Key_Hiragana_Katakana)
+        .value("Key_ParenRight", Qt::Key_ParenRight)
+        .value("Key_Idiaeresis", Qt::Key_Idiaeresis)
+        .value("Key_Standby", Qt::Key_Standby)
+        .value("Key_D", Qt::Key_D)
+        .value("Key_Colon", Qt::Key_Colon)
+        .value("Key_Oacute", Qt::Key_Oacute)
+        .value("Key_Search", Qt::Key_Search)
+        .value("Key_NumLock", Qt::Key_NumLock)
+        .value("Key_F19", Qt::Key_F19)
+        .value("Key_F16", Qt::Key_F16)
+        .value("Key_F17", Qt::Key_F17)
+        .value("Key_F14", Qt::Key_F14)
+        .value("Key_F15", Qt::Key_F15)
+        .value("Key_F12", Qt::Key_F12)
+        .value("Key_F13", Qt::Key_F13)
+        .value("Key_F10", Qt::Key_F10)
+        .value("Key_F11", Qt::Key_F11)
+        .value("Key_Back", Qt::Key_Back)
+        .value("Key_Semicolon", Qt::Key_Semicolon)
+        .value("Key_Ograve", Qt::Key_Ograve)
+        .value("Key_Hangul_Start", Qt::Key_Hangul_Start)
+        .value("Key_cedilla", Qt::Key_cedilla)
+        .value("Key_Control", Qt::Key_Control)
+        .value("Key_OpenUrl", Qt::Key_OpenUrl)
+        .value("Key_Codeinput", Qt::Key_Codeinput)
+        .value("Key_Ugrave", Qt::Key_Ugrave)
+        .value("Key_Hangul_PostHanja", Qt::Key_Hangul_PostHanja)
+        .value("Key_LaunchMedia", Qt::Key_LaunchMedia)
+        .value("Key_Any", Qt::Key_Any)
+        .value("Key_exclamdown", Qt::Key_exclamdown)
+        .value("Key_Ccedilla", Qt::Key_Ccedilla)
+        .value("Key_Hangul", Qt::Key_Hangul)
+        .value("Key_F18", Qt::Key_F18)
+        .value("Key_ordfeminine", Qt::Key_ordfeminine)
+        .value("Key_Question", Qt::Key_Question)
+        .value("Key_Dead_Horn", Qt::Key_Dead_Horn)
+        .value("Key_Ampersand", Qt::Key_Ampersand)
+        .value("Key_Kana_Shift", Qt::Key_Kana_Shift)
+        .value("Key_brokenbar", Qt::Key_brokenbar)
+        .value("Key_currency", Qt::Key_currency)
+        .value("Key_AsciiTilde", Qt::Key_AsciiTilde)
+        .value("Key_Dead_Semivoiced_Sound", Qt::Key_Dead_Semivoiced_Sound)
+        .value("Key_Multi_key", Qt::Key_Multi_key)
+        .value("Key_Stop", Qt::Key_Stop)
+        .value("Key_PageUp", Qt::Key_PageUp)
+        .value("Key_BracketRight", Qt::Key_BracketRight)
+        .value("Key_Dead_Abovering", Qt::Key_Dead_Abovering)
+        .value("Key_Eisu_toggle", Qt::Key_Eisu_toggle)
+        .value("Key_section", Qt::Key_section)
+        .value("Key_Launch9", Qt::Key_Launch9)
+        .value("Key_Dead_Doubleacute", Qt::Key_Dead_Doubleacute)
+        .value("Key_Underscore", Qt::Key_Underscore)
+        .value("Key_MultipleCandidate", Qt::Key_MultipleCandidate)
+        .value("Key_5", Qt::Key_5)
+        .value("Key_4", Qt::Key_4)
+        .value("Key_7", Qt::Key_7)
+        .value("Key_6", Qt::Key_6)
+        .value("Key_1", Qt::Key_1)
+        .value("Key_0", Qt::Key_0)
+        .value("Key_3", Qt::Key_3)
+        .value("Key_2", Qt::Key_2)
+        .value("Key_Dead_Iota", Qt::Key_Dead_Iota)
+        .value("Key_Touroku", Qt::Key_Touroku)
+        .value("Key_9", Qt::Key_9)
+        .value("Key_8", Qt::Key_8)
+        .value("Key_Massyo", Qt::Key_Massyo)
+        .value("Key_Henkan", Qt::Key_Henkan)
+        .value("Key_E", Qt::Key_E)
+        .value("Key_Equal", Qt::Key_Equal)
+        .value("Key_G", Qt::Key_G)
+        .value("Key_F", Qt::Key_F)
+        .value("Key_A", Qt::Key_A)
+        .value("Key_division", Qt::Key_division)
+        .value("Key_C", Qt::Key_C)
+        .value("Key_B", Qt::Key_B)
+        .value("Key_M", Qt::Key_M)
+        .value("Key_Up", Qt::Key_Up)
+        .value("Key_O", Qt::Key_O)
+        .value("Key_N", Qt::Key_N)
+        .value("Key_I", Qt::Key_I)
+        .value("Key_H", Qt::Key_H)
+        .value("Key_K", Qt::Key_K)
+        .value("Key_J", Qt::Key_J)
+        .value("Key_U", Qt::Key_U)
+        .value("Key_T", Qt::Key_T)
+        .value("Key_W", Qt::Key_W)
+        .value("Key_V", Qt::Key_V)
+        .value("Key_Q", Qt::Key_Q)
+        .value("Key_P", Qt::Key_P)
+        .value("Key_S", Qt::Key_S)
+        .value("Key_R", Qt::Key_R)
+        .value("Key_Plus", Qt::Key_Plus)
+        .value("Key_Hankaku", Qt::Key_Hankaku)
+        .value("Key_Enter", Qt::Key_Enter)
+        .value("Key_Y", Qt::Key_Y)
+        .value("Key_X", Qt::Key_X)
+        .value("Key_Z", Qt::Key_Z)
+        .value("Key_F4", Qt::Key_F4)
+        .value("Key_F5", Qt::Key_F5)
+        .value("Key_F6", Qt::Key_F6)
+        .value("Key_F7", Qt::Key_F7)
+        .value("Key_F1", Qt::Key_F1)
+        .value("Key_F2", Qt::Key_F2)
+        .value("Key_F3", Qt::Key_F3)
+        .value("Key_Help", Qt::Key_Help)
+        .value("Key_Less", Qt::Key_Less)
+        .value("Key_F8", Qt::Key_F8)
+        .value("Key_F9", Qt::Key_F9)
+        .value("Key_Tab", Qt::Key_Tab)
+        .value("Key_Launch6", Qt::Key_Launch6)
+        .value("Key_Odiaeresis", Qt::Key_Odiaeresis)
+        .value("Key_nobreakspace", Qt::Key_nobreakspace)
+        .value("Key_Agrave", Qt::Key_Agrave)
+        .value("Key_Escape", Qt::Key_Escape)
+        .value("Key_Alt", Qt::Key_Alt)
+        .value("Key_Meta", Qt::Key_Meta)
+        .value("Key_Percent", Qt::Key_Percent)
+        .value("Key_AE", Qt::Key_AE)
+        .value("Key_yen", Qt::Key_yen)
+        .value("Key_Dead_Circumflex", Qt::Key_Dead_Circumflex)
+        .value("Key_Direction_R", Qt::Key_Direction_R)
+        .value("Key_Dead_Ogonek", Qt::Key_Dead_Ogonek)
+        .value("Key_Refresh", Qt::Key_Refresh)
+        .value("Key_NumberSign", Qt::Key_NumberSign)
+        .value("Key_MediaStop", Qt::Key_MediaStop)
+        .value("Key_Print", Qt::Key_Print)
+        .value("Key_Dead_Macron", Qt::Key_Dead_Macron)
+        .value("Key_Direction_L", Qt::Key_Direction_L)
+        .value("Key_MediaLast", Qt::Key_MediaLast)
+        .value("Key_Shift", Qt::Key_Shift)
+        .value("Key_Aacute", Qt::Key_Aacute)
+        .value("Key_Return", Qt::Key_Return)
+        .value("Key_Hangul_Banja", Qt::Key_Hangul_Banja)
+        .value("Key_twosuperior", Qt::Key_twosuperior)
+        .value("Key_masculine", Qt::Key_masculine)
+        .value("Key_TrebleUp", Qt::Key_TrebleUp)
+        .value("Key_ETH", Qt::Key_ETH)
+        .value("Key_Exclam", Qt::Key_Exclam)
+        .value("Key_L", Qt::Key_L)
+        .value("Key_Dead_Diaeresis", Qt::Key_Dead_Diaeresis)
+        .value("Key_PreviousCandidate", Qt::Key_PreviousCandidate)
+        .value("Key_Hyper_L", Qt::Key_Hyper_L)
+        .value("Key_Dead_Abovedot", Qt::Key_Dead_Abovedot)
+        .value("Key_THORN", Qt::Key_THORN)
+        .value("Key_degree", Qt::Key_degree)
+        .value("Key_copyright", Qt::Key_copyright)
+        .value("Key_Insert", Qt::Key_Insert)
+        .value("Key_BracketLeft", Qt::Key_BracketLeft)
+        .value("Key_Minus", Qt::Key_Minus)
+        .value("Key_Delete", Qt::Key_Delete)
+        .value("Key_Hangul_Hanja", Qt::Key_Hangul_Hanja)
+        .value("Key_registered", Qt::Key_registered)
+        .value("Key_Egrave", Qt::Key_Egrave)
+        .value("Key_Launch0", Qt::Key_Launch0)
+        .value("Key_sterling", Qt::Key_sterling)
+        .value("Key_BraceLeft", Qt::Key_BraceLeft)
+        .value("Key_Apostrophe", Qt::Key_Apostrophe)
+        .value("Key_Hyper_R", Qt::Key_Hyper_R)
+        .value("Key_threesuperior", Qt::Key_threesuperior)
+        .value("Key_TrebleDown", Qt::Key_TrebleDown)
+        .value("Key_MediaPrevious", Qt::Key_MediaPrevious)
+        .value("Key_Adiaeresis", Qt::Key_Adiaeresis)
+        .value("Key_ssharp", Qt::Key_ssharp)
+        .value("Key_acute", Qt::Key_acute)
+        .value("Key_Mode_switch", Qt::Key_Mode_switch)
+        .value("Key_Hangul_End", Qt::Key_Hangul_End)
+        .value("Key_mu", Qt::Key_mu)
+        .value("Key_Home", Qt::Key_Home)
+        .value("Key_SysReq", Qt::Key_SysReq)
+        .value("Key_guillemotleft", Qt::Key_guillemotleft)
+        .value("Key_Dead_Caron", Qt::Key_Dead_Caron)
+        .value("Key_LaunchMail", Qt::Key_LaunchMail)
+        .value("Key_Igrave", Qt::Key_Igrave)
+    ;
+
+    enum_< Qt::ArrowType >("ArrowType")
+        .value("RightArrow", Qt::RightArrow)
+        .value("NoArrow", Qt::NoArrow)
+        .value("UpArrow", Qt::UpArrow)
+        .value("DownArrow", Qt::DownArrow)
+        .value("LeftArrow", Qt::LeftArrow)
+    ;
+
+    enum_< Qt::PenStyle >("PenStyle")
+        .value("DashLine", Qt::DashLine)
+        .value("NoPen", Qt::NoPen)
+        .value("DashDotLine", Qt::DashDotLine)
+        .value("MPenStyle", Qt::MPenStyle)
+        .value("DashDotDotLine", Qt::DashDotDotLine)
+        .value("SolidLine", Qt::SolidLine)
+        .value("DotLine", Qt::DotLine)
+    ;
+
+    enum_< Qt::PenCapStyle >("PenCapStyle")
+        .value("FlatCap", Qt::FlatCap)
+        .value("RoundCap", Qt::RoundCap)
+        .value("SquareCap", Qt::SquareCap)
+        .value("MPenCapStyle", Qt::MPenCapStyle)
+    ;
+
+    enum_< Qt::PenJoinStyle >("PenJoinStyle")
+        .value("RoundJoin", Qt::RoundJoin)
+        .value("MiterJoin", Qt::MiterJoin)
+        .value("MPenJoinStyle", Qt::MPenJoinStyle)
+        .value("BevelJoin", Qt::BevelJoin)
+    ;
+
+    enum_< Qt::BrushStyle >("BrushStyle")
+        .value("RadialGradientPattern", Qt::RadialGradientPattern)
+        .value("SolidPattern", Qt::SolidPattern)
+        .value("DiagCrossPattern", Qt::DiagCrossPattern)
+        .value("Dense2Pattern", Qt::Dense2Pattern)
+        .value("Dense5Pattern", Qt::Dense5Pattern)
+        .value("Dense7Pattern", Qt::Dense7Pattern)
+        .value("NoBrush", Qt::NoBrush)
+        .value("HorPattern", Qt::HorPattern)
+        .value("LinearGradientPattern", Qt::LinearGradientPattern)
+        .value("BDiagPattern", Qt::BDiagPattern)
+        .value("Dense4Pattern", Qt::Dense4Pattern)
+        .value("TexturePattern", Qt::TexturePattern)
+        .value("Dense1Pattern", Qt::Dense1Pattern)
+        .value("Dense3Pattern", Qt::Dense3Pattern)
+        .value("ConicalGradientPattern", Qt::ConicalGradientPattern)
+        .value("Dense6Pattern", Qt::Dense6Pattern)
+        .value("VerPattern", Qt::VerPattern)
+        .value("CrossPattern", Qt::CrossPattern)
+        .value("FDiagPattern", Qt::FDiagPattern)
+    ;
+
+    enum_< Qt::UIEffect >("UIEffect")
+        .value("UI_AnimateCombo", Qt::UI_AnimateCombo)
+        .value("UI_FadeMenu", Qt::UI_FadeMenu)
+        .value("UI_AnimateTooltip", Qt::UI_AnimateTooltip)
+        .value("UI_AnimateMenu", Qt::UI_AnimateMenu)
+        .value("UI_FadeTooltip", Qt::UI_FadeTooltip)
+        .value("UI_General", Qt::UI_General)
+        .value("UI_AnimateToolBox", Qt::UI_AnimateToolBox)
+    ;
+
+    enum_< Qt::CursorShape >("CursorShape")
+        .value("WaitCursor", Qt::WaitCursor)
+        .value("CrossCursor", Qt::CrossCursor)
+        .value("BlankCursor", Qt::BlankCursor)
+        .value("WhatsThisCursor", Qt::WhatsThisCursor)
+        .value("LastCursor", Qt::LastCursor)
+        .value("SizeFDiagCursor", Qt::SizeFDiagCursor)
+        .value("PointingHandCursor", Qt::PointingHandCursor)
+        .value("ForbiddenCursor", Qt::ForbiddenCursor)
+        .value("SizeBDiagCursor", Qt::SizeBDiagCursor)
+        .value("SizeVerCursor", Qt::SizeVerCursor)
+        .value("SplitHCursor", Qt::SplitHCursor)
+        .value("SizeAllCursor", Qt::SizeAllCursor)
+        .value("SizeHorCursor", Qt::SizeHorCursor)
+        .value("IBeamCursor", Qt::IBeamCursor)
+        .value("UpArrowCursor", Qt::UpArrowCursor)
+        .value("ArrowCursor", Qt::ArrowCursor)
+        .value("BitmapCursor", Qt::BitmapCursor)
+        .value("SplitVCursor", Qt::SplitVCursor)
+        .value("BusyCursor", Qt::BusyCursor)
+    ;
+
+    enum_< Qt::TextFormat >("TextFormat")
+        .value("PlainText", Qt::PlainText)
+        .value("AutoText", Qt::AutoText)
+        .value("LogText", Qt::LogText)
+        .value("RichText", Qt::RichText)
+    ;
+
+    enum_< Qt::AnchorAttribute >("AnchorAttribute")
+        .value("AnchorName", Qt::AnchorName)
+        .value("AnchorHref", Qt::AnchorHref)
+    ;
+
+    enum_< Qt::DockWidgetArea >("DockWidgetArea")
+        .value("AllDockWidgetAreas", Qt::AllDockWidgetAreas)
+        .value("LeftDockWidgetArea", Qt::LeftDockWidgetArea)
+        .value("DockWidgetArea_Mask", Qt::DockWidgetArea_Mask)
+        .value("TopDockWidgetArea", Qt::TopDockWidgetArea)
+        .value("RightDockWidgetArea", Qt::RightDockWidgetArea)
+        .value("BottomDockWidgetArea", Qt::BottomDockWidgetArea)
+    ;
+
+    enum_< Qt::ToolBarArea >("ToolBarArea")
+        .value("RightToolBarArea", Qt::RightToolBarArea)
+        .value("TopToolBarArea", Qt::TopToolBarArea)
+        .value("ToolBarArea_Mask", Qt::ToolBarArea_Mask)
+        .value("LeftToolBarArea", Qt::LeftToolBarArea)
+        .value("AllToolBarAreas", Qt::AllToolBarAreas)
+        .value("BottomToolBarArea", Qt::BottomToolBarArea)
+    ;
+
+    enum_< Qt::DateFormat >("DateFormat")
+        .value("LocalDate", Qt::LocalDate)
+        .value("TextDate", Qt::TextDate)
+        .value("ISODate", Qt::ISODate)
+    ;
+
+    enum_< Qt::TimeSpec >("TimeSpec")
+        .value("UTC", Qt::UTC)
+        .value("LocalTime", Qt::LocalTime)
+    ;
+
+    enum_< Qt::DayOfWeek >("DayOfWeek")
+        .value("Monday", Qt::Monday)
+        .value("Tuesday", Qt::Tuesday)
+        .value("Friday", Qt::Friday)
+        .value("Wednesday", Qt::Wednesday)
+        .value("Thursday", Qt::Thursday)
+        .value("Sunday", Qt::Sunday)
+        .value("Saturday", Qt::Saturday)
+    ;
+
+    enum_< Qt::ScrollBarPolicy >("ScrollBarPolicy")
+        .value("ScrollBarAsNeeded", Qt::ScrollBarAsNeeded)
+        .value("ScrollBarAlwaysOff", Qt::ScrollBarAlwaysOff)
+        .value("ScrollBarAlwaysOn", Qt::ScrollBarAlwaysOn)
+    ;
+
+    enum_< Qt::CaseSensitivity >("CaseSensitivity")
+        .value("CaseSensitive", Qt::CaseSensitive)
+        .value("CaseInsensitive", Qt::CaseInsensitive)
+    ;
+
+    enum_< Qt::Corner >("Corner")
+        .value("TopRightCorner", Qt::TopRightCorner)
+        .value("BottomRightCorner", Qt::BottomRightCorner)
+        .value("TopLeftCorner", Qt::TopLeftCorner)
+        .value("BottomLeftCorner", Qt::BottomLeftCorner)
+    ;
+
+    enum_< Qt::ConnectionType >("ConnectionType")
+        .value("AutoConnection", Qt::AutoConnection)
+        .value("QueuedConnection", Qt::QueuedConnection)
+        .value("AutoCompatConnection", Qt::AutoCompatConnection)
+        .value("DirectConnection", Qt::DirectConnection)
+    ;
+
+    enum_< Qt::ShortcutContext >("ShortcutContext")
+        .value("WindowShortcut", Qt::WindowShortcut)
+        .value("ApplicationShortcut", Qt::ApplicationShortcut)
+        .value("WidgetShortcut", Qt::WidgetShortcut)
+    ;
+
+    enum_< Qt::FillRule >("FillRule")
+        .value("WindingFill", Qt::WindingFill)
+        .value("OddEvenFill", Qt::OddEvenFill)
+    ;
+
+    enum_< Qt::ClipOperation >("ClipOperation")
+        .value("UniteClip", Qt::UniteClip)
+        .value("ReplaceClip", Qt::ReplaceClip)
+        .value("IntersectClip", Qt::IntersectClip)
+        .value("NoClip", Qt::NoClip)
+    ;
+
+    enum_< Qt::TransformationMode >("TransformationMode")
+        .value("SmoothTransformation", Qt::SmoothTransformation)
+        .value("FastTransformation", Qt::FastTransformation)
+    ;
+
+    enum_< Qt::FocusReason >("FocusReason")
+        .value("BacktabFocusReason", Qt::BacktabFocusReason)
+        .value("ShortcutFocusReason", Qt::ShortcutFocusReason)
+        .value("PopupFocusReason", Qt::PopupFocusReason)
+        .value("MouseFocusReason", Qt::MouseFocusReason)
+        .value("ActiveWindowFocusReason", Qt::ActiveWindowFocusReason)
+        .value("MenuBarFocusReason", Qt::MenuBarFocusReason)
+        .value("TabFocusReason", Qt::TabFocusReason)
+        .value("OtherFocusReason", Qt::OtherFocusReason)
+    ;
+
+    enum_< Qt::ContextMenuPolicy >("ContextMenuPolicy")
+        .value("DefaultContextMenu", Qt::DefaultContextMenu)
+        .value("ActionsContextMenu", Qt::ActionsContextMenu)
+        .value("NoContextMenu", Qt::NoContextMenu)
+        .value("CustomContextMenu", Qt::CustomContextMenu)
+    ;
+
+    enum_< Qt::InputMethodQuery >("InputMethodQuery")
+        .value("ImCursorPosition", Qt::ImCursorPosition)
+        .value("ImMicroFocus", Qt::ImMicroFocus)
+        .value("ImCurrentSelection", Qt::ImCurrentSelection)
+        .value("ImSurroundingText", Qt::ImSurroundingText)
+        .value("ImFont", Qt::ImFont)
+    ;
+
+    enum_< Qt::ToolButtonStyle >("ToolButtonStyle")
+        .value("ToolButtonIconOnly", Qt::ToolButtonIconOnly)
+        .value("ToolButtonTextBesideIcon", Qt::ToolButtonTextBesideIcon)
+        .value("ToolButtonTextOnly", Qt::ToolButtonTextOnly)
+        .value("ToolButtonTextUnderIcon", Qt::ToolButtonTextUnderIcon)
+    ;
+
+    enum_< Qt::LayoutDirection >("LayoutDirection")
+        .value("RightToLeft", Qt::RightToLeft)
+        .value("LeftToRight", Qt::LeftToRight)
+    ;
+
+    enum_< Qt::DropAction >("DropAction")
+        .value("LinkAction", Qt::LinkAction)
+        .value("CopyAction", Qt::CopyAction)
+        .value("IgnoreAction", Qt::IgnoreAction)
+        .value("TargetMoveAction", Qt::TargetMoveAction)
+        .value("MoveAction", Qt::MoveAction)
+        .value("ActionMask", Qt::ActionMask)
+    ;
+
+    enum_< Qt::CheckState >("CheckState")
+        .value("PartiallyChecked", Qt::PartiallyChecked)
+        .value("Checked", Qt::Checked)
+        .value("Unchecked", Qt::Unchecked)
+    ;
+
+    enum_< Qt::ItemDataRole >("ItemDataRole")
+        .value("StatusTipRole", Qt::StatusTipRole)
+        .value("TextColorRole", Qt::TextColorRole)
+        .value("WhatsThisRole", Qt::WhatsThisRole)
+        .value("AccessibleDescriptionRole", Qt::AccessibleDescriptionRole)
+        .value("EditRole", Qt::EditRole)
+        .value("TextAlignmentRole", Qt::TextAlignmentRole)
+        .value("FontRole", Qt::FontRole)
+        .value("CheckStateRole", Qt::CheckStateRole)
+        .value("BackgroundColorRole", Qt::BackgroundColorRole)
+        .value("AccessibleTextRole", Qt::AccessibleTextRole)
+        .value("DisplayRole", Qt::DisplayRole)
+        .value("DecorationRole", Qt::DecorationRole)
+        .value("ToolTipRole", Qt::ToolTipRole)
+        .value("UserRole", Qt::UserRole)
+    ;
+
+    enum_< Qt::ItemFlag >("ItemFlag")
+        .value("ItemIsUserCheckable", Qt::ItemIsUserCheckable)
+        .value("ItemIsEnabled", Qt::ItemIsEnabled)
+        .value("ItemIsDragEnabled", Qt::ItemIsDragEnabled)
+        .value("ItemIsSelectable", Qt::ItemIsSelectable)
+        .value("ItemIsEditable", Qt::ItemIsEditable)
+        .value("ItemIsDropEnabled", Qt::ItemIsDropEnabled)
+        .value("ItemIsTristate", Qt::ItemIsTristate)
+    ;
+
+    enum_< Qt::MatchFlag >("MatchFlag")
+        .value("MatchEndsWith", Qt::MatchEndsWith)
+        .value("MatchRecursive", Qt::MatchRecursive)
+        .value("MatchCaseSensitive", Qt::MatchCaseSensitive)
+        .value("MatchRegExp", Qt::MatchRegExp)
+        .value("MatchContains", Qt::MatchContains)
+        .value("MatchWildcard", Qt::MatchWildcard)
+        .value("MatchStartsWith", Qt::MatchStartsWith)
+        .value("MatchExactly", Qt::MatchExactly)
+        .value("MatchWrap", Qt::MatchWrap)
+    ;
 
 }
 

@@ -222,7 +222,7 @@ struct QWidget_Wrapper: QWidget, wrapper<QWidget>
     // define a Python function with name "after_<original method name>"
     // example: def after_mousePressEvent(self, event):
 
-    void
+    virtual void
     mousePressEvent(QMouseEvent* p0)
     {
         if (override mousePressEvent = this->get_override("mousePressEvent"))
@@ -609,9 +609,7 @@ export_QWidget()
     //                                          with_custodian_and_ward_postcall<2,0> >() );
 
     //def("qFindChild", _qFindChild, return_value_policy<manage_new_object>());
-    enum_<Qt::WindowType>("WindowType")
-    ;
-    
+
     class_< QWidget_Wrapper,
             bases<QObject, QPaintDevice>,
             boost::shared_ptr<QWidget_Wrapper>,
