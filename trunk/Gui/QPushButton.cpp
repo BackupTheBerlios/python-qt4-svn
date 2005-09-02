@@ -102,6 +102,8 @@ export_QPushButton()
         .add_property("autoDefault", &QPushButton::autoDefault, &QPushButton::setAutoDefault)
         .add_property("default", &QPushButton::isDefault, &QPushButton::setDefault)
         .add_property("flat", &QPushButton::isFlat, &QPushButton::setFlat)
+        .add_property("text", &QPushButton::text, &QPushButton::setText)
+
         
         // signals
         .def("clicked", (void (QPushButton_Wrapper::*)() ) &QPushButton_Wrapper::clicked)

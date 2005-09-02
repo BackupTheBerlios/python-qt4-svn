@@ -3,7 +3,9 @@
 # O subdir relativo ao diretório principal do projeto: ./Core
 # O alvo é um aplicativo: Core
 
-HEADERS += PythonConnection.h 
+HEADERS += PythonConnection.h \
+           PythonQObject.h \
+           PythonQt.h 
 SOURCES += Core.cpp \
            QObject.cpp \
            QString.cpp \
@@ -11,7 +13,8 @@ SOURCES += Core.cpp \
            PythonConnection.cpp \
            QTimer.cpp \
            QCoreApplication.cpp \
-           QTime.cpp 
+           QTime.cpp \
+           PythonQt.cpp 
 TARGET = Core
 include ( ../setup.pri )
 include ( ../libs.pri )

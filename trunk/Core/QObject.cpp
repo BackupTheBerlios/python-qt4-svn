@@ -41,8 +41,9 @@
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 
+#include "PythonQt.h"
 #include "PythonConnection.h"
-
+#include "PythonQObject.h"
 
 #include <QList>
 #include <QString>
@@ -203,9 +204,10 @@ childrens(QObject* obj)
 
 //namespace {
 
-struct QObject_Wrapper: QObject, wrapper<QObject>
+struct QObject_Wrapper: QObject, wrapper<QObject>, PythonQObject<QObject>
 {
-//    list children;
+    //PYTHON_QOBJECT(QObject)
+    PYTHON_QOBJECT;
 
     QObject_Wrapper():
         QObject()
@@ -283,7 +285,7 @@ struct QObject_Wrapper: QObject, wrapper<QObject>
 //     }
 };
 
-BOOST_PYTHON_FUNCTION_OVERLOADS(QObject_connect_overloads_4_5, QObject::connect, 4, 5)
+BOOST_PYTHON_FUNCTION_OVERLOADS(QObject_connect_overloads_4_5, QObject::connect, 4, 5);
 
 //} // namespace
 
@@ -350,7 +352,7 @@ export_QObject()
 {
     qDebug(">>> register_slot_factories");
     register_slot_factories(slot_registry);    
-    
+
     to_python_converter<QList<QObject*>, QObjectList_to_python_object>();
     
     //def("connect", &Qt_connect, with_custodian_and_ward<1,3>() );
@@ -443,6 +445,23 @@ export_QObject()
 //     ("PythonConnection", no_init)
 //         .def("callback", &PythonConnection::callback)
 //     ;
+
+
+    
+
+    
+    /*int i = 13;
+    void* pi = (void*) &i;
+    object pyi = PythonQt::convert("int", pi);
+    i = extract<int>(pyi);
+    qDebug("i: %d", i);
+    
+    QObject* obj = new QObject(0);
+    obj->setObjectName("Eric Jardim");
+    void* pobj = (void*) &obj;
+    object pyobj = PythonQt::convert("QObject*", pobj);
+    obj = extract<QObject*>(pyobj);
+    qDebug("obj: %s", obj->objectName().toStdString().c_str());*/
 }
 
 

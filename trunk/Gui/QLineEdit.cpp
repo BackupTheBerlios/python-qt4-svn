@@ -66,8 +66,9 @@ export_QLineEdit()
             boost::noncopyable>
     ("QLineEdit")
         .def(init<QWidget*>() [with_custodian_and_ward<1,2>()] )
-        .def(init<const QString&, QWidget*>() [with_custodian_and_ward<1,3>()] )
-        
+        .def(init<const QString&, QWidget*>() [with_custodian_and_ward<1,3>()] )        
+        .add_property("text", &QLineEdit::text, &QLineEdit::setText)
+
         //.add_property("autoDefault", &QLineEdit::autoDefault, &QLineEdit::setAutoDefault)
         //.add_property("default", &QLineEdit::isDefault, &QLineEdit::setDefault)
         //.add_property("flat", &QLineEdit::isFlat, &QLineEdit::setFlat)

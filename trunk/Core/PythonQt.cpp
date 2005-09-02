@@ -18,56 +18,6 @@
 *    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ****************************************************************************/
 
-//#include <boost/python.hpp>
-#include <boost/python/class.hpp>
-#include <boost/python/with_custodian_and_ward.hpp>
-#include <boost/shared_ptr.hpp>
+#include <PythonQt.h>
 
-#include "PythonQObject.h"
-#include <QtCore/QTimer>
-
-
-using namespace boost::python;
-
-struct QTimer_Wrapper: QTimer, wrapper<QTimer>, PythonQObject<QTimer>
-{
-    PYTHON_QOBJECT;
-        
-    QTimer_Wrapper(): QTimer()
-    {
-        qDebug("new QTimert_Wrapper: %p", this);
-    }      
-    
-    QTimer_Wrapper(QObject* parent): QTimer(parent)
-    {
-        qDebug("new QTimert_Wrapper: %p", this);
-    }
-};
-
-void
-export_QTimer()
-{
-    class_< QTimer_Wrapper,
-            bases<QObject>,
-            boost::shared_ptr<QTimer_Wrapper>,
-            boost::noncopyable>
-            ("QTimer", init<>() )
-        // constructor
-        .def(init<QObject*>()[with_custodian_and_ward<1,2>()])
-        
-        // properties
-        .add_property("interval", &QTimer::interval, &QTimer::setInterval)
-        .add_property("singleShot", &QTimer::isSingleShot, &QTimer::setSingleShot)        
-        
-        // methods
-        .def("isActive", &QTimer::isActive)
-        .def("timerId", &QTimer::timerId)        
-        .def("start", (void (QTimer::*)(int)) &QTimer::start)
-        .def("start", (void (QTimer::*)()) &QTimer::start)
-        .def("stop", &QTimer::stop)
-        
-        //.def("singleShot", &QTimer::singleShot)
-        //.staticmethod("singleShot")
-    ;
-}
-
+QMap<QString, boost::python::object (*)(void*)> PythonQt::arg_convert_map;

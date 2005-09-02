@@ -30,7 +30,7 @@ RUNTIME=debug
 PYTHONDIR=/usr
 
 # Python version
-PYTHONVER=2.3
+PYTHONVER=2.4
 
 
 ##########################
@@ -42,17 +42,17 @@ BOOSTDIR=/usr
 
 # The toolset you compiled boost 
 # ex: "-gcc" (Gnu gcc), "-mgw" (MinGW) ...
-#BOOSTTOOLSET=-gcc
+BOOSTTOOLSET=-gcc
 
 # If you want boost multithread support 
 # ex: "-mt" or "" (nothing)
-#BOOSTTHREADING=-mt
+BOOSTTHREADING=-mt
 
 # Runtime, debug or release?
 # ex:  "-d" or "" (nothing)
-#BOOSTRUNTIME=-d
+BOOSTRUNTIME=
 
 # Boost version 
 #ex "-1_32", "-1_33" and so on
-#BOOSTVER=-1_32
+BOOSTVER=-1_33
 

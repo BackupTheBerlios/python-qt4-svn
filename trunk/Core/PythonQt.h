@@ -18,56 +18,72 @@
 *    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ****************************************************************************/
 
-//#include <boost/python.hpp>
-#include <boost/python/class.hpp>
-#include <boost/python/with_custodian_and_ward.hpp>
-#include <boost/shared_ptr.hpp>
+#ifndef PYTHONQT_H
+#define PYTHONQT_H
 
-#include "PythonQObject.h"
-#include <QtCore/QTimer>
+#include <boost/python.hpp>
 
+#include <QMap>
+#include <QObject>
 
-using namespace boost::python;
+#define Q_PYTHON_ARG(T) \
+    PythonQt::register_converter(#T, convert_arg_to_python<T>);
 
-struct QTimer_Wrapper: QTimer, wrapper<QTimer>, PythonQObject<QTimer>
+#define Q_PYTHON_ARG_POINTER(T) \
+    PythonQt::register_converter(#T, convert_arg_pointer_to_python<T>);
+
+class PythonQt
 {
-    PYTHON_QOBJECT;
-        
-    QTimer_Wrapper(): QTimer()
+public:
+    static inline void
+    register_converter(const QString& argtype, boost::python::object (*convert)(void*))
     {
-        qDebug("new QTimert_Wrapper: %p", this);
-    }      
-    
-    QTimer_Wrapper(QObject* parent): QTimer(parent)
-    {
-        qDebug("new QTimert_Wrapper: %p", this);
+        arg_convert_map[argtype] = convert;
     }
+
+    static inline boost::python::object
+    convert(const QString& argtype, void* arg)
+    {
+        if ( arg_convert_map.contains(argtype) )
+        {
+            boost::python::object (*convert)(void*) = arg_convert_map[argtype];
+            return convert(arg);
+        }
+        else
+        {
+            qWarning("Argument type '%s' not registered");
+            return boost::python::object();
+        }
+    }
+    
+private:
+    static QMap<QString, boost::python::object (*)(void*)> arg_convert_map;
+
+protected:
+    PythonQt(){};
 };
 
-void
-export_QTimer()
+enum PythonArgType {
+    instance = 0,
+    pointer = 1
+};
+
+template<typename T>
+boost::python::object
+convert_arg_to_python(void* param)
 {
-    class_< QTimer_Wrapper,
-            bases<QObject>,
-            boost::shared_ptr<QTimer_Wrapper>,
-            boost::noncopyable>
-            ("QTimer", init<>() )
-        // constructor
-        .def(init<QObject*>()[with_custodian_and_ward<1,2>()])
-        
-        // properties
-        .add_property("interval", &QTimer::interval, &QTimer::setInterval)
-        .add_property("singleShot", &QTimer::isSingleShot, &QTimer::setSingleShot)        
-        
-        // methods
-        .def("isActive", &QTimer::isActive)
-        .def("timerId", &QTimer::timerId)        
-        .def("start", (void (QTimer::*)(int)) &QTimer::start)
-        .def("start", (void (QTimer::*)()) &QTimer::start)
-        .def("stop", &QTimer::stop)
-        
-        //.def("singleShot", &QTimer::singleShot)
-        //.staticmethod("singleShot")
-    ;
+    return boost::python::object( *(T*)param );
 }
+
+template<typename T>
+boost::python::object
+convert_arg_pointer_to_python(void* param)
+{
+    return boost::python::object( boost::python::ptr( *(T*)param ) );
+}
+
+
+
+#endif // PYTHONQT_H
+
 

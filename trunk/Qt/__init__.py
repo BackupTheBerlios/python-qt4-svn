@@ -36,9 +36,12 @@ def __newinit__(self, *args, **kw):
     __link_parent__(self)
 
 def __newdel__(self):
-    print '__del__:', self
     if hasattr(self, '__children__'):
+        print '__del__(*):', self
         del self.__children__
+    else:
+        print '__del__:', self
+  
     #if hasattr(self, '__qt_slots__'):
     #    del self.__qt_slots__
     
