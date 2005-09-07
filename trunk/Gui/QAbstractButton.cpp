@@ -36,9 +36,11 @@
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 
+#include <PythonQObject.h>
+
 #include <QEvent>
 #include <QWidget>
-#include <QPushButton>
+#include <QAbstractButton>
 //#include <QString>
 #include <memory>
 //#include <iostream>
@@ -46,17 +48,13 @@
 
 using namespace boost::python;
 
-struct QPushButton_Wrapper: QPushButton, wrapper<QPushButton>
+struct PythonQAbstractButton: QPushButton, 
+                              wrapper<QPushButton>,
+                              qtwrapper<QPushButton, PythonQAbstractButton>
 {
-    QAbstractButton_Wrapper(QWidget* p0):
-        QAbstractButton(p0)
-    {
-    }
-
-    QAbstractButton_Wrapper(const QString& p0, QWidget* p1):
-        QPushButton(p0, p1)
-    {
-    }
+    PYTHON_QOBJECT;    
+    PythonQAbstractButton(QWidget* p0): QAbstractButton(p0) {}
+    PythonQAbstractButton(const QString& p0, QWidget* p1): QPushButton(p0, p1) {}
     
 /*    bool
     event(QEvent* p0)
@@ -80,18 +78,18 @@ struct QPushButton_Wrapper: QPushButton, wrapper<QPushButton>
 void
 export_QPushButton()
 {
-    class_< QPushButton_Wrapper,
+    class_< PythonQAbstractButton,
             bases<QWidget>,
-            boost::shared_ptr<QPushButton_Wrapper>,
+            boost::shared_ptr<PythonQAbstractButton>,
             boost::noncopyable>
             ("QPushButton", init<QWidget*>() [with_custodian_and_ward<1,2>()])
             
         .def(init<const QString&, QWidget*>() [with_custodian_and_ward<1,3>()] )
         //.def("event", &QObject::event, &QObject_Wrapper::default_event)
-        .def("event", &QPushButton::event, &QPushButton_Wrapper::default_event)
-        .add_property("autoDefault", &QPushButton::autoDefault, &QPushButton::setAutoDefault)
-        .add_property("default", &QPushButton::isDefault, &QPushButton::setDefault)
-        .add_property("flat", &QPushButton::isFlat, &QPushButton::setFlat)
+        .def("event", &QAbstractButton::event, &PythonQAbstractButton::default_event)
+        .add_property("autoDefault", &QAbstractButton::autoDefault, &QAbstractButton::setAutoDefault)
+        .add_property("default", &QAbstractButton::isDefault, &QAbstractButton::setDefault)
+        .add_property("flat", &QAbstractButton::isFlat, &QAbstractButton::setFlat)
         
         //.def("parent", &QObject::parent, return_internal_reference<>() )
         //.def("parent", &QObject::parent, return_value_policy<manage_new_object>())

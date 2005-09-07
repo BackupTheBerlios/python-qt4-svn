@@ -22,63 +22,72 @@
 #include <boost/python/def.hpp>
 #include <boost/python/str.hpp>
 #include <boost/shared_ptr.hpp>
+
+// #include <boost/python/object.hpp>
+// #include <boost/python/list.hpp>
 #include <boost/python/manage_new_object.hpp>
-//#include <boost/python/return_value_policy.hpp>
+// #include <boost/python/return_value_policy.hpp>
+// #include <boost/utility.hpp>
 //#include <boost/python/copy_non_const_reference.hpp>
-#include <boost/python/with_custodian_and_ward.hpp>
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
-
-#include <PythonQObject.h>
-#include <PythonQtWrapper.h>
+//#include <boost/python/return_value_policy.hpp>
 
 #include <QLayout>
 #include <QWidget>
-
+#include <QAbstractItemView>
+#include <QListView>
+#include <QListWidget>
+//#include <QString>
+#include <memory>
+//#include <iostream>
+//#include <string>
 
 using namespace boost::python;
 
-
-QOBJECT_WRAPPER(QLayout, PythonQLayout)
+void
+QGridLayout_addWidget(QGridLayout* self, QWidget* w, int r, int c)
 {
-    PYTHON_QOBJECT;    
-    
-    PythonQLayout(QWidget* parent): QLayout(parent) {}
-    
-    // defined in QLayoutItem
-    PURE_VIRTUAL_1(void, addItem, QLayoutItem*);
-    PURE_VIRTUAL_CONST_0(QSize, sizeHint);
-    PURE_VIRTUAL_1(void, setGeometry, const QRect&);
-    PURE_VIRTUAL_CONST_1(QLayoutItem*, itemAt, int);
-    PURE_VIRTUAL_1(QLayoutItem*, takeAt, int);
-    PURE_VIRTUAL_CONST_0(int, count);
-};
-
+    self->addWidget(w, r, c);
+}
 
 void
-export_QLayout()
+export_QGridLayout()
 {
-    scope* QLayout_scope = new scope(
-    
-    class_< PythonQLayout,
+    class_< QLayout,
             bases<QObject, QLayoutItem>,
-            boost::shared_ptr<PythonQLayout>,
+            boost::shared_ptr<QLayout>,
             boost::noncopyable>
-    ("QLayout", init<QWidget*>(args("parent"))[with_custodian_and_ward<1,2>()] )
+    ("QLayout", no_init )
         .def("isEnabled", &QLayout::isEnabled)
         .def("setEnabled", &QLayout::isEnabled)
-        
-    );
-
-    enum_< QLayout::SizeConstraint >("SizeConstraint")
-        .value("SetMinAndMaxSize", QLayout::SetMinAndMaxSize)
-        .value("SetMinimumSize", QLayout::SetMinimumSize)
-        .value("SetFixedSize", QLayout::SetFixedSize)
-        .value("SetDefaultConstraint", QLayout::SetDefaultConstraint)
-        .value("SetNoConstraint", QLayout::SetNoConstraint)
-        .value("SetMaximumSize", QLayout::SetMaximumSize)
+    ;
+ 
+    class_< QHBoxLayout,
+            bases<QBoxLayout>,
+            boost::shared_ptr<QHBoxLayout>,
+            boost::noncopyable>
+    ("QHBoxLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
     ;
 
-    delete QLayout_scope;
-    
+    class_< QVBoxLayout,
+            bases<QBoxLayout>,
+            boost::shared_ptr<QVBoxLayout>,
+            boost::noncopyable>
+    ("QVBoxLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
+    ;
+
+    class_< QGridLayout,
+            bases<QLayout>,
+            boost::shared_ptr<QGridLayout>,
+            boost::noncopyable>
+    ("QGridLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
+/*        .def("addWidget",
+            (void (QGridLayout::*)(QWidget*,int,int column,Qt::Alignment)) &QGridLayout::addWidget,
+            default_call_policies() )*/
+        .def("addWidget",
+             QGridLayout_addWidget,
+             with_custodian_and_ward<1,2>() )
+            
+    ;
 }

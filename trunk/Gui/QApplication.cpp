@@ -20,11 +20,13 @@
 
 #include <boost/python.hpp>
 #include <boost/python/wrapper.hpp>
+
+#include <PythonQObject.h>
+
 #include <QApplication>
 #include <QMainWindow>
 #include <QString>
 #include <string>
-#include <memory>
 #include <stdlib.h>
 
 static int one = 1;
@@ -38,22 +40,24 @@ AppName(std::string name)
     return v;
 }
 
+
 using namespace boost::python;
 
-struct QApplication_Wrapper: QApplication, wrapper<QApplication>
+
+struct PythonQApplication: QApplication, 
+                           wrapper<QApplication>, 
+                           qtwrapper<QApplication, PythonQApplication>
 {
-    QApplication_Wrapper(std::string name):
-        QApplication(one, AppName(name))
-    {
-    }
+    PYTHON_QOBJECT;
+    PythonQApplication(std::string name): QApplication(one, AppName(name)) {}
 };
 
 void
 export_QApplication()
 {
-    class_< QApplication_Wrapper,
+    class_< PythonQApplication,
             bases<QCoreApplication>,
-            boost::shared_ptr<QApplication_Wrapper>,
+            boost::shared_ptr<PythonQApplication>,
             boost::noncopyable>
             ("QApplication", init<std::string>())
             

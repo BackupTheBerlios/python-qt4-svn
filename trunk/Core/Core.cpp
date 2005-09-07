@@ -25,7 +25,9 @@
 #include "PythonQt.h"
 
 //void export_QFlags();
+void export_QByteArray();
 void export_QString();
+void export_QEvent();
 void export_QObject();
 void export_QTime();
 void export_QTimer();
@@ -36,8 +38,10 @@ using namespace boost::python;
 BOOST_PYTHON_MODULE(Core)
 {
 //    export_QFlags();
+    export_QByteArray();
     export_QString();
     export_QTime();
+    export_QEvent();    
     export_QObject();
         export_QTimer();
         export_QCoreApplication();

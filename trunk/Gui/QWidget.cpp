@@ -34,6 +34,8 @@
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 
+#include <PythonQObject.h>
+
 #include <Qt>
 #include <QFlags>
 #include <QObject>
@@ -49,6 +51,8 @@
 #include <memory>
 //#include <iostream>
 //#include <string>
+
+
 
 using namespace boost::python;
 
@@ -106,19 +110,21 @@ _qFindChild(const QObject* obj, const QString& name)
 
 
 
-struct QWidget_Wrapper: QWidget, wrapper<QWidget>
+struct PythonQWidget: QWidget, wrapper<QWidget>, qtwrapper<QWidget, PythonQWidget>
 {
-    QWidget_Wrapper():
+    PYTHON_QOBJECT;
+
+    PythonQWidget():
         QWidget()
     {
     }
 
-    QWidget_Wrapper(QWidget* p0):
+    PythonQWidget(QWidget* p0):
         QWidget(p0)
     {
     }
 
-    QWidget_Wrapper(QWidget* p0, Qt::WFlags p1):
+    PythonQWidget(QWidget* p0, Qt::WFlags p1):
         QWidget(p0, p1)
     {
     }
@@ -227,12 +233,12 @@ struct QWidget_Wrapper: QWidget, wrapper<QWidget>
     {
         if (override mousePressEvent = this->get_override("mousePressEvent"))
         {
-            qDebug("QWidget_Wrapper::mousePressEvent (overriden)");
+            qDebug("PythonQWidget::mousePressEvent (overriden)");
             mousePressEvent( ptr( p0 ) );
         }
         else
         {
-            qDebug("QWidget_Wrapper::mousePressEvent (not overriden)");
+            qDebug("PythonQWidget::mousePressEvent (not overriden)");
             QWidget::mousePressEvent(p0);
         }
     }
@@ -240,7 +246,7 @@ struct QWidget_Wrapper: QWidget, wrapper<QWidget>
     void
     _mousePressEvent(QMouseEvent* p0)
     {
-        qDebug("QWidget_Wrapper::_mousePressEvent (default)");
+        qDebug("PythonQWidget::_mousePressEvent (default)");
         this->QWidget::mousePressEvent(p0);
     }
     
@@ -249,7 +255,7 @@ struct QWidget_Wrapper: QWidget, wrapper<QWidget>
     {
         if (override mouseReleaseEvent = this->get_override("mouseReleaseEvent"))
         {
-            mouseReleaseEvent( ptr( p0 ) );
+            mouseReleaseEvent( object(ptr(p0)) );
         }
         QWidget::mouseReleaseEvent(p0);
     }
@@ -610,9 +616,9 @@ export_QWidget()
 
     //def("qFindChild", _qFindChild, return_value_policy<manage_new_object>());
 
-    class_< QWidget_Wrapper,
+    class_< PythonQWidget,
             bases<QObject, QPaintDevice>,
-            boost::shared_ptr<QWidget_Wrapper>,
+            boost::shared_ptr<PythonQWidget>,
             //std::auto_ptr<QWidget>,
             boost::noncopyable>
         ("QWidget", init<>() )
@@ -640,27 +646,27 @@ export_QWidget()
         .add_property("y", &QWidget::y)
 
         // events -------------------------------------------------------------
-        //.def("mousePressEvent", &QWidget_Wrapper::mousePressEvent) //, &QWidget_Wrapper::default_mousePressEvent)
-        .def("mousePressEvent", &QWidget_Wrapper::_mousePressEvent)
-        .def("mouseReleaseEvent", &QWidget_Wrapper::mouseReleaseEvent)
-        .def("mouseDoubleClickEvent", &QWidget_Wrapper::mouseDoubleClickEvent)
-        .def("mouseMoveEvent", &QWidget_Wrapper::mouseMoveEvent)
+        //.def("mousePressEvent", &PythonQWidget::mousePressEvent) //, &PythonQWidget::default_mousePressEvent)
+        .def("mousePressEvent", &PythonQWidget::_mousePressEvent)
+        .def("mouseReleaseEvent", &PythonQWidget::mouseReleaseEvent)
+        .def("mouseDoubleClickEvent", &PythonQWidget::mouseDoubleClickEvent)
+        .def("mouseMoveEvent", &PythonQWidget::mouseMoveEvent)
         
         //.def("update", &QWidget::update)
 
         /* to be released
        .def_readonly("staticMetaObject", &QWidget::staticMetaObject)
-        .def("metaObject", (const QMetaObject* (QWidget::*)() const)&QWidget::metaObject, (const QMetaObject* (QWidget_Wrapper::*)() const)&QWidget_Wrapper::default_metaObject)
-        .def("qt_metacast", (void* (QWidget::*)(const char*) )&QWidget::qt_metacast, (void* (QWidget_Wrapper::*)(const char*))&QWidget_Wrapper::default_qt_metacast)
-        .def("qt_metacall", (int (QWidget::*)(QMetaObject::Call, int, void**) )&QWidget::qt_metacall, (int (QWidget_Wrapper::*)(QMetaObject::Call, int, void**))&QWidget_Wrapper::default_qt_metacall)
-        .def("devType", (int (QWidget::*)() const)&QWidget::devType, (int (QWidget_Wrapper::*)() const)&QWidget_Wrapper::default_devType)
-        .def("setVisible", &QWidget::setVisible, &QWidget_Wrapper::default_setVisible)
-        .def("sizeHint", &QWidget::sizeHint, &QWidget_Wrapper::default_sizeHint)
-        .def("minimumSizeHint", &QWidget::minimumSizeHint, &QWidget_Wrapper::default_minimumSizeHint)
-        .def("heightForWidth", &QWidget::heightForWidth, &QWidget_Wrapper::default_heightForWidth)
-        .def("paintEngine", (QPaintEngine* (QWidget::*)() const)&QWidget::paintEngine, (QPaintEngine* (QWidget_Wrapper::*)() const)&QWidget_Wrapper::default_paintEngine)
-        .def("inputMethodQuery", &QWidget::inputMethodQuery, &QWidget_Wrapper::default_inputMethodQuery)
-        .def("eventFilter", &QObject::eventFilter, &QWidget_Wrapper::default_eventFilter)
+        .def("metaObject", (const QMetaObject* (QWidget::*)() const)&QWidget::metaObject, (const QMetaObject* (PythonQWidget::*)() const)&PythonQWidget::default_metaObject)
+        .def("qt_metacast", (void* (QWidget::*)(const char*) )&QWidget::qt_metacast, (void* (PythonQWidget::*)(const char*))&PythonQWidget::default_qt_metacast)
+        .def("qt_metacall", (int (QWidget::*)(QMetaObject::Call, int, void**) )&QWidget::qt_metacall, (int (PythonQWidget::*)(QMetaObject::Call, int, void**))&PythonQWidget::default_qt_metacall)
+        .def("devType", (int (QWidget::*)() const)&QWidget::devType, (int (PythonQWidget::*)() const)&PythonQWidget::default_devType)
+        .def("setVisible", &QWidget::setVisible, &PythonQWidget::default_setVisible)
+        .def("sizeHint", &QWidget::sizeHint, &PythonQWidget::default_sizeHint)
+        .def("minimumSizeHint", &QWidget::minimumSizeHint, &PythonQWidget::default_minimumSizeHint)
+        .def("heightForWidth", &QWidget::heightForWidth, &PythonQWidget::default_heightForWidth)
+        .def("paintEngine", (QPaintEngine* (QWidget::*)() const)&QWidget::paintEngine, (QPaintEngine* (PythonQWidget::*)() const)&PythonQWidget::default_paintEngine)
+        .def("inputMethodQuery", &QWidget::inputMethodQuery, &PythonQWidget::default_inputMethodQuery)
+        .def("eventFilter", &QObject::eventFilter, &PythonQWidget::default_eventFilter)
         .def("tr", &QWidget::tr, QWidget_tr_overloads_1_2())
         .def("trUtf8", &QWidget::trUtf8, QWidget_trUtf8_overloads_1_2())
         .def("winId", &QWidget::winId)
@@ -891,8 +897,6 @@ export_QWidget()
         .def("inputContext", &QWidget::inputContext)
         .def("setInputContext", &QWidget::setInputContext)
         .def("isAncestorOf", &QWidget::isAncestorOf)
-        .staticmethod("trUtf8")
-        .staticmethod("tr")
         .staticmethod("setTabOrder")
         .staticmethod("keyboardGrabber")
         .staticmethod("mouseGrabber")

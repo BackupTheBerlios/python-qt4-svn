@@ -18,29 +18,58 @@
 *    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ****************************************************************************/
 
-#include <boost/python.hpp>
-#include <boost/python/detail/api_placeholder.hpp>
-#include <iostream>
-#include "Utility.h"
+#include <boost/python/class.hpp>
+#include <boost/python/def.hpp>
+#include <boost/python/str.hpp>
+#include <boost/shared_ptr.hpp>
+
+// #include <boost/python/object.hpp>
+// #include <boost/python/list.hpp>
+#include <boost/python/manage_new_object.hpp>
+// #include <boost/python/return_value_policy.hpp>
+// #include <boost/utility.hpp>
+//#include <boost/python/copy_non_const_reference.hpp>
+#include <boost/python/copy_const_reference.hpp>
+#include <boost/python/return_value_policy.hpp>
+//#include <boost/python/return_value_policy.hpp>
+
+#include <QLayout>
+#include <QWidget>
+#include <QAbstractItemView>
+#include <QListView>
+#include <QListWidget>
+//#include <QString>
+#include <memory>
+//#include <iostream>
+//#include <string>
+
+using namespace boost::python;
 
 
-
-//using namespace boost::python;
-
-//char**
 void
-ListToCharPP(const boost::python::list& args)
+export_QBoxLayout()
 {
-    int size = boost::python::len(args);
-    //shared_array<char*> out = new char*[size];
-    char** out = new char*[size];
-    for(int i=0; i<size; i++)
-    {
-        out[i] = boost::python::extract<char*>(args[i]);
-        std::cout << out[i] << std::endl;
-    }
-    delete[] out;
-    //return out;
+    class_< QBoxLayout,
+            bases<QLayout>,
+            boost::shared_ptr<QBoxLayout>,
+            boost::noncopyable>
+    ("QBoxLayout", no_init)
+        .def("addWidget",
+             &QLayout::addWidget,
+             default_call_policies() )
+    ;
+    
+    class_< QHBoxLayout,
+            bases<QBoxLayout>,
+            boost::shared_ptr<QHBoxLayout>,
+            boost::noncopyable>
+    ("QHBoxLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
+    ;
+
+    class_< QVBoxLayout,
+            bases<QBoxLayout>,
+            boost::shared_ptr<QVBoxLayout>,
+            boost::noncopyable>
+    ("QVBoxLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
+    ;
 }
-
-

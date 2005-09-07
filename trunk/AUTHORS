@@ -1,1 +1,17 @@
 Eric Jardim <ericjardim@gmail.com>
+   - Original author
+   - Main developer
+
+
+>>> Credits:
+
+Wiliam Alves de Souza <wiliamsouza83@gmail.com>
+   - Created some examples
+   - Testing
+
+
+Craig Ringer <craig@postnewspapers.com.au>
+   - QString to/from unicode convertion
+   - Some cool new unittests for string testing
+
+

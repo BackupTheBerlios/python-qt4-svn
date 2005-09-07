@@ -1,25 +1,44 @@
+/***************************************************************************
+*    Copyright (C) 2005 by Eric Jardim                                     *
+*    ericjardim@gmail.com                                                  *
+*                                                                          *
+*    This program is free software; you can redistribute it and/or modify  *
+*    it under the terms of the GNU General Public License as published by  *
+*    the Free Software Foundation; either version 2 of the License, or     *
+*    (at your option) any later version.                                   *
+*                                                                          *
+*    This program is distributed in the hope that it will be useful,       *
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*    GNU General Public License for more details.                          *
+*                                                                          *
+*    You should have received a copy of the GNU General Public License     *
+*    along with this program; if not, write to the                         *
+*    Free Software Foundation, Inc.,                                       *
+*    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+****************************************************************************/
 
-// Boost Includes ==============================================================
-#include <boost/python.hpp>
-#include <boost/cstdint.hpp>
+#include <boost/python/scope.hpp>
+#include <boost/python/class.hpp>
+#include <boost/python/def.hpp>
+#include <boost/python/enum.hpp>
+#include <boost/python/copy_const_reference.hpp>
 
-// Includes ====================================================================
 #include <QtCore/QEvent>
 #include <QtGui/QInputEvent>
 #include <QtGui/QMouseEvent>
 
-// Using =======================================================================
 using namespace boost::python;
 
-// Module ======================================================================
-BOOST_PYTHON_MODULE(QEvent)
+
+void export_QEvent()
 {
     scope* QEvent_scope = new scope(
-    class_< QEvent, boost::noncopyable >("QEvent", init< QEvent::Type >())
+    class_<QEvent, boost::shared_ptr<QEvent>, boost::noncopyable>
+        ("QEvent", init<QEvent::Type>())
+        .add_property("accepted", &QEvent::isAccepted, &QEvent::setAccepted)
         .def("type", &QEvent::type)
         .def("spontaneous", &QEvent::spontaneous)
-        .def("setAccepted", &QEvent::setAccepted)
-        .def("isAccepted", &QEvent::isAccepted)
         .def("accept", &QEvent::accept)
         .def("ignore", &QEvent::ignore)
     );
@@ -130,15 +149,22 @@ BOOST_PYTHON_MODULE(QEvent)
         .value("InputMethod", QEvent::InputMethod)
         .value("KeyPress", QEvent::KeyPress)
         .value("HideToParent", QEvent::HideToParent)
+        //.export_values()
     ;
 
     delete QEvent_scope;
-
-    class_< QInputEvent, bases< QEvent > , boost::noncopyable >("QInputEvent", init< QEvent::Type, optional< Qt::KeyboardModifiers > >())
+    
+    class_< QInputEvent,
+            bases< QEvent >,
+            boost::noncopyable >
+            ("QInputEvent", init< QEvent::Type, optional< Qt::KeyboardModifiers > >())
         .def("modifiers", &QInputEvent::modifiers)
     ;
 
-    class_< QMouseEvent, bases< QInputEvent > , boost::noncopyable >("QMouseEvent", init< QEvent::Type, const QPoint&, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers >())
+    class_< QMouseEvent,
+            bases< QInputEvent >,
+            boost::noncopyable >
+            ("QMouseEvent", init< QEvent::Type, const QPoint&, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers >())
         .def(init< QEvent::Type, const QPoint&, const QPoint&, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers >())
         .def("pos", &QMouseEvent::pos, return_value_policy< copy_const_reference >())
         .def("globalPos", &QMouseEvent::globalPos, return_value_policy< copy_const_reference >())
@@ -149,6 +175,5 @@ BOOST_PYTHON_MODULE(QEvent)
         .def("button", &QMouseEvent::button)
         .def("buttons", &QMouseEvent::buttons)
     ;
-
 }
 

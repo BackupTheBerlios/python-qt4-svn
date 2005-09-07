@@ -1,0 +1,11 @@
+Python-QtDesigner Widget Integration
+
+Steps: 
+   - compile the plugin (with the same runtime as QtDesigner, say debug/release)
+   - copy it to the $QTDIR/plugins/designer or other QtDesigner search path
+   - run designer
+   - have fun ;)
+
+If you have problems, try reading:
+http://docs.python.org/ext/link-reqs.html
+

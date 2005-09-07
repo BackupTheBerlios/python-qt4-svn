@@ -1,7 +1,10 @@
 LIBS += -L$$BOOSTDIR/lib \
         -lboost_python$${BOOSTTOOLSET}$${BOOSTTHREADING}$${BOOSTRUNTIME}$${BOOSTVER}
 INCLUDEPATH += $$BOOSTDIR/include/boost$$BOOSTVER \
-               $$PYTHONDIR/include/python$$PYTHONVER
+               $$PYTHONDIR/include/python$$PYTHONVER\
+               ../QtPython
+DEPENDPATH += ../QtPython
+
 DESTDIR = ../Qt
 unix {
     QMAKE_POST_LINK = ln -sf $$DESTDIR/$(TARGET) $$DESTDIR/$(QMAKE_TARGET).so

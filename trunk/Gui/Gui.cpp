@@ -21,9 +21,7 @@
 #include <boost/python/module.hpp>
 #include <boost/python/enum.hpp>
 
-#include <QtCore/Qt>
 
-void export_QEvent();
 void export_QFont();
 void export_QPaintDevice();
 void export_QApplication();
@@ -33,6 +31,8 @@ void export_QLineEdit();
 void export_QListView();
 void export_QLayoutItem();
 void export_QLayout();
+//void export_QBoxLayout();
+//void export_QGridLayout();
 void export_QFrame();
 void export_QLCDNumber();
 
@@ -40,11 +40,12 @@ using namespace boost::python;
 
 BOOST_PYTHON_MODULE(Gui)
 {
-    export_QEvent();
     export_QFont();
     export_QPaintDevice();
     export_QLayoutItem();
     export_QLayout();
+//    export_QBoxLayout();
+//    export_QGridLayout();
     export_QApplication();
     export_QWidget();
     export_QFrame();

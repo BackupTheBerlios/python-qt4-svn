@@ -23,33 +23,34 @@
 #include <boost/python/with_custodian_and_ward.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "PythonQObject.h"
+#include <PythonQObject.h>
+
 #include <QtCore/QTimer>
 
 
 using namespace boost::python;
 
-struct QTimer_Wrapper: QTimer, wrapper<QTimer>, PythonQObject<QTimer>
+struct PythonQTimer: QTimer, wrapper<QTimer>, qtwrapper<QTimer, PythonQTimer>
 {
     PYTHON_QOBJECT;
-        
-    QTimer_Wrapper(): QTimer()
+    
+    PythonQTimer(): QTimer()
     {
-        qDebug("new QTimert_Wrapper: %p", this);
+        qDebug("new PythonQTimer: %p", this);
     }      
     
-    QTimer_Wrapper(QObject* parent): QTimer(parent)
+    PythonQTimer(QObject* parent): QTimer(parent)
     {
-        qDebug("new QTimert_Wrapper: %p", this);
+        qDebug("new PythonQTimer: %p", this);
     }
 };
 
 void
 export_QTimer()
 {
-    class_< QTimer_Wrapper,
+    class_< PythonQTimer,
             bases<QObject>,
-            boost::shared_ptr<QTimer_Wrapper>,
+            boost::shared_ptr<PythonQTimer>,
             boost::noncopyable>
             ("QTimer", init<>() )
         // constructor

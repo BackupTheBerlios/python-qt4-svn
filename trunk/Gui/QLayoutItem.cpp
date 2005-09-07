@@ -30,10 +30,7 @@ using namespace boost::python;
 
 struct QLayoutItem_Wrapper: QLayoutItem, wrapper<QLayoutItem>
 {
-    QLayoutItem_Wrapper(Qt::Alignment p0=0):
-        QLayoutItem(p0)
-    {
-    }
+    QLayoutItem_Wrapper(Qt::Alignment p0=0): QLayoutItem(p0) {}
 
     QSize
     sizeHint() const

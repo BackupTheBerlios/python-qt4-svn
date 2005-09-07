@@ -26,6 +26,8 @@
 //#include <memory>
 #include <stdlib.h>
 
+#include <PythonQObject.h>
+
 
 static int one = 1;
 
@@ -41,9 +43,13 @@ AppName(std::string name)
 
 using namespace boost::python;
 
-struct QCoreApplication_Wrapper: QCoreApplication, wrapper<QCoreApplication>
+struct PythonQCoreApplication: QCoreApplication, 
+                               wrapper<QCoreApplication>, 
+                               qtwrapper<QCoreApplication, PythonQCoreApplication>
 {
-    QCoreApplication_Wrapper(std::string name):
+    PYTHON_QOBJECT;
+
+    PythonQCoreApplication(std::string name):
         QCoreApplication(one, AppName(name))
     {
     }
@@ -52,9 +58,9 @@ struct QCoreApplication_Wrapper: QCoreApplication, wrapper<QCoreApplication>
 void
 export_QCoreApplication()
 {
-    class_< QCoreApplication_Wrapper,
+    class_< PythonQCoreApplication,
             bases<QObject>,
-            boost::shared_ptr<QCoreApplication_Wrapper>,
+            boost::shared_ptr<PythonQCoreApplication>,
             boost::noncopyable>
             ("QCoreApplication", init<std::string>())
 
@@ -67,8 +73,8 @@ export_QCoreApplication()
         .def("run", &QCoreApplication::exec)
         .staticmethod("run")
      
-	.def("instance", &QCoreApplication::instance, 
-			return_value_policy<reference_existing_object>())
+    .def("instance", &QCoreApplication::instance, 
+            return_value_policy<reference_existing_object>())
         .staticmethod("instance")
    
         .def("exit", (void(*)()) &QCoreApplication::exit)

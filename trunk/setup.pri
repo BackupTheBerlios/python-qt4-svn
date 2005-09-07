@@ -30,14 +30,15 @@ RUNTIME=debug
 PYTHONDIR=/usr
 
 # Python version
-PYTHONVER=2.4
+PYTHONVER=2.3
 
 
 ##########################
 ### Boost.Python setup ###
 ##########################
 
-# The boost.python prefix dir
+# The boost.python prefix dir (where you installed it, or where
+# your distribution places it)
 BOOSTDIR=/usr
 
 # The toolset you compiled boost 
@@ -53,6 +54,6 @@ BOOSTTHREADING=-mt
 BOOSTRUNTIME=
 
 # Boost version 
-#ex "-1_32", "-1_33" and so on
+# ex: "-1_32", "-1_33" and so on
 BOOSTVER=-1_33
 

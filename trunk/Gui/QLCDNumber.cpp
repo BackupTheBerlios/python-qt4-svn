@@ -24,19 +24,29 @@
 #include <boost/python/enum.hpp>
 #include <boost/python/scope.hpp>
 
+#include <PythonQObject.h>
+
 #include <QtGui/QLCDNumber>
 
 using namespace boost::python;
 
-//BOOST_PYTHON_FUNCTION_OVERLOADS(QLCDNumber_tr_overloads_1_2, QLCDNumber::tr, 1, 2)
-//BOOST_PYTHON_FUNCTION_OVERLOADS(QLCDNumber_trUtf8_overloads_1_2, QLCDNumber::trUtf8, 1, 2)
+struct PythonQLCDNumber: QLCDNumber, 
+                         wrapper<QLCDNumber>,
+                         qtwrapper<QLCDNumber, PythonQLCDNumber>
+{
+    PYTHON_QOBJECT;
+        
+    PythonQLCDNumber(QWidget* parent=0): QLCDNumber(parent) {}
+    PythonQLCDNumber(uint numDigits, QWidget* parent=0): QLCDNumber(numDigits, parent) {}    
+};
 
 void
 export_QLCDNumber()
 {
     scope* QLCDNumber_scope = new scope(
-    class_< QLCDNumber,
+    class_< PythonQLCDNumber,
             bases<QFrame> ,
+            boost::shared_ptr<PythonQLCDNumber>,
             boost::noncopyable>
             ("QLCDNumber", init<>() )
         .def(init<QWidget*>()[with_custodian_and_ward<1,2>()] )

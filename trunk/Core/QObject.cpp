@@ -42,9 +42,10 @@
 #include <boost/python/return_value_policy.hpp>
 
 #include "PythonQt.h"
-#include "PythonConnection.h"
-#include "PythonQObject.h"
+#include <PythonQObject.h>
+#include <PythonQtWrapper.h>
 
+#include <QThread>
 #include <QList>
 #include <QString>
 #include <QEvent>
@@ -55,17 +56,52 @@
 #include <iostream>
 //#include <string>
 
+//#include <qobjectdefs.h>
 
 void
-qprint(const QString& s)
+to_stdout(const QString& s)
 {
-    std::cout << s.toStdString() << std::endl;
+    std::cout << s.toLocal8Bit().data() << std::endl;
 }
 
+// Return a QByteArray as a str
 std::string
-to_str(const QString& s)
+to_str(const QByteArray& s)
 {
-    return s.toStdString();
+    return std::string(s.data(), s.size());
+}
+
+// Return a str containing the utf-8 encoded bytes to represent
+// the passed QString.
+std::string
+to_utf8_str(const QString& s)
+{
+    QByteArray d(s.toUtf8());
+    return std::string(d.data(), d.size());
+}
+
+// Return a str containing the latin-1 encoded bytes to represent
+// the passed QString. Characters that cannot be represented in
+// latin-1 are replaced with `?' .
+std::string
+to_latin1_str(const QString& s)
+{
+    QByteArray d(s.toLatin1());
+    return std::string(d.data(), d.size());
+}
+
+QString
+to_unicode(const QString& s)
+{
+    return QString(s);
+}
+
+///////////////////////////////
+
+QObject*
+factory(QObject* parent)
+{
+    return new QObject(parent);
 }
 
 QObject*
@@ -105,14 +141,6 @@ QObjectList_to_python_object
         return incref( pythonList.ptr() );
     }
 };
-
-
-// void
-// QObject_del(QObject* obj)
-// {
-//     std::cout << "__del__: " << obj->objectName().toStdString() << " at " << obj << std::endl;
-//     //qDebug("__del__:%s at %p", obj);
-// }
 
 void
 QObject_del(object self)
@@ -183,285 +211,161 @@ QObject___signals__(QObject* self)
     
     return _signals;
 }
-    
-static QMap<QObject*, list> __children__;
-// static QMap<QObject*, boost::shared_ptr<QObject> > _refs;
-// 
-// struct QtWrapper {
-//     QtWrapper(QObject*)
-//     {
-//     }
-// };
 
 
-list
-childrens(QObject* obj)
+QOBJECT_WRAPPER(QObject, PythonQObject)
 {
-    //list ret;
-    return __children__[obj];
-}
-
-
-//namespace {
-
-struct QObject_Wrapper: QObject, wrapper<QObject>, PythonQObject<QObject>
-{
-    //PYTHON_QOBJECT(QObject)
     PYTHON_QOBJECT;
-
-    QObject_Wrapper():
-        QObject()
-    {
-        qDebug("new QObject_Wrapper: %p", this);
-    }
     
-    //QObject_Wrapper(QObject* parent):
-    QObject_Wrapper(object parent):
-        QObject( extract<QObject*>(parent) )
-    {
-        qDebug("new QObject_Wrapper(parent): %p", this);
-        //list children = list( parent.attr("__children__") );
-        //object item = object( ptr(this) );
-        //children.append(item);
-        //parent.attr("__children__") = children;
-        //if ()
-        //{
-//             list& children = __children__[parent];
-//             object item = object( ptr(this) );
-//             children.append(item);
-//             incref( item.ptr() );
-//             qDebug("new %p", this);
-        //}
-    }
+    PythonQObject(QObject* parent=0): QObject(parent) {}
+    virtual ~PythonQObject() { qDebug("del: %p", this); }
+
+    // QObject virtual methods
+    VIRTUAL_1(bool, event, QEvent*);
+    VIRTUAL_2(bool, eventFilter, QObject*, QEvent*);
     
-//     QObject_Wrapper(boost::shared_ptr<QObject> parent):
-//     //QObject_Wrapper(std::auto_ptr <QObject> parent):
-//         QObject(parent.get()), QtWrapper(parent.get())
-//     {
-//         //qDebug("parent: %p", this->parent());
-//         //_refs[parent.get()] = parent;
-//         //qDebug("use_count: %ld", parent.use_count());
-//         //qDebug("use_count: %ld", parent.use_count());
-//     }
+    // QObject protected virtual methods
+    VIRTUAL_1(void, childEvent, QChildEvent*);
+    VIRTUAL_1(void, connectNotify, const char*);
+    VIRTUAL_1(void, customEvent, QEvent*);
+    VIRTUAL_1(void, disconnectNotify, const char*);
+    VIRTUAL_1(void, timerEvent, QTimerEvent*);
 
-    virtual ~QObject_Wrapper()
-    {
-        qDebug("del: %p", this);
-        //_refs.remove(parent());
-        //qDebug("~QObject_Wrapper: %s @ %p", this->objectName().toStdString(), this);
-    } 
-           
-    bool
-    event(QEvent* p0)
-    {
-        //qDebug("QObject_Wrapper::event");
-        if (override event = this->get_override("event"))
-        {
-            return event( ptr( p0 ) );
-        }
-        else
-        {
-            return QObject::event(p0);
-        }
-    }
-
-    bool
-    default_event(QEvent* p0)
-    {
-        //qDebug("QObject_Wrapper::default_event");
-        return this->QObject::event(p0);
-    }
-
-//     void
-//     childEvent(QChildEvent* event)
-//     {
-//         //qDebug("QObject_Wrapper::childEvent");
-//         QObject* obj = event->child();
-//         object child( ptr(obj) );
-//         //qDebug("child %p:%p", obj, child.ptr());
-//         
-//         list& children = __children__[this];
-//         children.append( child );
-//     }
+    // QObject protected methods
+    //int receivers ( const char * signal ) const
+    //QObject * sender () const
+    
 };
 
-BOOST_PYTHON_FUNCTION_OVERLOADS(QObject_connect_overloads_4_5, QObject::connect, 4, 5);
-
-//} // namespace
+//BOOST_PYTHON_FUNCTION_OVERLOADS(QObject_connect_overloads_4_5, QObject::connect, 4, 5);
 
 
-QObject* 
-factory(QObject* parent)
+static void
+__addDynamicMethod__(QObject* obj, QString signature, QString name, list params, object method)
 {
-    return new QObject(parent);
+    abstractwrapper* wrapper = dynamic_cast<abstractwrapper*>(obj);
+    QList<QString> params_;
+    int n = extract<int>( (params.attr("__len__"))() );
+    for(int i=0; i<n; i++)
+    {
+        params_.append( extract<QString>( params[i] ) );
+    }
+    wrapper->addDynamicMethod(signature, name, params_, method);
 }
 
-// // QObject* 
-// // __bypass__(QObject* obj)
-// // {
-// //     object pyobj( ptr(obj) );
-// //     qDebug("__bypass__: (%p, %p)", obj, pyobj.ptr());
-// //     return obj;
-// // }
-
-// object
-// QObject___init__(object self, object parent)
-// {
-//     qDebug("__init__");
-//     object oldinit = QObject_class.attr("__oldinit__");
-//     oldinit(self, parent);
-// }
-
-// object
-// QObject___new__(object self)
-// {
-//     qDebug("__new__");
-//     object oldnew = QObject_class.attr("__oldnew__");
-//     oldnew(self);
-// }
-
-static QMap<QString, AbstractPythonSlotFactory*> slot_registry;
-
-QObject*
-create_slot(QString signature, object method)
+static bool
+__connectSlot__(QObject* sender, QString signal, QObject* reciever, QString slot)
 {
-    AbstractPythonSlotFactory* factory = slot_registry[signature];
-    return factory->create(&method);
+    QString _signal = QString::number(QSIGNAL_CODE)+signal;
+    QString _slot = QString::number(QSLOT_CODE)+slot;
+    QObject::connect(sender, _signal.toStdString().c_str(), reciever, _slot.toStdString().c_str());
 }
-
-QObject*
-__connect_method__(QObject* sender, QString signal, QString signature, object method)
-{
-    qDebug("__connect_method__");
-    QString signalname = QString("2")+signal+signature;
-    QString slotname = QString("1callback")+signature;
-    qDebug("signal:%s, slot:%s", signalname.toStdString().c_str(), slotname.toStdString().c_str());
-    QObject* pySlot = create_slot(signature, method);
-    bool result = QObject::connect( sender,
-                                    signalname.toStdString().c_str(),
-                                    pySlot,
-                                    slotname.toStdString().c_str() );
-    if (result) return pySlot;
-    else return 0;
-}
-
 
 
 void
 export_QObject()
 {
-    qDebug(">>> register_slot_factories");
-    register_slot_factories(slot_registry);    
-
-    to_python_converter<QList<QObject*>, QObjectList_to_python_object>();
+    //qDebug(">>> ...");
     
-    //def("connect", &Qt_connect, with_custodian_and_ward<1,3>() );
-    //def("__bypass__", __bypass__, return_value_policy<reference_existing_object>() );
-    def("childrens", childrens, default_call_policies() );
-    def("factory", factory, return_value_policy<reference_existing_object, with_custodian_and_ward_postcall<0,1> >() );
-    def("qprint", qprint);
+    // this should be on other file
+    to_python_converter<QList<QObject*>, QObjectList_to_python_object>();
+   
+    def("factory", factory,
+                   return_value_policy<reference_existing_object,
+                   with_custodian_and_ward_postcall<0,1> >() );
+    def("to_stdout", to_stdout);
     def("to_str", to_str);
+    def("to_utf8_str", to_utf8_str);
+    def("to_latin1_str", to_latin1_str);
+    def("to_unicode", to_unicode);
+        
     def("display", display, return_internal_reference<>() );
     def("compare", compare);
-    def("__connect_method__", __connect_method__, return_value_policy<manage_new_object>());
+    def("__addDynamicMethod__", __addDynamicMethod__);
+    def("__connectSlot__", __connectSlot__);
 
     // static methods
     def("tr", ( QString (*)(const char*) ) &QObject::tr);
     def("tr", ( QString (*)(const char*, const char*) ) &QObject::tr);
     def("trUtf8", &QObject::trUtf8);
 
-    QObject_class = class_<QObject_Wrapper,
-        //std::auto_ptr<QObject_Wrapper>,
-        boost::shared_ptr<QObject_Wrapper>,
+    QObject_class = class_<PythonQObject,
+        boost::shared_ptr<PythonQObject>,
         boost::noncopyable>
         ("QObject", init<>())
-        //("QObject", no_init)
+        .def(init<QObject*>(args("parent")) [with_custodian_and_ward<1,2>()])
 
-        //.def("__init__", QObject__call__)
-        // constructor with QObject parent
-        .def(init<object>(args("parent"))
-        //.def(init<QObject*>(args("parent"))
-        //.def(init< std::auto_ptr<QObject> >(args("parent"))
-        //.def(init< boost::shared_ptr<QObject> >(args("parent")) 
-            //[default_call_policies()])
-            //[with_custodian_and_ward_postcall<1,2>()])
-            [with_custodian_and_ward<1,2>()])
-            //[with_custodian_and_ward<1,2,with_custodian_and_ward<2,1> >()])
-                                            
-        //.def(init<QObject*>(args("parent")) [with_custodian_and_ward<1,2/*,
-        //                                    with_custodian_and_ward<2,1>*/ >()])
+        // properties                                    
+        .add_property("objectName", &QObject::objectName, &QObject::setObjectName)
 
-        //.def("connect", QObject_connect)
-        .def("event", &QObject::event, &QObject_Wrapper::default_event)
-        //.def("eventFilter", &QObject::eventFilter, &QObject_Wrapper::default_eventFilter)
+        // methods         
+        .def("blockSignals", &QObject::blockSignals)
+        .def("signalsBlocked", &QObject::signalsBlocked)
+        .def("dumpObjectTree", &QObject::dumpObjectTree)
+        .def("dumpObjectInfo", &QObject::dumpObjectInfo)
+        .def("event", &QObject::event, &PythonQObject::__event)
+        .def("eventFilter", &QObject::eventFilter, &PythonQObject::__eventFilter)
+        //.def("children", &QObject::children, return_value_policy<copy_const_reference>())
+        .def("children", &QObject::children, return_value_policy<return_by_value>() )
+        .def("findChild", &QObject::findChild<QObject*>,
+                          return_value_policy<reference_existing_object,
+                          with_custodian_and_ward_postcall<0,1> >())
+        .def("inherits", &QObject::inherits)
+        .def("installEventFilter", &QObject::installEventFilter)
+        .def("removeEventFilter", &QObject::removeEventFilter)
+        .def("isWidgetType", &QObject::isWidgetType)
+        .def("startTimer", &QObject::startTimer)
+        .def("killTimer", &QObject::killTimer)
+        //.def("thread", &QObject::thread,
+        //               return_value_policy<reference_existing_object>() )
+        //.def("moveToThread", &QObject::moveToThread)
+        //.def("parent", &QObject::parent, return_internal_reference<>() )
+        .def("parent", &QObject::parent,
+                       return_value_policy<reference_existing_object>() )
+        .def("setParent", &QObject::setParent,
+                       with_custodian_and_ward<1,2>() )
+        //.def("registerUserData", &QObject::registerUserData)
+        //.def("setUserData", &QObject::setUserData)
+        //.def("userData", &QObject::userData)
+        
+        // slots
+        .def("deleteLater", &QObject::deleteLater)
+
+        // protected methods
+        //.def("protected_childEvent", &PythonQObject::__childEvent)
+        .def("childEvent", &PythonQObject::__childEvent)
+        .def("protected_connectNotify", &PythonQObject::__connectNotify)
+        .def("protected_customEvent", &PythonQObject::__customEvent)
+        .def("protected_disconnectNotify", &PythonQObject::__disconnectNotify)
+        .def("protected_timerEvent", &PythonQObject::__timerEvent)
+  
+        //  int receivers ( const char * signal ) const
+        //  QObject * sender () const
+
+        
+        // custom
+        .def("__signals__", QObject___signals__)
+        
+        
+        //.def("eventFilter", &QObject::eventFilter, &PythonQObject::__eventFilter)
         //.def("installEventFilter", &QObject::installEventFilter)
         //.def("removeEventFilter", &QObject::removeEventFilter)
         
         //.def("children", &QObject::children, with_custodian_and_ward_postcall<0,1>())
         //.def("children", &QObject::children, return_internal_reference<>() )
-        .def("children", &QObject::children, return_value_policy<return_by_value>())
         //.def("children", &QObject::children, return_value_policy<reference_existing_object>() )
 
         //.def("findChild", &QObject::findChild<QObject*>, ,<>() )
         //.def("findChild", &QObject::findChild<QObject*>, return_value_policy<manage_new_object>() )
         //.def("findChild", &QObject::findChild<QObject*>, return_value_policy<reference_existing_object>())
-        .def("findChild", &QObject::findChild<QObject*>, return_value_policy<reference_existing_object, with_custodian_and_ward_postcall<0,1> >())
         //.def(init<QObject*>()[with_custodian_and_ward<2,1>()])
         //.def("parent", &QObject::parent)
         //.def("__eq__", compare)
-        .def("parent", &QObject::parent, return_internal_reference<>() )
-        //.def("parent", &QObject::parent, return_value_policy<reference_existing_object>() )
-        .def("setParent", &QObject::setParent, with_custodian_and_ward<2,1>() )
+        //.def("parent", &QObject::parent, return_internal_reference<>() )
         //.def("parent", &QObject::parent, return_value_policy<manage_new_object>())
         //.def("parent", &QObject::parent, return_value_policy<reference_existing_object>())
         //.def("parent", &QObject::parent, return_value_policy<copy_const_reference>())
-        .add_property("objectName", &QObject::objectName, &QObject::setObjectName)
-
-        //.def_readwrite("__children__", &QObject_Wrapper::children)
-        
-        .def("__signals__", QObject___signals__)
-        
-        // slots
-        .def("deleteLater", &QObject::deleteLater)
-        
-        //.def("__del__", QObject_del)
-
-/*        .def("__connect__",
-            (bool (*)(const QObject*, const char*, const QObject*, const char*, Qt::ConnectionType))
-            &QObject::connect,
-            QObject_connect_overloads_4_5() )    
-        .staticmethod("__connect__")*/
     ;
-
-/*   QObject_class.attr("__oldinit__") = QObject_class.attr("__init__");
-   QObject_class.attr("__init__") = make_function(QObject___init__);*/
-    //QObject_class.attr("__oldnew__") = QObject_class.attr("__new__");
-    //QObject_class.attr("__new__") = make_function(QObject___new__);
-    
-//     class_<PythonConnection,
-//         bases<QObject>,
-//         boost::shared_ptr<PythonConnection>,
-//         boost::noncopyable>
-//     ("PythonConnection", no_init)
-//         .def("callback", &PythonConnection::callback)
-//     ;
-
-
-    
-
-    
-    /*int i = 13;
-    void* pi = (void*) &i;
-    object pyi = PythonQt::convert("int", pi);
-    i = extract<int>(pyi);
-    qDebug("i: %d", i);
-    
-    QObject* obj = new QObject(0);
-    obj->setObjectName("Eric Jardim");
-    void* pobj = (void*) &obj;
-    object pyobj = PythonQt::convert("QObject*", pobj);
-    obj = extract<QObject*>(pyobj);
-    qDebug("obj: %s", obj->objectName().toStdString().c_str());*/
 }
 
 

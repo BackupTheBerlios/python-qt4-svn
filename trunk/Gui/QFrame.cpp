@@ -24,20 +24,28 @@
 #include <boost/python/enum.hpp>
 #include <boost/python/scope.hpp>
 
+#include <PythonQObject.h>
+
 #include <QtGui/QFrame>
 
 using namespace boost::python;
 
-//BOOST_PYTHON_FUNCTION_OVERLOADS(QFrame_tr_overloads_1_2, QFrame::tr, 1, 2)
-//BOOST_PYTHON_FUNCTION_OVERLOADS(QFrame_trUtf8_overloads_1_2, QFrame::trUtf8, 1, 2)
+struct PythonQFrame: QFrame, 
+                     wrapper<QFrame>,
+                     qtwrapper<QFrame, PythonQFrame>
+{
+    PYTHON_QOBJECT;
+    
+    PythonQFrame(QWidget* parent=0, Qt::WFlags f=0): QFrame(parent, f) {}
+};
 
 void
 export_QFrame()
 {
     scope* QFrame_scope = new scope(
-    class_< QFrame,
+    class_< PythonQFrame,
             bases<QWidget>,
-            boost::shared_ptr<QFrame>,
+            boost::shared_ptr<PythonQFrame>,
             boost::noncopyable>
             ("QFrame", init<>() )
         .def(init<QWidget*>()[with_custodian_and_ward<1,2>()] )
@@ -54,11 +62,6 @@ export_QFrame()
         // methods
         .def("frameStyle", &QFrame::frameStyle)
         .def("setFrameStyle", &QFrame::setFrameStyle)
-
-        //.def("tr", &QFrame::tr, QFrame_tr_overloads_1_2())
-        //.def("trUtf8", &QFrame::trUtf8, QFrame_trUtf8_overloads_1_2())
-        //.staticmethod("trUtf8")
-        //.staticmethod("tr")
     ); 
 
     enum_<QFrame::Shape>("Shape")

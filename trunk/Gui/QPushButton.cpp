@@ -36,6 +36,9 @@
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 
+#include <PythonQObject.h>
+
+
 #include <QEvent>
 #include <QWidget>
 #include <QPushButton>
@@ -44,23 +47,28 @@
 //#include <iostream>
 //#include <string>
 
+
 using namespace boost::python;
 
-struct QPushButton_Wrapper: QPushButton, wrapper<QPushButton>
+struct PythonQPushButton: QPushButton, 
+                          wrapper<QPushButton>, 
+                          qtwrapper<QPushButton, PythonQPushButton> 
 {
-    QPushButton_Wrapper(QWidget* p0=0):
+    PYTHON_QOBJECT;
+    
+    PythonQPushButton(QWidget* p0=0):
         QPushButton(p0)
     {
     }
 
-    QPushButton_Wrapper(const QString& p0, QWidget* p1=0):
+    PythonQPushButton(const QString& p0, QWidget* p1=0):
         QPushButton(p0, p1)
     {
     }
 
     // signals
     void
-    clicked(bool checked = false)
+    clicked(bool checked=false)
     {
         this->QPushButton::clicked(checked);
     }
@@ -69,7 +77,7 @@ struct QPushButton_Wrapper: QPushButton, wrapper<QPushButton>
 //     bool
 //     event(QEvent* p0)
 //     {
-//         qDebug("QPushButton_Wrapper::event");
+//         qDebug("PythonQPushButton::event");
 //         if (override event = this->get_override("event"))
 //         {
 //             return event( ptr( p0 ) );
@@ -80,7 +88,7 @@ struct QPushButton_Wrapper: QPushButton, wrapper<QPushButton>
 //     bool
 //     default_event(QEvent* p0)
 //     {
-//         qDebug("QPushButton_Wrapper::default_event");
+//         qDebug("PythonQPushButton::default_event");
 //         return this->QPushButton::event(p0);
 //     }
 };
@@ -88,9 +96,9 @@ struct QPushButton_Wrapper: QPushButton, wrapper<QPushButton>
 void
 export_QPushButton()
 {
-    class_< QPushButton_Wrapper,
+    class_< PythonQPushButton,
             bases<QWidget>,
-            boost::shared_ptr<QPushButton_Wrapper>,
+            boost::shared_ptr<PythonQPushButton>,
             boost::noncopyable>
             ("QPushButton", init<>() )
         .def(init<QWidget*>() [with_custodian_and_ward<1,2>()])    
@@ -98,7 +106,7 @@ export_QPushButton()
         .def(init<const QString&, QWidget*>() [with_custodian_and_ward<1,3>()] )
         
         //.def("event", &QObject::event, &QObject_Wrapper::default_event)
-        //.def("event", &QPushButton::event, &QPushButton_Wrapper::default_event)
+        //.def("event", &QPushButton::event, &PythonQPushButton::default_event)
         .add_property("autoDefault", &QPushButton::autoDefault, &QPushButton::setAutoDefault)
         .add_property("default", &QPushButton::isDefault, &QPushButton::setDefault)
         .add_property("flat", &QPushButton::isFlat, &QPushButton::setFlat)
@@ -106,8 +114,8 @@ export_QPushButton()
 
         
         // signals
-        .def("clicked", (void (QPushButton_Wrapper::*)() ) &QPushButton_Wrapper::clicked)
-        .def("clicked", (void (QPushButton_Wrapper::*)(bool) ) &QPushButton_Wrapper::clicked)
+        .def("clicked", (void (PythonQPushButton::*)() ) &PythonQPushButton::clicked)
+        .def("clicked", (void (PythonQPushButton::*)(bool) ) &PythonQPushButton::clicked)
         
         //.def("parent", &QObject::parent, return_internal_reference<>() )
         //.def("parent", &QObject::parent, return_value_policy<manage_new_object>())

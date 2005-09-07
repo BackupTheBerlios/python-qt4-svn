@@ -34,6 +34,8 @@
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 
+#include <PythonQObject.h>
+
 #include <QLineEdit>
 #include <QEvent>
 //#include <QString>
@@ -43,14 +45,18 @@
 
 using namespace boost::python;
 
-struct QLineEdit_Wrapper: QLineEdit, wrapper<QLineEdit>
+struct PythonQLineEdit: QLineEdit, 
+                        wrapper<QLineEdit>,
+                        qtwrapper<QLineEdit, PythonQLineEdit>
 {
-    QLineEdit_Wrapper(QWidget* p0=0):
+    PYTHON_QOBJECT;
+    
+    PythonQLineEdit(QWidget* p0=0):
         QLineEdit(p0)
     {
     }
 
-    QLineEdit_Wrapper(const QString& p0, QLineEdit* p1=0):
+    PythonQLineEdit(const QString& p0, QWidget* p1=0):
         QLineEdit(p0, p1)
     {
     }
@@ -60,9 +66,9 @@ struct QLineEdit_Wrapper: QLineEdit, wrapper<QLineEdit>
 void
 export_QLineEdit()
 {
-    class_< QLineEdit,
+    class_< PythonQLineEdit,
             bases<QWidget>,
-            boost::shared_ptr<QLineEdit>,
+            boost::shared_ptr<PythonQLineEdit>,
             boost::noncopyable>
     ("QLineEdit")
         .def(init<QWidget*>() [with_custodian_and_ward<1,2>()] )

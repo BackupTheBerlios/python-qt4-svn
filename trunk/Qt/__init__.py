@@ -30,6 +30,7 @@ def __link_parent__(obj):
 def __newinit__(self, *args, **kw):
     self.__oldinit__(*args, **kw)
     self.__qt_slots__ = []
+    self.__python_native__ = True
     if isinstance(self, Core.QCoreApplication):
         Core.__app__ = self
     #print '__newinit__:', self, self.parent()
@@ -140,7 +141,40 @@ def __parse_signal(sender, signal):
         raise TypeError, 'signal "%s" parse error' % signal
 
     
+def __addDynamicMethod(signal, reciever, callback):
+    signature = (signal.split('(')[1])[:-1]
+    #print '|',signature, '|'
+    if signature == '':
+        params = []
+    else:
+        params = list(signature.split(','))
+
+    slot = callback.__name__+'('+signature+')'
+    Core.__addDynamicMethod__(reciever,
+                              slot,
+                              callback.__name__,
+                              params ,
+                              callback)
+    #print '__addDynamicMethod:', reciever, slot, callback.__name__, params, callback
+    return slot
+    
 def __connect__(self, signal, callback):
+    if callable(callback):
+        if isinstance(callback, types.MethodType) and \
+           isinstance(callback.im_self, Core.QObject) and \
+           hasattr(callback.im_self, '__python_native__'):
+            reciever = callback.im_self
+            #print 'reciever:', reciever, callback
+            slot = __addDynamicMethod(signal, reciever, callback)
+            Core.__connectSlot__(self, signal, reciever, slot)
+        else:
+            raise AttributeError, 'for a while, callback must be method of a native QObject'
+    else:
+        raise AttributeError, 'The callback must be a callable (function, method, lambda, etc.)'
+
+_addDynamicMethod = __addDynamicMethod
+    
+def __connect2__(self, signal, callback):
     """
     The connect function is one of the central aspects of the Qt toolkit.
     Every QObject must connect its events (signals) to other objects
@@ -220,4 +254,4 @@ for klass in __klasses__:
 if  sys.platform.startswith('linux') or sys.platform.startswith('sunos'):    
     sys.setdlopenflags(__dlopenflags__)
     
-print 'done\n'
+print 'done'
