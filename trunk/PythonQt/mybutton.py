@@ -1,3 +1,4 @@
+import Qt
 from Qt.Core import QTimer
 from Qt.Gui import QPushButton, QLineEdit, QLCDNumber
 
@@ -28,4 +29,13 @@ class MyEdit(QLineEdit):
 #         QLCDNumber.__init__(self, parent)
 
 class MyTimer(QTimer):
-    pass
+    def __init__(self, parent=None):
+        QTimer.__init__(self, parent)
+        Qt._addDynamicMethod('clicked(bool)',self, self.clicked)
+
+    def callback(self):
+        print 'callback'
+
+    def clicked(self, checked):
+        print checked
+

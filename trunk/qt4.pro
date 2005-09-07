@@ -3,7 +3,7 @@
 # O subdir relativo ao diretório principal do projeto: .
 # O alvo é um projeto subdirs 
 
-SUBDIRS += QtPython \
+SUBDIRS += PythonQt \
            Namespace \
            Core \
            Gui 
