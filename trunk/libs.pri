@@ -2,8 +2,8 @@ LIBS += -L$$BOOSTDIR/lib \
         -lboost_python$${BOOSTTOOLSET}$${BOOSTTHREADING}$${BOOSTRUNTIME}$${BOOSTVER}
 INCLUDEPATH += $$BOOSTDIR/include/boost$$BOOSTVER \
                $$PYTHONDIR/include/python$$PYTHONVER\
-               ../QtPython
-DEPENDPATH += ../QtPython
+               ../PythonQt
+DEPENDPATH += ../PythonQt
 
 DESTDIR = ../Qt
 unix {
