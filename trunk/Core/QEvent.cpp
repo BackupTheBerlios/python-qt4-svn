@@ -149,7 +149,7 @@ void export_QEvent()
         .value("InputMethod", QEvent::InputMethod)
         .value("KeyPress", QEvent::KeyPress)
         .value("HideToParent", QEvent::HideToParent)
-        //.export_values()
+        .export_values()
     ;
 
     delete QEvent_scope;

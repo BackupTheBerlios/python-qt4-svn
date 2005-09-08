@@ -1,7 +1,7 @@
 # Arquivo gerado pelo gerenciador qmake do kdevelop. 
 # ------------------------------------------- 
-# O subdir relativo ao diretï¿½io principal do projeto: ./Core
-# O alvo ï¿½um aplicativo: Core
+# O subdir relativo ao diretório principal do projeto: ./Core
+# O alvo é um aplicativo: Core
 
 HEADERS += PythonQt.h 
 SOURCES += Core.cpp \
@@ -12,7 +12,8 @@ SOURCES += Core.cpp \
            QTimer.cpp \
            QCoreApplication.cpp \
            QTime.cpp \
-           PythonQt.cpp 
+           PythonQt.cpp \
+           QChildEvent.cpp 
 TARGET = Core
 include ( ../setup.pri )
 include ( ../libs.pri )

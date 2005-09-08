@@ -334,7 +334,7 @@ export_QObject()
         // protected methods
         //.def("protected_childEvent", &PythonQObject::__childEvent)
         .def("childEvent", &PythonQObject::__childEvent)
-        .def("protected_connectNotify", &PythonQObject::__connectNotify)
+        .def("connectNotify", &PythonQObject::__connectNotify)
         .def("protected_customEvent", &PythonQObject::__customEvent)
         .def("protected_disconnectNotify", &PythonQObject::__disconnectNotify)
         .def("protected_timerEvent", &PythonQObject::__timerEvent)

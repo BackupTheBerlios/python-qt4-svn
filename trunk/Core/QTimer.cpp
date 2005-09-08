@@ -33,16 +33,8 @@ using namespace boost::python;
 struct PythonQTimer: QTimer, wrapper<QTimer>, qtwrapper<QTimer, PythonQTimer>
 {
     PYTHON_QOBJECT;
-    
-    PythonQTimer(): QTimer()
-    {
-        qDebug("new PythonQTimer: %p", this);
-    }      
-    
-    PythonQTimer(QObject* parent): QTimer(parent)
-    {
-        qDebug("new PythonQTimer: %p", this);
-    }
+    PythonQTimer(): QTimer() {}
+    PythonQTimer(QObject* parent): QTimer(parent) {}
 };
 
 void

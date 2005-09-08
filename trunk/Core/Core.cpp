@@ -28,6 +28,7 @@
 void export_QByteArray();
 void export_QString();
 void export_QEvent();
+void export_QChildEvent();
 void export_QObject();
 void export_QTime();
 void export_QTimer();
@@ -42,6 +43,7 @@ BOOST_PYTHON_MODULE(Core)
     export_QString();
     export_QTime();
     export_QEvent();    
+    export_QChildEvent();
     export_QObject();
         export_QTimer();
         export_QCoreApplication();
@@ -51,6 +53,7 @@ BOOST_PYTHON_MODULE(Core)
     Q_PYTHON_ARG(double);
     Q_PYTHON_ARG(QString);
     //Q_PYTHON_ARG(QStringList);
+    //Q_PYTHON_ARG_POINTER(QEvent*);
     Q_PYTHON_ARG_POINTER(QObject*);
     //Q_PYTHON_ARG_POINTER(QAction*); // this should stay on Gui module
 }

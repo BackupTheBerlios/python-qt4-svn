@@ -1,6 +1,6 @@
 # Arquivo gerado pelo gerenciador qmake do kdevelop. 
 # ------------------------------------------- 
-# O subdir relativo ao diretório principal do projeto: ./QtPython
+# O subdir relativo ao diretório principal do projeto: ./PythonQt
 # O alvo é um aplicativo: embedded
 
 HEADERS += QPython.h \

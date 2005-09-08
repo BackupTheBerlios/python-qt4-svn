@@ -35,6 +35,7 @@
 #include <boost/python/return_value_policy.hpp>
 
 #include <PythonQObject.h>
+#include <PythonQtWrapper.h>
 
 #include <Qt>
 #include <QFlags>
@@ -56,24 +57,6 @@
 
 using namespace boost::python;
 
-// QWidget*
-// widget()
-// {
-//     return new QWidget(0);
-// }
-
-// QWidget* 
-// loadUi(QString filename, QWidget* parent)
-// {
-//     //std::auto_ptr<QWidget> parent
-//     QFormBuilder builder;
-//     QFile file(filename);
-//     file.open(QFile::ReadOnly);
-//     QWidget* widget = builder.load(&file, parent);
-//     file.close();
-//     return widget;
-// }
-
 object
 loadUi(str _filename, object _parent)
 {
@@ -88,72 +71,24 @@ loadUi(str _filename, object _parent)
     return widget;
 }
 
-
-void
-setupUi(QString filename, QWidget* parent)
-{
-//     QFormBuilder builder;
-//     QFile file(filename);
-//     file.open(QFile::ReadOnly);
-//     //std::auto_ptr<QWidget> widget;
-//     //widget.set( builder.load(&file, parent) );
-//     QWidget* widget = builder.load(&file, parent);
-//     file.close();
-//     return widget;
-}
-
-QWidget*
-_qFindChild(const QObject* obj, const QString& name)
-{
-    return qFindChild<QWidget*>(obj, name);
-}
-
-
-
-struct PythonQWidget: QWidget, wrapper<QWidget>, qtwrapper<QWidget, PythonQWidget>
+QOBJECT_WRAPPER(QWidget, PythonQWidget)
 {
     PYTHON_QOBJECT;
+    PythonQWidget():QWidget() {}
+    PythonQWidget(QWidget* p0):QWidget(p0) {}
+    PythonQWidget(QWidget* p0, Qt::WFlags p1):QWidget(p0, p1){}
 
-    PythonQWidget():
-        QWidget()
-    {
-    }
-
-    PythonQWidget(QWidget* p0):
-        QWidget(p0)
-    {
-    }
-
-    PythonQWidget(QWidget* p0, Qt::WFlags p1):
-        QWidget(p0, p1)
-    {
-    }
-
-/*    const QMetaObject* metaObject() const {
-        return call_method< const QMetaObject* >(py_self, "metaObject");
-    }
-
-    const QMetaObject* default_metaObject() const {
-        return QWidget::metaObject();
-    }
-
-    void* qt_metacast(const char* p0) {
-        return call_method< void* >(py_self, "qt_metacast", p0);
-    }
-
-    void* default_qt_metacast(const char* p0) {
-        return QWidget::qt_metacast(p0);
-    }
-
-    int qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return call_method< int >(py_self, "qt_metacall", p0, p1, p2);
-    }
-
-    int default_qt_metacall(QMetaObject::Call p0, int p1, void** p2) {
-        return QWidget::qt_metacall(p0, p1, p2);
-    }
-
-    int devType() const {
+    // QObject virtual methods
+    VIRTUAL_2(bool, eventFilter, QObject*, QEvent*);
+    
+    // QObject protected virtual methods
+    PROTECTED_VIRTUAL_1(void, childEvent, QChildEvent*);
+    PROTECTED_VIRTUAL_1(void, connectNotify, const char*);
+    PROTECTED_VIRTUAL_1(void, customEvent, QEvent*);
+    PROTECTED_VIRTUAL_1(void, disconnectNotify, const char*);
+    PROTECTED_VIRTUAL_1(void, timerEvent, QTimerEvent*);
+    
+/*    int devType() const {
         return call_method< int >(py_self, "devType");
     }
 
@@ -562,59 +497,13 @@ struct PythonQWidget: QWidget, wrapper<QWidget>, qtwrapper<QWidget, PythonQWidge
         return QObject::eventFilter(p0, p1);
     }
 
-    void timerEvent(QTimerEvent* p0) {
-        call_method< void >(py_self, "timerEvent", p0);
-    }
-
-    void default_timerEvent(QTimerEvent* p0) {
-        QObject::timerEvent(p0);
-    }
-
-    void childEvent(QChildEvent* p0) {
-        call_method< void >(py_self, "childEvent", p0);
-    }
-
-    void default_childEvent(QChildEvent* p0) {
-        QObject::childEvent(p0);
-    }
-
-    void customEvent(QEvent* p0) {
-        call_method< void >(py_self, "customEvent", p0);
-    }
-
-    void default_customEvent(QEvent* p0) {
-        QObject::customEvent(p0);
-    }
-
-    void connectNotify(const char* p0) {
-        call_method< void >(py_self, "connectNotify", p0);
-    }
-
-    void default_connectNotify(const char* p0) {
-        QObject::connectNotify(p0);
-    }
-
-    void disconnectNotify(const char* p0) {
-        call_method< void >(py_self, "disconnectNotify", p0);
-    }
-
-    void default_disconnectNotify(const char* p0) {
-        QObject::disconnectNotify(p0);
-    }
 */
 };
 
 void
 export_QWidget()
 {
-    //class_<QFlags>("QFlags", init<>());
-
     def("loadUi", loadUi);
-    //def("loadUi", loadUi, return_value_policy<manage_new_object>() );
-    //def("loadUi", loadUi, return_value_policy<manage_new_object,
-    //                                          with_custodian_and_ward_postcall<2,0> >() );
-
-    //def("qFindChild", _qFindChild, return_value_policy<manage_new_object>());
 
     class_< PythonQWidget,
             bases<QObject, QPaintDevice>,
@@ -645,6 +534,15 @@ export_QWidget()
         .add_property("x", &QWidget::x)
         .add_property("y", &QWidget::y)
 
+        .def("eventFilter", &QWidget::eventFilter, &PythonQWidget::__eventFilter)
+        // protected methods (from QObject)
+        //.def("protected_childEvent", &PythonQObject::__childEvent)
+        .def("childEvent", &PythonQWidget::__childEvent)
+        .def("connectNotify", &PythonQWidget::__connectNotify)
+        .def("customEvent", &PythonQWidget::__customEvent)
+        .def("disconnectNotify", &PythonQWidget::__disconnectNotify)
+        .def("timerEvent", &PythonQWidget::__timerEvent)
+        
         // events -------------------------------------------------------------
         //.def("mousePressEvent", &PythonQWidget::mousePressEvent) //, &PythonQWidget::default_mousePressEvent)
         .def("mousePressEvent", &PythonQWidget::_mousePressEvent)
