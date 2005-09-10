@@ -1,7 +1,7 @@
 from Qt.Core import QObject, QEvent, factory
 from Qt.Gui import QApplication, QWidget
 
-app = QApplication('parent')
+app = QApplication()
 
 a = QObject(None)
 b = QObject(None)

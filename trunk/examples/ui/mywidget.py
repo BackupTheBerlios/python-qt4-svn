@@ -35,7 +35,7 @@ class MyWidget(QWidget):
 #     def mouseMoveEvent(self, e):
 #         print e, e.type(), e.x(), e.y()
         
-app = QApplication('Inheritance')
+app = QApplication()
 widget = MyWidget(None)
 print widget
 widget.show()

@@ -37,7 +37,7 @@ class MyObject(QObject):
 #event = QEvent()
 #print event
 
-app = QApplication('obj')
+app = QApplication()
 a = MyObject(None)
 b = MyObject(a)
 button = QPushButton('Click me', None)

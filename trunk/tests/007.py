@@ -2,7 +2,7 @@
 
 from Qt.Gui import QApplication, loadUi
 
-app = QApplication('QFormBuilderExample')
+app = QApplication()
 form = loadUi('form.ui', None)
 form.show()
 

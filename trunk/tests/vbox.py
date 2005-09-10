@@ -1,6 +1,6 @@
 from Qt.Gui import QApplication, QWidget, QVBoxLayout, QPushButton
 
-app = QApplication('')
+app = QApplication()
 
 window = QWidget(None)
 button1 = QPushButton("One")

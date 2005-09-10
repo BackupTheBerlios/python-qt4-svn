@@ -4,7 +4,7 @@ from Qt.Gui import QApplication, QLineEdit
 def slot(*args):
     print args
 
-app = QApplication('signals')
+app = QApplication()
 
 a = QLineEdit(None)
 b = QLineEdit(None)

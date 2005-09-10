@@ -44,7 +44,7 @@ class Form(QWidget):
         #    print signal
         
 
-app = QApplication('Dynamic UI loading example')
+app = QApplication()
 form = Form(None)
 #form = loadUi('form.ui', None)
 form.show()

@@ -3,7 +3,7 @@
 from Qt.Core import QObject
 from Qt.Gui import QApplication, QPushButton
 
-app = QApplication('app')
+app = QApplication()
 button = QPushButton('Push me', None)
 a = QObject(button)
 a.objectName = 'a'

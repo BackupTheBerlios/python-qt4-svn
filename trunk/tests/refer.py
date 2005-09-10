@@ -4,8 +4,8 @@ import Qt
 from Qt.Core import QCoreApplication, QObject
 from Qt.Gui import QApplication, QWidget
 
-#app = QCoreApplication('refer')
-app = QApplication('refer')
+#app = QCoreApplication()
+app = QApplication()
 
 #Klass = QObject
 Klass = QWidget

@@ -4,7 +4,7 @@ def unixSignal(number):
     print 'Unix signal:', number
     QCoreApplication.quit()
 
-app = QCoreApplication('')
+app = QCoreApplication()
 app.connect('unixSignal(int)', unixSignal)
 app.run()
 

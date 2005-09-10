@@ -11,7 +11,7 @@ class MyWidget(QWidget):
     def on_clicked(self, checked):
         print 'clicked:', checked
 
-app = QApplication('008')
+app = QApplication()
 widget = MyWidget()
 widget.show()
 app.run()

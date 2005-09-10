@@ -17,7 +17,7 @@ class MyObject(QObject):
 
 ##########################################################
 
-app = QApplication('')
+app = QApplication()
 
 timer = MyTimer(None)
 a = MyObject(None)

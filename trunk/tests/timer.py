@@ -9,7 +9,7 @@ def timeout():
     if count > 5: 
         QCoreApplication.quit()
 
-app = QCoreApplication('timer')
+app = QCoreApplication()
 timer = QTimer(None)
 timer.interval = 1000
 timer.connect('timeout()', timeout)

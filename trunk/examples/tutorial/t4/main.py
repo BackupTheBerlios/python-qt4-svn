@@ -9,7 +9,7 @@ class MyWidget(QWidget):
         quit.setFont(QFont('Times', 18, QFont.Bold))
         quit.connect('clicked()', QApplication.instance().quit)
 
-app = QApplication('t4')
+app = QApplication()
 widget = MyWidget()
 widget.show()
 app.run()

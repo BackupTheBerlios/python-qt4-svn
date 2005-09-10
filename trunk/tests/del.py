@@ -11,7 +11,7 @@ def f():
     del a
 
 
-app = QApplication('del')
+app = QApplication()
 print 'before'
 f()
 print 'after'

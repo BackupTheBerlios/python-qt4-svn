@@ -4,7 +4,7 @@ class MyButton(QPushButton):
     def on_clicked(self):
         print 'on_clicked'
 
-app = QApplication('test')
+app = QApplication()
 
 a = QPushButton('A', None)
 b = MyButton('B', None)

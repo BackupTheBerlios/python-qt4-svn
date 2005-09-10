@@ -8,7 +8,7 @@ def classtype(obj):
         print str(obj), 'is a cpp native object'
 
 
-app = QApplication('')
+app = QApplication()
 
 # python 'native' object
 a = QObject(None)

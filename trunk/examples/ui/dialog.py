@@ -49,7 +49,7 @@ class Dialog(QWidget):
 
 
 if __name__ == '__main__':
-    app = QApplication('Dynamic dialog loading example')
+    app = QApplication()
     dialog = Dialog(None)
     dialog.show()
     app.run()

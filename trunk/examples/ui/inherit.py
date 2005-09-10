@@ -27,7 +27,7 @@ class MyButton(QPushButton):
         return QPushButton.event(self, e)
 
                     
-app = QApplication('Inheritance')
+app = QApplication()
 #button = QPushButton('Click me', None)
 button = QWidget(None)
 #button = MyButton('Click me', None)

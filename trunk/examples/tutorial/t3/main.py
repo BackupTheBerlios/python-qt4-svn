@@ -1,6 +1,6 @@
 from Qt.Gui import QApplication, QFont, QPushButton, QWidget
 
-app = QApplication('t3')
+app = QApplication()
 window = QWidget()
 window.resize(200, 120);
 quit = QPushButton ('Quit', window)

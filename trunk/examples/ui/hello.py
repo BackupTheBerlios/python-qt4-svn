@@ -37,7 +37,7 @@ class MyButton(QPushButton):
     def on_button_clicked(self):
         print 'Hello, World!'
        
-app = QApplication('Hello World example')
+app = QApplication()
 button = MyButton('Click me')
 button.show()
 app.run()

@@ -1,7 +1,7 @@
 # parent test
 
 from Qt.Gui import QApplication, QPushButton, QWidget
-app = QApplication('app')
+app = QApplication()
 form = QWidget()
 okButton = QPushButton('Push me', form)
 cancelButton = QPushButton('Push me', form)
