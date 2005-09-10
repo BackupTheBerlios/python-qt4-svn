@@ -34,8 +34,7 @@
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 
-#include <PythonQObject.h>
-#include <PythonQtWrapper.h>
+#include <QtWrapper.h>
 
 #include <Qt>
 #include <QFlags>
@@ -79,14 +78,14 @@ QOBJECT_WRAPPER(QWidget, PythonQWidget)
     PythonQWidget(QWidget* p0, Qt::WFlags p1):QWidget(p0, p1){}
 
     // QObject virtual methods
-    VIRTUAL_2(bool, eventFilter, QObject*, QEvent*);
+    VIRTUAL_2(bool,, eventFilter, QObject*, QEvent*, );
     
     // QObject protected virtual methods
-    PROTECTED_VIRTUAL_1(void, childEvent, QChildEvent*);
-    PROTECTED_VIRTUAL_1(void, connectNotify, const char*);
-    PROTECTED_VIRTUAL_1(void, customEvent, QEvent*);
-    PROTECTED_VIRTUAL_1(void, disconnectNotify, const char*);
-    PROTECTED_VIRTUAL_1(void, timerEvent, QTimerEvent*);
+    VIRTUAL_1(void, (void), childEvent, QChildEvent*, );
+    VIRTUAL_1(void, (void), connectNotify, const char*, );
+    VIRTUAL_1(void, (void), customEvent, QEvent*, );
+    VIRTUAL_1(void, (void), disconnectNotify, const char*, );
+    VIRTUAL_1(void, (void), timerEvent, QTimerEvent*, );
     
 /*    int devType() const {
         return call_method< int >(py_self, "devType");

@@ -21,7 +21,8 @@
 #include <boost/python.hpp>
 #include <boost/python/wrapper.hpp>
 
-#include <PythonQObject.h>
+#include <QtWrapper.h>
+#include <Util.h>
 
 #include <QApplication>
 #include <QMainWindow>
@@ -29,27 +30,16 @@
 #include <string>
 #include <stdlib.h>
 
-static int one = 1;
-
-static char**
-AppName(std::string name)
-{
-    char** v = (char**) malloc(sizeof(char*));
-    v[0] = (char*) malloc(strlen(name.c_str())+1);
-    strcpy(v[0], name.c_str());
-    return v;
-}
-
+static int _value = 1;
 
 using namespace boost::python;
 
 
-struct PythonQApplication: QApplication, 
-                           wrapper<QApplication>, 
-                           qtwrapper<QApplication, PythonQApplication>
+QOBJECT_WRAPPER(QApplication, PythonQApplication)
 {
     PYTHON_QOBJECT;
-    PythonQApplication(std::string name): QApplication(one, AppName(name)) {}
+    PythonQApplication(): QApplication(Util::one(_value), Util::single_string("python-qt4")) {}
+    PythonQApplication(list _args): QApplication(Util::list_size(_args, _value), Util::list_values(_args)) {}
 };
 
 void
@@ -59,7 +49,8 @@ export_QApplication()
             bases<QCoreApplication>,
             boost::shared_ptr<PythonQApplication>,
             boost::noncopyable>
-            ("QApplication", init<std::string>())
+            ("QApplication", init<>())
+        .def(init<list>(args("args")))
             
         .def("sessionId", &QApplication::sessionId)
         .def("notify", &QApplication::notify)  

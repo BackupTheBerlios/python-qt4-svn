@@ -1,15 +1,15 @@
 from Qt.Core import QObject, QEvent, factory
 from Qt.Gui import QApplication, QWidget
 
-class MyObject(QObject):
+class MyObject(QObject): 
     def event(self, e):
         print 'event()', self, e
         return QObject.event(self, e)
-    
+
     def eventFilter(self, watched, event):
          print 'eventFilter()', watched, event
          return QObject.eventFilter(self, watched, event)
-    
+
     def connectNotify(self, signal):
         print 'connectNotify()', self, signal
         QObject.connectNotify(self, signal)
@@ -19,10 +19,10 @@ class MyObject(QObject):
         
     def childEvent(self, e):
         print 'childEvent', e
-        #return QObject.__protected__childEvent(self, e)
+        #return QObject.protected_childEvent(self, e)
         return QObject.childEvent(self, e)
     
-class MyWidget(QWidget):
+class MyWidget(QWidget): 
     def eventFilter(self, watched, event):
          print 'eventFilter()', watched, event
          return QWidget.eventFilter(self, watched, event)
@@ -33,16 +33,17 @@ class MyWidget(QWidget):
 
     def childEvent(self, e):
         print 'childEvent()', e
-        #return QObject.__protected__childEvent(self, e)
+        #return QWidget.protected_childEvent(self, e)
         return QWidget.childEvent(self, e)
-    
+
     def func(self):
         print 'func'
 
         
-app = QApplication('')
+app = QApplication()
 e = QEvent(QEvent.Type.Show)
 #a = factory(None)
+
 b = QObject(None)
 c = MyObject(None)
 d = MyObject(None)

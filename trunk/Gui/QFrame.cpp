@@ -24,18 +24,15 @@
 #include <boost/python/enum.hpp>
 #include <boost/python/scope.hpp>
 
-#include <PythonQObject.h>
+#include <QtWrapper.h>
 
 #include <QtGui/QFrame>
 
 using namespace boost::python;
 
-struct PythonQFrame: QFrame, 
-                     wrapper<QFrame>,
-                     qtwrapper<QFrame, PythonQFrame>
+QOBJECT_WRAPPER(QFrame, PythonQFrame)
 {
     PYTHON_QOBJECT;
-    
     PythonQFrame(QWidget* parent=0, Qt::WFlags f=0): QFrame(parent, f) {}
 };
 

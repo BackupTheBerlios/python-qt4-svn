@@ -1,7 +1,7 @@
 # Arquivo gerado pelo gerenciador qmake do kdevelop. 
 # ------------------------------------------- 
-# O subdir relativo ao diretï¿½io principal do projeto: ./Gui
-# O alvo ï¿½uma biblioteca: Gui
+# O subdir relativo ao diretório principal do projeto: ./Gui
+# O alvo é uma biblioteca: Gui
 
 SOURCES += Gui.cpp \
            QApplication.cpp \
@@ -14,7 +14,8 @@ SOURCES += Gui.cpp \
            QFont.cpp \
            QFrame.cpp \
            QLCDNumber.cpp \
-           QLayoutItem.cpp 
+           QLayoutItem.cpp \
+           QBoxLayout.cpp 
 TARGET = Gui
 CONFIG += designer
 TEMPLATE = lib

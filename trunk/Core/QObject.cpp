@@ -41,9 +41,8 @@
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 
-#include "PythonQt.h"
-#include <PythonQObject.h>
-#include <PythonQtWrapper.h>
+#include <PythonQt.h>
+#include <QtWrapper.h>
 
 #include <QThread>
 #include <QList>
@@ -221,20 +220,19 @@ QOBJECT_WRAPPER(QObject, PythonQObject)
     virtual ~PythonQObject() { qDebug("del: %p", this); }
 
     // QObject virtual methods
-    VIRTUAL_1(bool, event, QEvent*);
-    VIRTUAL_2(bool, eventFilter, QObject*, QEvent*);
+    VIRTUAL_1(bool,, event, QEvent*,);
+    VIRTUAL_2(bool,, eventFilter, QObject*, QEvent*,);
     
     // QObject protected virtual methods
-    VIRTUAL_1(void, childEvent, QChildEvent*);
-    VIRTUAL_1(void, connectNotify, const char*);
-    VIRTUAL_1(void, customEvent, QEvent*);
-    VIRTUAL_1(void, disconnectNotify, const char*);
-    VIRTUAL_1(void, timerEvent, QTimerEvent*);
+    VIRTUAL_1(void, (void), childEvent, QChildEvent*, );
+    VIRTUAL_1(void, (void), connectNotify, const char*, );
+    VIRTUAL_1(void, (void), customEvent, QEvent*, );
+    VIRTUAL_1(void, (void), disconnectNotify, const char*, );
+    VIRTUAL_1(void, (void), timerEvent, QTimerEvent*, );
 
     // QObject protected methods
-    //int receivers ( const char * signal ) const
-    //QObject * sender () const
-    
+    PROTECTED_1(int,, receivers, const char*, const);
+    PROTECTED_0(QObject*,, sender, const);
 };
 
 //BOOST_PYTHON_FUNCTION_OVERLOADS(QObject_connect_overloads_4_5, QObject::connect, 4, 5);
@@ -332,16 +330,13 @@ export_QObject()
         .def("deleteLater", &QObject::deleteLater)
 
         // protected methods
-        //.def("protected_childEvent", &PythonQObject::__childEvent)
         .def("childEvent", &PythonQObject::__childEvent)
         .def("connectNotify", &PythonQObject::__connectNotify)
-        .def("protected_customEvent", &PythonQObject::__customEvent)
-        .def("protected_disconnectNotify", &PythonQObject::__disconnectNotify)
-        .def("protected_timerEvent", &PythonQObject::__timerEvent)
-  
-        //  int receivers ( const char * signal ) const
-        //  QObject * sender () const
-
+        .def("customEvent", &PythonQObject::__customEvent)
+        .def("disconnectNotify", &PythonQObject::__disconnectNotify)
+        .def("timerEvent", &PythonQObject::__timerEvent)
+        .def("receivers", &PythonQObject::__receivers)
+        .def("sender", &PythonQObject::__sender, return_value_policy<reference_existing_object>() )
         
         // custom
         .def("__signals__", QObject___signals__)

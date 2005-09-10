@@ -22,7 +22,8 @@
 #include <boost/python/enum.hpp>
 
 #include <QtCore/Qt>
-#include "PythonQt.h"
+#include <QtCore/QEvent>
+#include <PythonQt.h>
 
 //void export_QFlags();
 void export_QByteArray();
@@ -53,7 +54,7 @@ BOOST_PYTHON_MODULE(Core)
     Q_PYTHON_ARG(double);
     Q_PYTHON_ARG(QString);
     //Q_PYTHON_ARG(QStringList);
-    //Q_PYTHON_ARG_POINTER(QEvent*);
+    Q_PYTHON_ARG_POINTER(QEvent*);
     Q_PYTHON_ARG_POINTER(QObject*);
     //Q_PYTHON_ARG_POINTER(QAction*); // this should stay on Gui module
 }

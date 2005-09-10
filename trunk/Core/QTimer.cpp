@@ -23,14 +23,14 @@
 #include <boost/python/with_custodian_and_ward.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <PythonQObject.h>
+#include <QtWrapper.h>
 
 #include <QtCore/QTimer>
 
 
 using namespace boost::python;
 
-struct PythonQTimer: QTimer, wrapper<QTimer>, qtwrapper<QTimer, PythonQTimer>
+QOBJECT_WRAPPER(QTimer, PythonQTimer)
 {
     PYTHON_QOBJECT;
     PythonQTimer(): QTimer() {}

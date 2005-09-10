@@ -9,6 +9,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QTimer>
+#include <QMetaObject>
+#include <QMetaMethod>
 
 using namespace boost::python;
 
@@ -37,6 +39,16 @@ main(int argc, char** argv)
     QTimer* timer = extract<QTimer*>(pytimer);
     qDebug("timer: %p", timer);    
     QObject::connect(button3, SIGNAL(clicked()), timer, SLOT(start()));
+    QObject::connect(button3, SIGNAL(clicked(bool)), timer, SLOT(clicked(bool)));
+    QObject::connect(timer, SIGNAL(timeout()), timer, SLOT(stop()));
+    
+    const QMetaObject* mo = timer->metaObject();
+    qDebug("- %s", mo->className());
+    for(int i=0; i < mo->methodCount(); i++)
+    {
+        QString name = mo->method(i).signature();
+        qDebug("%s", name.toStdString().c_str());
+    } 
     
     layout->addWidget(button1);
     layout->addWidget(button2);

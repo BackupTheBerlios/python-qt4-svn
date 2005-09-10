@@ -1,4 +1,4 @@
-from Qt.Gui import QApplication, QWidget, QPushButton, QHBoxLayout
+from Qt.Gui import QApplication, QWidget, QPushButton, QVBoxLayout
 
 app = QApplication()
 window = QWidget()
@@ -8,7 +8,7 @@ button3 = QPushButton("Three")
 button4 = QPushButton("Four")
 button5 = QPushButton("Five")
 
-layout = QHBoxLayout()
+layout = QVBoxLayout()
 layout.addWidget(button1)
 layout.addWidget(button2)
 layout.addWidget(button3)

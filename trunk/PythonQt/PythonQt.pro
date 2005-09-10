@@ -4,11 +4,13 @@
 # O alvo é um aplicativo: embedded
 
 HEADERS += QPython.h \
-           PythonQObject.h \
            PyMoc.h \
            QPythonWidget.h \
            QPythonObject.h \
-           PythonQtWrapper.h 
+           PythonQt.h \
+           QtWrapper.h \
+           Wrapper.h \
+           Util.h 
 SOURCES += main.cpp \
            QPython.cpp \
            QPythonWidget.cpp 

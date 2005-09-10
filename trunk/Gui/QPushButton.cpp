@@ -36,7 +36,7 @@
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 
-#include <PythonQObject.h>
+#include <QtWrapper.h>
 
 
 #include <QEvent>
@@ -50,21 +50,12 @@
 
 using namespace boost::python;
 
-struct PythonQPushButton: QPushButton, 
-                          wrapper<QPushButton>, 
-                          qtwrapper<QPushButton, PythonQPushButton> 
+QOBJECT_WRAPPER(QPushButton, PythonQPushButton)
 {
     PYTHON_QOBJECT;
     
-    PythonQPushButton(QWidget* p0=0):
-        QPushButton(p0)
-    {
-    }
-
-    PythonQPushButton(const QString& p0, QWidget* p1=0):
-        QPushButton(p0, p1)
-    {
-    }
+    PythonQPushButton(QWidget* p0=0):QPushButton(p0) {}
+    PythonQPushButton(const QString& p0, QWidget* p1=0):QPushButton(p0, p1) {}
 
     // signals
     void

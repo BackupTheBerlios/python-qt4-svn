@@ -3,7 +3,6 @@
 # O subdir relativo ao diretório principal do projeto: ./Core
 # O alvo é um aplicativo: Core
 
-HEADERS += PythonQt.h 
 SOURCES += Core.cpp \
            QEvent.cpp \
            QObject.cpp \

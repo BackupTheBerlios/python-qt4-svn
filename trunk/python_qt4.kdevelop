@@ -76,7 +76,7 @@
   </kdevfilecreate>
   <kdevtrollproject>
     <general>
-      <activedir>Gui</activedir>
+      <activedir>Core</activedir>
     </general>
     <run>
       <directoryradio>executable</directoryradio>

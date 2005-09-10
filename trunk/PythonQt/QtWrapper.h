@@ -18,8 +18,8 @@
 *    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ****************************************************************************/
 
-#ifndef PYTHONQOBJECT_H
-#define PYTHONQOBJECT_H
+#ifndef QT_WRAPPER_H
+#define QT_WRAPPER_H
 
 #include <boost/python.hpp>
 #include <QMetaObject>
@@ -28,8 +28,9 @@
 #include <QByteArray>
 #include <string.h>
 
-#include "PyMoc.h"
+#include <PyMoc.h>
 #include <PythonQt.h>
+#include <Wrapper.h>
 
 /// @macro: PYTHON_QOBJECT
 /// This macro is similiar to Q_OBJECT macro, but is intended for creating a

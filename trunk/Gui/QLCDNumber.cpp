@@ -24,18 +24,15 @@
 #include <boost/python/enum.hpp>
 #include <boost/python/scope.hpp>
 
-#include <PythonQObject.h>
+#include <QtWrapper.h>
 
 #include <QtGui/QLCDNumber>
 
 using namespace boost::python;
 
-struct PythonQLCDNumber: QLCDNumber, 
-                         wrapper<QLCDNumber>,
-                         qtwrapper<QLCDNumber, PythonQLCDNumber>
+QOBJECT_WRAPPER(QLCDNumber, PythonQLCDNumber)
 {
     PYTHON_QOBJECT;
-        
     PythonQLCDNumber(QWidget* parent=0): QLCDNumber(parent) {}
     PythonQLCDNumber(uint numDigits, QWidget* parent=0): QLCDNumber(numDigits, parent) {}    
 };
@@ -71,11 +68,6 @@ export_QLCDNumber()
         .def("setDecMode", &QLCDNumber::setDecMode)
         .def("setOctMode", &QLCDNumber::setOctMode)
         .def("setBinMode", &QLCDNumber::setBinMode)
-        
-        //.def("tr", &QLCDNumber::tr, QLCDNumber_tr_overloads_1_2())
-        //.def("trUtf8", &QLCDNumber::trUtf8, QLCDNumber_trUtf8_overloads_1_2())
-        //.staticmethod("trUtf8")
-        //.staticmethod("tr")
     );
 
     enum_<QLCDNumber::Mode>("Mode")

@@ -31,7 +31,7 @@ void export_QLineEdit();
 void export_QListView();
 void export_QLayoutItem();
 void export_QLayout();
-//void export_QBoxLayout();
+void export_QBoxLayout();
 //void export_QGridLayout();
 void export_QFrame();
 void export_QLCDNumber();
@@ -44,7 +44,7 @@ BOOST_PYTHON_MODULE(Gui)
     export_QPaintDevice();
     export_QLayoutItem();
     export_QLayout();
-//    export_QBoxLayout();
+    export_QBoxLayout();
 //    export_QGridLayout();
     export_QApplication();
     export_QWidget();

@@ -22,164 +22,46 @@
 #include <boost/shared_ptr.hpp>
 //#include <memory>
 
+#include <QWidget>
+#include <QLayout>
 #include <QLayoutItem>
 //#include <string>
+#include <Wrapper.h>
 
 using namespace boost::python;
 
-
-struct QLayoutItem_Wrapper: QLayoutItem, wrapper<QLayoutItem>
+WRAPPER(QLayoutItem, PythonQLayoutItem)
 {
-    QLayoutItem_Wrapper(Qt::Alignment p0=0): QLayoutItem(p0) {}
+    PythonQLayoutItem(Qt::Alignment p1=0): QLayoutItem(p1) {}
 
-    QSize
-    sizeHint() const
-    {
-        return this->get_override("sizeHint")();
-    }
-
-    QSize
-    minimumSize() const
-    {
-        return this->get_override("minimumSize")();
-    }
-
-    QSize
-    maximumSize() const
-    {
-        return this->get_override("maximumSize")();
-    }
-
-    Qt::Orientations
-    expandingDirections() const
-    {
-        return this->get_override("expandingDirections")();
-    }
-
-    void
-    setGeometry(const QRect& p0)
-    {
-        this->get_override("setGeometry")(p0);
-    }
-
-    QRect
-    geometry() const
-    {
-        return this->get_override("geometry")();
-    }
-
-    bool
-    isEmpty() const
-    {
-        return this->get_override("isEmpty")();
-    }
-
-/*    bool
-    hasHeightForWidth() const
-    {
-        return call_method< bool >(py_self, "hasHeightForWidth");
-        return this->get_override("minimumSize")();
-    }
-
-    bool
-    default_hasHeightForWidth() const
-    {
-        return QLayoutItem::hasHeightForWidth();
-        return this->get_override("minimumSize")();
-    }
-
-    int
-    heightForWidth(int p0) const
-    {
-        return call_method< int >(py_self, "heightForWidth", p0);
-        return this->get_override("minimumSize")();
-    }
-
-    int
-    default_heightForWidth(int p0) const
-    {
-        return QLayoutItem::heightForWidth(p0);
-        return this->get_override("minimumSize")();
-    }*/
-
-/*    int
-    minimumHeightForWidth(int p0) const
-    {
-        return call_method< int >(py_self, "minimumHeightForWidth", p0);
-        return this->get_override("minimumSize")();
-    }
-
-    int
-    default_minimumHeightForWidth(int p0) const
-    {
-        return QLayoutItem::minimumHeightForWidth(p0);
-        return this->get_override("minimumSize")();
-    }*/
-
-/*    void
-    invalidate()
-    {
-        call_method< void >(py_self, "invalidate");
-    }
-
-    void
-    default_invalidate()
-    {
-        QLayoutItem::invalidate();
-    }
-*/
-
-/*    QWidget*
-    widget()
-    {
-        return call_method< QWidget* >(py_self, "widget");
-        return this->get_override("minimumSize")();
-    }
-
-    QWidget*
-    default_widget()
-    {
-        return QLayoutItem::widget();
-        return this->get_override("minimumSize")();
-    }
-
-    QLayout*
-    layout()
-    {
-        return call_method< QLayout* >(py_self, "layout");
-        return this->get_override("minimumSize")();
-    }
-
-    QLayout*
-    default_layout()
-    {
-        return QLayoutItem::layout();
-        return this->get_override("minimumSize")();
-    }
-
-    QSpacerItem*
-    spacerItem()
-    {
-        return call_method< QSpacerItem* >(py_self, "spacerItem");
-        return this->get_override("minimumSize")();
-    }
-
-    QSpacerItem*
-    default_spacerItem()
-    {
-        return QLayoutItem::spacerItem();
-        return this->get_override("spacerItem")();
-    }*/
+    // virtual in QLayoutItem
+    PURE_VIRTUAL_0(QFlags<Qt::Orientation>,, expandingDirections, const);
+    PURE_VIRTUAL_0(QRect,, geometry, const);
+    PURE_VIRTUAL_1(void, (void), setGeometry, const QRect&,);
+    PURE_VIRTUAL_0(bool,, isEmpty, const);
+    PURE_VIRTUAL_0(QSize,, maximumSize, const);
+    PURE_VIRTUAL_0(QSize,, minimumSize, const);
+    PURE_VIRTUAL_0(QSize,, sizeHint, const);
+    VIRTUAL_0(bool,, hasHeightForWidth, const);
+    VIRTUAL_1(int,, heightForWidth, int, const);
+    VIRTUAL_1(int,, minimumHeightForWidth, int, const);
+    VIRTUAL_0(void, (void), invalidate,);
+    VIRTUAL_0(QLayout*,, layout,);
+    VIRTUAL_0(QSpacerItem*,, spacerItem,);
+    VIRTUAL_0(QWidget*,, widget,);
 };
 
 void
 export_QLayoutItem()
 {
-    class_< QLayoutItem_Wrapper,
-            boost::shared_ptr<QLayoutItem_Wrapper>,
+    class_< PythonQLayoutItem,
+            boost::shared_ptr<PythonQLayoutItem>,
             boost::noncopyable >
             ("QLayoutItem",
-                init< optional< Qt::Alignment > >() )
+                init<>() )
+        .def(init<Qt::Alignment>())
+                
+        // pure virtual methods
         .def("sizeHint", pure_virtual(&QLayoutItem::sizeHint))
         .def("minimumSize", pure_virtual(&QLayoutItem::minimumSize))
         .def("maximumSize", pure_virtual(&QLayoutItem::maximumSize))
@@ -187,15 +69,18 @@ export_QLayoutItem()
         .def("setGeometry", pure_virtual(&QLayoutItem::setGeometry))
         .def("geometry", pure_virtual(&QLayoutItem::geometry))
         .def("isEmpty", pure_virtual(&QLayoutItem::isEmpty))
-        /*.def("hasHeightForWidth", &QLayoutItem::hasHeightForWidth, &QLayoutItem_Wrapper::default_hasHeightForWidth)
-        .def("heightForWidth", &QLayoutItem::heightForWidth, &QLayoutItem_Wrapper::default_heightForWidth)
-        .def("minimumHeightForWidth", &QLayoutItem::minimumHeightForWidth, &QLayoutItem_Wrapper::default_minimumHeightForWidth)
-        .def("invalidate", &QLayoutItem::invalidate, &QLayoutItem_Wrapper::default_invalidate)
-        .def("widget", &QLayoutItem::widget, &QLayoutItem_Wrapper::default_widget)
-        .def("layout", &QLayoutItem::layout, &QLayoutItem_Wrapper::default_layout)
-        .def("spacerItem", &QLayoutItem::spacerItem, &QLayoutItem_Wrapper::default_spacerItem)
+
+        // virtual methods
+        .def("hasHeightForWidth", &QLayoutItem::hasHeightForWidth, &PythonQLayoutItem::__hasHeightForWidth)
+        .def("heightForWidth", &QLayoutItem::heightForWidth, &PythonQLayoutItem::__heightForWidth)
+        .def("minimumHeightForWidth", &QLayoutItem::minimumHeightForWidth, &PythonQLayoutItem::__minimumHeightForWidth)
+        .def("invalidate", &QLayoutItem::invalidate, &PythonQLayoutItem::__invalidate)
+        .def("widget", &QLayoutItem::widget, &PythonQLayoutItem::__widget, return_value_policy<reference_existing_object>() )
+        .def("layout", &QLayoutItem::layout, &PythonQLayoutItem::__layout, return_value_policy<reference_existing_object>() )
+        .def("spacerItem", &QLayoutItem::spacerItem, &PythonQLayoutItem::__spacerItem, return_value_policy<reference_existing_object>())
+
+        // methods
         .def("alignment", &QLayoutItem::alignment)
         .def("setAlignment", &QLayoutItem::setAlignment)
-        */
     ;
 }

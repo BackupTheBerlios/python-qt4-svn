@@ -26,33 +26,18 @@
 //#include <memory>
 #include <stdlib.h>
 
-#include <PythonQObject.h>
-
-
-static int one = 1;
-
-static char**
-AppName(std::string name)
-{
-    char** v = (char**) malloc(sizeof(char*));
-    v[0] = new char[strlen(name.c_str())];
-    v[0] = (char*) malloc(strlen(name.c_str())+1);
-    strcpy(v[0], name.c_str());
-    return v;
-}
+#include <QtWrapper.h>
+#include <Util.h>
 
 using namespace boost::python;
 
-struct PythonQCoreApplication: QCoreApplication, 
-                               wrapper<QCoreApplication>, 
-                               qtwrapper<QCoreApplication, PythonQCoreApplication>
+static int _value;
+
+QOBJECT_WRAPPER(QCoreApplication, PythonQCoreApplication)
 {
     PYTHON_QOBJECT;
-
-    PythonQCoreApplication(std::string name):
-        QCoreApplication(one, AppName(name))
-    {
-    }
+    PythonQCoreApplication(): QCoreApplication(Util::one(_value), Util::single_string("python-qt4")) {}
+    PythonQCoreApplication(list _args): QCoreApplication(Util::list_size(_args, _value), Util::list_values(_args)) {}
 };
 
 void
@@ -62,7 +47,8 @@ export_QCoreApplication()
             bases<QObject>,
             boost::shared_ptr<PythonQCoreApplication>,
             boost::noncopyable>
-            ("QCoreApplication", init<std::string>())
+            ("QCoreApplication", init<>())
+        .def(init<list>(args("args")))
 
         .add_property("applicationName", &QCoreApplication::applicationName)
         .add_property("organizationDomain", &QCoreApplication::organizationDomain)
