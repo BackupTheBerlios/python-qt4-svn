@@ -20,11 +20,11 @@ __qt_connections__ = {}
 
 def __link_parent__(obj):
     parent = obj.parent()
-    #print '__link_parent__:',obj, parent
+    print '(%s -> %s)'%(obj, parent)
     if parent is not None:
-        if not hasattr(parent, 'children__'):
-            parent.children__ = []
-        children = parent.children__
+        if not hasattr(parent, '__children__'):
+            parent.__children__ = []
+        children = parent.__children__
         children.append(obj)
 
 def __newinit__(self, *args, **kw):
@@ -37,8 +37,16 @@ def __newinit__(self, *args, **kw):
     __link_parent__(self)
 
 def __newdel__(self):
+    for child in self.children():
+        child.setParent(None)
+        
     if hasattr(self, '__children__'):
         print '__del__(*):', self
+        for child in self.__children__():
+            child.setParent(None)
+        #while len(self.__children__) > 0:
+            #print 'del %s' % (self.__children__[0])
+            #del self.__children__[0]
         del self.__children__
     else:
         print '__del__:', self
@@ -48,8 +56,9 @@ def __newdel__(self):
     
     
 def __replace_constructor__(klass):
-    klass.__oldinit__ = klass.__init__
-    klass.__init__ = __newinit__
+    pass
+    #klass.__oldinit__ = klass.__init__
+    #klass.__init__ = __newinit__
 
     
 ##############################################################################

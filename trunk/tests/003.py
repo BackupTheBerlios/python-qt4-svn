@@ -19,3 +19,5 @@ assert b.parent() == a
 assert a == b.parent()
 assert b.parent() == b.parent()
 
+#del a, b
+#del b, a

@@ -1,7 +1,5 @@
 # try to leak memory
-from Qt.Core import QObject, childrens, factory
-
-
+from Qt.Core import QObject, factory
 
 print
 print 'Test #1: parentless QObjects'
@@ -14,7 +12,6 @@ for i in range(3):
 a = QObject()
 a.objectName = 'a'
 c = QObject(a)
-#a.__children__ = []
 
 print
 print 'Test #2: parented QObjects'
@@ -30,17 +27,5 @@ for i in range(3):
 c.setParent(None)
 
 print 'a:', a
-#print a.__children__
-#print a.children()
-#print childrens(b)
-
-
-
-#print
-#l = []
-#for i in range(5):
-#    l += [QObject()]
-#
-#print l
 
 

@@ -7,7 +7,7 @@ def on_destroy(self=None):
 def f():     
     a = QObject(None)
     print 'a:',a
-    a.connect('destroyed(QObject*)', on_destroy)
+    #a.connect('destroyed(QObject*)', on_destroy)
     del a
 
 

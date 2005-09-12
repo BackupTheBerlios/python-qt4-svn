@@ -269,8 +269,7 @@ export_QObject()
     to_python_converter<QList<QObject*>, QObjectList_to_python_object>();
    
     def("factory", factory,
-                   return_value_policy<reference_existing_object,
-                   with_custodian_and_ward_postcall<0,1> >() );
+                   with_custodian_and_ward_postcall<1,0,return_value_policy<manage_new_object> >() );
     def("to_stdout", to_stdout);
     def("to_str", to_str);
     def("to_utf8_str", to_utf8_str);
@@ -291,7 +290,8 @@ export_QObject()
         boost::shared_ptr<PythonQObject>,
         boost::noncopyable>
         ("QObject", init<>())
-        .def(init<QObject*>(args("parent")) [with_custodian_and_ward<1,2>()])
+        .def(init<QObject*>(args("parent")) [with_custodian_and_ward<2,1>()])
+        //.def(init<QObject*>(args("parent")))
 
         // properties                                    
         .add_property("objectName", &QObject::objectName, &QObject::setObjectName)
@@ -318,10 +318,9 @@ export_QObject()
         //               return_value_policy<reference_existing_object>() )
         //.def("moveToThread", &QObject::moveToThread)
         //.def("parent", &QObject::parent, return_internal_reference<>() )
-        .def("parent", &QObject::parent,
-                       return_value_policy<reference_existing_object>() )
+        .def("parent", &QObject::parent, return_value_policy<reference_existing_object>() )
         .def("setParent", &QObject::setParent,
-                       with_custodian_and_ward<1,2>() )
+                       with_custodian_and_ward<2,1>() )
         //.def("registerUserData", &QObject::registerUserData)
         //.def("setUserData", &QObject::setUserData)
         //.def("userData", &QObject::userData)

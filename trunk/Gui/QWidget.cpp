@@ -510,7 +510,7 @@ export_QWidget()
             //std::auto_ptr<QWidget>,
             boost::noncopyable>
         ("QWidget", init<>() )
-        .def(init<QWidget*>(args("parent"))[with_custodian_and_ward<1,2>()] )
+        .def(init<QWidget*>(args("parent"))[with_custodian_and_ward<2,1>()] )
         //.def(init<QWidget*,Qt::WFlags>() )
         .def("close", &QWidget::close)
         .def("hide", &QWidget::hide)
@@ -755,10 +755,10 @@ export_QWidget()
         
         .def("setParent",
              (void (QWidget::*)(QWidget*) )&QWidget::setParent,
-             with_custodian_and_ward<1,2>() )
+             with_custodian_and_ward<2,1>() )
         .def("setParent",
              (void (QWidget::*)(QWidget*, Qt::WFlags) )&QWidget::setParent,
-             with_custodian_and_ward<1,2>())
+             with_custodian_and_ward<2,1>())
 
         /*
         .def("scroll", (void (QWidget::*)(int, int) )&QWidget::scroll)
