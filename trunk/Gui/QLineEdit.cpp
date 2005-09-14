@@ -35,6 +35,7 @@
 #include <boost/python/return_value_policy.hpp>
 
 #include <QtWrapper.h>
+#include <parent_change_policy.h>
 
 #include <QLineEdit>
 #include <QEvent>
@@ -60,9 +61,10 @@ export_QLineEdit()
             bases<QWidget>,
             boost::shared_ptr<PythonQLineEdit>,
             boost::noncopyable>
-    ("QLineEdit")
-        .def(init<QWidget*>() [with_custodian_and_ward<1,2>()] )
-        .def(init<const QString&, QWidget*>() [with_custodian_and_ward<1,3>()] )        
+    ("QLineEdit", init< optional<QWidget*> >(args("parent"))[parent_change_policy<>()])
+        .def(init<const QString&, optional<QWidget*> >(args("text","parent")) [parent_change_policy<>()])
+        
+        // properties
         .add_property("text", &QLineEdit::text, &QLineEdit::setText)
 
         //.add_property("autoDefault", &QLineEdit::autoDefault, &QLineEdit::setAutoDefault)

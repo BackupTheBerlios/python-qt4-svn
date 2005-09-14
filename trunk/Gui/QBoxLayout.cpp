@@ -34,6 +34,7 @@
 //#include <boost/python/return_value_policy.hpp>
 
 #include <QtWrapper.h>
+#include <parent_change_policy.h>
 
 #include <QLayout>
 #include <QWidget>
@@ -101,8 +102,7 @@ export_QBoxLayout()
             bases<QLayout>,
             boost::shared_ptr<PythonQBoxLayout>,
             boost::noncopyable>
-    ("QBoxLayout", init<QBoxLayout::Direction>() )
-        .def(init<QBoxLayout::Direction, QWidget*>()[with_custodian_and_ward<1,3>()])
+    ("QBoxLayout", init<QBoxLayout::Direction, optional<QWidget*> >(args("direction","parent"))[parent_change_policy<>()] )
         
 /*
         .def("sizeHint", (QSize (QBoxLayout::*)() const)&QBoxLayout::sizeHint, (QSize (PythonQBoxLayout::*)() const)&PythonQBoxLayout::__sizeHint)
@@ -160,7 +160,7 @@ export_QBoxLayout()
             bases<QBoxLayout>,
             boost::shared_ptr<PythonQHBoxLayout>,
             boost::noncopyable>
-    ("QHBoxLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
+    ("QHBoxLayout",  init<QWidget*>(args("parent"))[parent_change_policy<>()])
         .def(init<>())
     ;
 
@@ -168,7 +168,7 @@ export_QBoxLayout()
             bases<QBoxLayout>,
             boost::shared_ptr<PythonQVBoxLayout>,
             boost::noncopyable>
-    ("QVBoxLayout",  init<QWidget*>()[with_custodian_and_ward<1,2>()])
+    ("QVBoxLayout",  init<QWidget*>(args("parent"))[parent_change_policy<>()])
         .def(init<>())
     ;
 }

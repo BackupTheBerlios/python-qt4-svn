@@ -1,5 +1,5 @@
-import Qt
-print 'Qt:', Qt
+#import Qt
+#print 'Qt:', Qt
 
 from Qt.Gui import QApplication
 

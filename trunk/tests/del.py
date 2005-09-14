@@ -8,7 +8,7 @@ def f():
     a = QObject(None)
     print 'a:',a
     #a.connect('destroyed(QObject*)', on_destroy)
-    del a
+    #del a
 
 
 app = QApplication()

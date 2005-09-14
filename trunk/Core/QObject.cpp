@@ -43,12 +43,15 @@
 
 #include <PythonQt.h>
 #include <QtWrapper.h>
+#include <parent_change_policy.h>
+#include <custom_call_policy.h>
 
 #include <QThread>
 #include <QList>
 #include <QString>
 #include <QEvent>
 #include <QObject>
+#include <QWidget>
 #include <QMetaObject>
 #include <QMetaMethod>
 #include <memory>
@@ -56,6 +59,10 @@
 //#include <string>
 
 //#include <qobjectdefs.h>
+
+//QMap<QObject*, QPair<boost::python::object, boost::python::object> > pythonqt_reference_holder;
+QMap<QObject*, boost::python::object> pythonqt_reference_holder;
+
 
 void
 to_stdout(const QString& s)
@@ -194,6 +201,43 @@ QObject_connect(object self, const QString& signal, object method)
 //     std::cout << "connect: " << sender << " " << name.toStdString() << std::endl;
 // }
 
+void 
+dispose(QObject* obj)
+{
+    delete obj;
+}
+
+
+void
+release_reference(QObject* _this)
+{
+    if ( pythonqt_reference_holder.contains(_this) )
+    {
+        // detach the child from the parent
+        // FIXME: this should only happen when the object
+        if (_this->inherits("QWidget"))
+        {
+            qobject_cast<QWidget*>(_this)->setParent(0);
+        }
+        else
+        {
+            if(!_this->inherits("QLayout"))
+            {
+                _this->setParent(0);
+            }
+        }
+        decref( pythonqt_reference_holder[_this].ptr() );
+        pythonqt_reference_holder.remove(_this);
+    }
+}
+
+const char*
+QObject_className(QObject* _this)
+{
+    const QMetaObject* mo = _this->metaObject();
+    return mo->className();
+}
+
 
 list
 QObject___signals__(QObject* self)
@@ -218,7 +262,7 @@ QOBJECT_WRAPPER(QObject, PythonQObject)
     
     PythonQObject(QObject* parent=0): QObject(parent) {}
     virtual ~PythonQObject() { qDebug("del: %p", this); }
-
+    
     // QObject virtual methods
     VIRTUAL_1(bool,, event, QEvent*,);
     VIRTUAL_2(bool,, eventFilter, QObject*, QEvent*,);
@@ -289,9 +333,7 @@ export_QObject()
     QObject_class = class_<PythonQObject,
         boost::shared_ptr<PythonQObject>,
         boost::noncopyable>
-        ("QObject", init<>())
-        .def(init<QObject*>(args("parent")) [with_custodian_and_ward<2,1>()])
-        //.def(init<QObject*>(args("parent")))
+        ("QObject", init< optional<QObject*> >()[parent_change_policy<>()] )
 
         // properties                                    
         .add_property("objectName", &QObject::objectName, &QObject::setObjectName)
@@ -305,9 +347,9 @@ export_QObject()
         .def("eventFilter", &QObject::eventFilter, &PythonQObject::__eventFilter)
         //.def("children", &QObject::children, return_value_policy<copy_const_reference>())
         .def("children", &QObject::children, return_value_policy<return_by_value>() )
+
         .def("findChild", &QObject::findChild<QObject*>,
-                          return_value_policy<reference_existing_object,
-                          with_custodian_and_ward_postcall<0,1> >())
+                          return_value_policy<reference_existing_object>() )
         .def("inherits", &QObject::inherits)
         .def("installEventFilter", &QObject::installEventFilter)
         .def("removeEventFilter", &QObject::removeEventFilter)
@@ -317,10 +359,13 @@ export_QObject()
         //.def("thread", &QObject::thread,
         //               return_value_policy<reference_existing_object>() )
         //.def("moveToThread", &QObject::moveToThread)
-        //.def("parent", &QObject::parent, return_internal_reference<>() )
+        
+        //.def("parent", &QObject::parent, custom_call_policy() )
         .def("parent", &QObject::parent, return_value_policy<reference_existing_object>() )
-        .def("setParent", &QObject::setParent,
-                       with_custodian_and_ward<2,1>() )
+        .def("setParent", &QObject::setParent, parent_change_policy<>() )
+        //.def("setParent", &QObject::setParent,
+        //               with_custodian_and_ward<2,1>() )
+        
         //.def("registerUserData", &QObject::registerUserData)
         //.def("setUserData", &QObject::setUserData)
         //.def("userData", &QObject::userData)
@@ -337,9 +382,16 @@ export_QObject()
         .def("receivers", &PythonQObject::__receivers)
         .def("sender", &PythonQObject::__sender, return_value_policy<reference_existing_object>() )
         
-        // custom
+        // custom methods
+        .def("className", QObject_className)
         .def("__signals__", QObject___signals__)
+        //.def("__del__", &PythonQObject::__del__)
+
+        .def("__dispose__", dispose)
+        .staticmethod("__dispose__")
         
+        .def("__release_reference__", release_reference)
+        .staticmethod("__release_reference__")
         
         //.def("eventFilter", &QObject::eventFilter, &PythonQObject::__eventFilter)
         //.def("installEventFilter", &QObject::installEventFilter)

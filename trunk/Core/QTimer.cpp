@@ -24,6 +24,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <QtWrapper.h>
+#include <parent_change_policy.h>
 
 #include <QtCore/QTimer>
 
@@ -44,9 +45,8 @@ export_QTimer()
             bases<QObject>,
             boost::shared_ptr<PythonQTimer>,
             boost::noncopyable>
-            ("QTimer", init<>() )
+            ("QTimer", init< optional<QObject*> >()[parent_change_policy<>()] )
         // constructor
-        .def(init<QObject*>()[with_custodian_and_ward<1,2>()])
         
         // properties
         .add_property("interval", &QTimer::interval, &QTimer::setInterval)

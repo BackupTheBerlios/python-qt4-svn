@@ -25,11 +25,11 @@
 #include <boost/python/manage_new_object.hpp>
 //#include <boost/python/return_value_policy.hpp>
 //#include <boost/python/copy_non_const_reference.hpp>
-#include <boost/python/with_custodian_and_ward.hpp>
 #include <boost/python/copy_const_reference.hpp>
 #include <boost/python/return_value_policy.hpp>
 
 #include <QtWrapper.h>
+#include <parent_change_policy.h>
 
 #include <QLayout>
 #include <QWidget>
@@ -79,7 +79,7 @@ export_QLayout()
             bases<QObject, QLayoutItem>,
             boost::shared_ptr<PythonQLayout>,
             boost::noncopyable>
-    ("QLayout", init<QWidget*>(args("parent"))[with_custodian_and_ward<1,2>()] )
+    ("QLayout", init<QWidget*>(args("parent"))[parent_change_policy<>()] )
 
         // properties
         .add_property("margin", &QLayout::margin, &QLayout::setMargin)

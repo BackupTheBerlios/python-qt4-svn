@@ -25,6 +25,7 @@
 #include <boost/python/scope.hpp>
 
 #include <QtWrapper.h>
+#include <parent_change_policy.h>
 
 #include <QtGui/QFrame>
 
@@ -44,9 +45,7 @@ export_QFrame()
             bases<QWidget>,
             boost::shared_ptr<PythonQFrame>,
             boost::noncopyable>
-            ("QFrame", init<>() )
-        .def(init<QWidget*>()[with_custodian_and_ward<1,2>()] )
-        .def(init<QWidget*, Qt::WFlags>()[with_custodian_and_ward<1,2>()] )
+            ("QFrame", init< optional<QWidget*, Qt::WFlags> >(args("parent","flags"))[parent_change_policy<>()])
 
         // properties
         .add_property("frameRect", &QFrame::frameRect, &QFrame::setFrameRect)

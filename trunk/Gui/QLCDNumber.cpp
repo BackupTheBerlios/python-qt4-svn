@@ -25,6 +25,7 @@
 #include <boost/python/scope.hpp>
 
 #include <QtWrapper.h>
+#include <parent_change_policy.h>
 
 #include <QtGui/QLCDNumber>
 
@@ -45,10 +46,8 @@ export_QLCDNumber()
             bases<QFrame> ,
             boost::shared_ptr<PythonQLCDNumber>,
             boost::noncopyable>
-            ("QLCDNumber", init<>() )
-        .def(init<QWidget*>()[with_custodian_and_ward<1,2>()] )
-        .def(init<uint>() )
-        .def(init<uint, QWidget*>()[with_custodian_and_ward<1,2>()] )
+            ("QLCDNumber", init< optional<QWidget*> >(args("parent")) [parent_change_policy<>()] )
+        .def(init<uint, optional<QWidget*> >(args("numDigits","parent"))[parent_change_policy<>()] )
 
         // properties
         .add_property("intValue", &QLCDNumber::intValue, (void (QLCDNumber::*)(int) )&QLCDNumber::display)

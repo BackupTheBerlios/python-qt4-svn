@@ -37,6 +37,7 @@
 #include <boost/python/return_value_policy.hpp>
 
 #include <QtWrapper.h>
+#include <parent_change_policy.h>
 
 
 #include <QEvent>
@@ -91,10 +92,8 @@ export_QPushButton()
             bases<QWidget>,
             boost::shared_ptr<PythonQPushButton>,
             boost::noncopyable>
-            ("QPushButton", init<>() )
-        .def(init<QWidget*>() [with_custodian_and_ward<1,2>()])    
-        .def(init<const QString&>() )
-        .def(init<const QString&, QWidget*>() [with_custodian_and_ward<1,3>()] )
+            ("QPushButton", init< optional<QWidget*> >(args("parent"))[parent_change_policy<>()] )
+        .def(init<const QString&, optional<QWidget*> >(args("text", "parent"))[parent_change_policy<>()] )
         
         //.def("event", &QObject::event, &QObject_Wrapper::default_event)
         //.def("event", &QPushButton::event, &PythonQPushButton::default_event)

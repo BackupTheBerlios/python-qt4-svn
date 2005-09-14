@@ -13,8 +13,6 @@ if  sys.platform.startswith('linux'):
 from Namespace import *
 import Core
 import Gui
-#from Core import *
-#from Gui import *
 
 __qt_connections__ = {}
 
@@ -27,38 +25,83 @@ def __link_parent__(obj):
         children = parent.__children__
         children.append(obj)
 
-def __newinit__(self, *args, **kw):
-    self.__oldinit__(*args, **kw)
+def __init__(self, *args, **kw):
+    self.__default_init__(*args, **kw)
     self.__qt_slots__ = []
     self.__python_native__ = True
     if isinstance(self, Core.QCoreApplication):
         Core.__app__ = self
-    #print '__newinit__:', self, self.parent()
-    __link_parent__(self)
+    #print '__init__:', self, self.parent()
+    #__link_parent__(self)
 
-def __newdel__(self):
-    for child in self.children():
-        child.setParent(None)
+    
+def __setLayout__(self, layout):
+    # remove the previous layout
+    oldLayout = self.layout()
+    if oldLayout is not None:
+        self.__dispose__(oldLayout)
+    del oldLayout    
+    
+    # call the default setLayout method
+    print '__default_setLayout__'
+    self.__default_setLayout__(layout)
+    #layout.setParent(self)
+    
+    # reparent all the child    
+    for i in range(0, layout.count()):
+        widget = layout.itemAt(i).widget()
+        if widget is not None:
+            print '(%s -> %s)'%(widget, self)
+            widget.setParent(self)
+Gui.QWidget.__default_setLayout__ = Gui.QWidget.setLayout;
+Gui.QWidget.setLayout = __setLayout__;
+    
+
+def __del__(self):
+    print 'del(%s):'%self.className(), self.objectName, self
+    
+    if self.inherits("QWidget"): #isinstance(self, Gui.QWidget): 
+        try:
+            layout = self.layout()
+            if layout is not None:
+                print '   managing layout'                            
+                for i in range(0, layout.count()):
+                    widget = layout.itemAt(i).widget()
+                    if widget is not None:
+                        self.__release_reference__(widget)
+                        layout.removeWidget(widget)
+                self.__release_reference__(layout)
+                #self.__dispose__(layout)
+            del layout     
+        except:
+            pass
+    
+    children = self.children();
+    for child in children:        
+        print '   releasing:(%s)'%child.className() , child
+        self.__release_reference__(child)
+        #if hasattr(child, '__python_native__'):
+        #child.setParent(None)
         
-    if hasattr(self, '__children__'):
-        print '__del__(*):', self
-        for child in self.__children__():
-            child.setParent(None)
+        
+    #if hasattr(self, '__children__'):
+    #    print '__del__(*):', self
+    #    for child in self.__children__():
+    #        child.setParent(None)
         #while len(self.__children__) > 0:
             #print 'del %s' % (self.__children__[0])
             #del self.__children__[0]
-        del self.__children__
-    else:
-        print '__del__:', self
+        #del self.__children__
+    #else:
+    #    print '__del__:', self
   
     #if hasattr(self, '__qt_slots__'):
     #    del self.__qt_slots__
     
     
 def __replace_constructor__(klass):
-    pass
-    #klass.__oldinit__ = klass.__init__
-    #klass.__init__ = __newinit__
+    klass.__default_init__ = klass.__init__
+    klass.__init__ = __init__
 
     
 ##############################################################################
@@ -247,7 +290,7 @@ __klasses__ += search_qobjects(Gui)
 #print __klasses__
 for klass in __klasses__:
     __replace_constructor__(klass)
-    klass.__del__ = __newdel__
+    klass.__del__ = __del__
 
 
 # Proxy class

@@ -35,6 +35,8 @@
 #include <boost/python/return_value_policy.hpp>
 
 #include <QtWrapper.h>
+#include <parent_change_policy.h>
+#include <layout_change_policy.h>
 
 #include <Qt>
 #include <QFlags>
@@ -67,6 +69,7 @@ loadUi(str _filename, object _parent)
     file.open(QFile::ReadOnly);
     object widget = object( ptr( builder.load(&file, parent) ) );
     file.close();
+    //incref( widget.ptr() );
     return widget;
 }
 
@@ -86,6 +89,7 @@ QOBJECT_WRAPPER(QWidget, PythonQWidget)
     VIRTUAL_1(void, (void), customEvent, QEvent*, );
     VIRTUAL_1(void, (void), disconnectNotify, const char*, );
     VIRTUAL_1(void, (void), timerEvent, QTimerEvent*, );
+    
     
 /*    int devType() const {
         return call_method< int >(py_self, "devType");
@@ -509,8 +513,9 @@ export_QWidget()
             boost::shared_ptr<PythonQWidget>,
             //std::auto_ptr<QWidget>,
             boost::noncopyable>
-        ("QWidget", init<>() )
-        .def(init<QWidget*>(args("parent"))[with_custodian_and_ward<2,1>()] )
+        ("QWidget", init< optional<QWidget*,Qt::WFlags> >()[parent_change_policy<>()] )
+        //.def(init<QWidget*>(args("parent"))[with_custodian_and_ward<2,1>()] )
+        
         //.def(init<QWidget*,Qt::WFlags>() )
         .def("close", &QWidget::close)
         .def("hide", &QWidget::hide)
@@ -682,7 +687,7 @@ export_QWidget()
         .def("setFocusPolicy", &QWidget::setFocusPolicy)
         .def("hasFocus", &QWidget::hasFocus)
         .def("setTabOrder", &QWidget::setTabOrder) */
-        .def("setFocusProxy", &QWidget::setFocusProxy, with_custodian_and_ward<1,2>() )
+        .def("setFocusProxy", &QWidget::setFocusProxy)
         .def("focusProxy",
              &QWidget::focusProxy,
              return_value_policy<reference_existing_object>() )
@@ -749,16 +754,16 @@ export_QWidget()
         
         //.def("layout", &QWidget::layout, return_internal_reference<>() )
         .def("layout", &QWidget::layout, return_value_policy<reference_existing_object>() )
-        .def("setLayout", &QWidget::setLayout, with_custodian_and_ward<2,1>() )
+        .def("setLayout", &QWidget::setLayout, layout_change_policy<>() )
         
         //.def("updateGeometry", &QWidget::updateGeometry)
         
         .def("setParent",
              (void (QWidget::*)(QWidget*) )&QWidget::setParent,
-             with_custodian_and_ward<2,1>() )
+             parent_change_policy<>() )
         .def("setParent",
              (void (QWidget::*)(QWidget*, Qt::WFlags) )&QWidget::setParent,
-             with_custodian_and_ward<2,1>())
+             parent_change_policy<>() )
 
         /*
         .def("scroll", (void (QWidget::*)(int, int) )&QWidget::scroll)

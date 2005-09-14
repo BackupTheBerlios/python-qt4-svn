@@ -1,4 +1,5 @@
-from Qt import QEvent, QObject, QWidget, QApplication, QPushButton
+from Qt.Core import QEvent, QObject
+from Qt.Gui import  QWidget, QApplication, QPushButton
 
 
 class MyObject(QObject):
